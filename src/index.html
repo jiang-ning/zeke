@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Jiji</title>
+    <link rel="stylesheet" href="index.css" />
+  </head>
+  <body>
+    <header id="titlebar">
+      <div id="drag-region">记记 内测版v0.1.0</div>
+    </header>
+    <div class="container">
+
+      <div id="panelsContainer" class="panelsContainer" style="grid-template-columns:200px 10px 1fr">
+
+        <!-- panel list -->
+        <div id="panelList" class="panel">
+          <div id="areaListLists">
+            <ul></ul>
+            <div id="listAdd"><input id="listAddName" value="+"></div>
+          </div>
+        </div>
+
+        <div id="gutter"></div>
+
+        <!-- panel note -->
+        <div id="panelNote" class="panel">
+          <div id="areaNew">
+            <input id="txtNew">
+            <span type="button" id="btnNew">+</span>
+          </div>
+          <div id="areaListNotes">
+            <ul></ul>
+          </div>
+        </div>
+
+      </div>
+      <!-- end of panelsContainer -->
+
+    </div>
+    <!-- end of container -->
+    
+    <script src="./main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,299 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
+    Arial, sans-serif;
+  margin: auto;
+  overflow: hidden;
+}
+header {
+  background-color: #eee;
+  position: relative;;
+  height: 60px;
+  box-shadow: 0 0 2px #00000066;
+  -webkit-user-select: none;
+  -webkit-app-region: drag;
+}
+input[type='checkbox'] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  color: #016936;
+  width: 20px;
+  height: 20px;
+  transform: translateY(-0.075em);
+  display: grid;
+  place-content: center;
+  margin-top: 12px;
+}
+input[type="checkbox"]::before {
+  content: "";
+  color: #016936;
+  width: 10px;
+  height: 10px;
+  transform: scale(0);
+  transform-origin: bottom left;
+  transition: 120ms transform ease-in-out;
+  box-shadow: inset 1em 1em var(--form-control-color);
+  background-color: #016936;
+  -webkit-clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+  clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+}
+input[type="checkbox"]:checked::before {
+  transform: scale(1);
+}
+input[type="checkbox"]:focus {
+  /* outline: max(2px, 0.15em) solid currentColor;
+  outline-offset: max(2px, 0.15em); */
+}
+input[type="checkbox"]:disabled {
+  color: #ccc;
+  cursor: not-allowed;
+}
+
+.panelsContainer {
+  display: grid;
+  grid-template-columns: 200px 10px 1fr;
+  grid-template-rows: 1fr;
+  height: calc(100vh - 60px);
+  overflow: hidden;
+  /* background-color: #ccc; */
+  /* border-radius: 10px; */
+  /* box-shadow: 0 0 10px #00000066; */
+}
+
+.panelsContainer.viewFocused {
+  grid-template-columns: 0px 10px 1fr !important;
+}
+
+#panelList {
+  grid-column: 1;
+  /* grid-row: 1; */
+  grid-row: 1 / span 2;
+  background-color: #eee;
+  /* border-radius: 10px 0 0 10px; */
+}
+#panelList:hover #listAdd {
+  display: block;
+}
+
+#panelNote {
+  /* grid-column: 3;
+  grid-row: 1; */
+  display: grid;
+  grid-template-rows: 40px 1fr;
+  background-color: #fff;
+  padding: 10px 10px 10px 0;
+}
+
+#gutter {
+  grid-column: 2;
+  grid-row: 1;
+  width: 10px;
+  cursor: col-resize;
+  background-color: #fff;
+  /* border-radius: 10px 0 0 10px; */
+  /* margin: 10px 0; */
+  box-shadow: 0 0 3px #66666666;
+}
+
+.panelToggle {
+  cursor: pointer;
+  color: #666;
+  padding: 10px;
+}
+.panelToggle:hover {
+  color: #000;
+}
+.panelToggle.active {
+  cursor: default;
+  color: #000;
+  background-color: #ddd;
+}
+.panel {
+  overflow: hidden scroll;
+}
+
+#areaListLists {
+  /* padding: 20px 0 0 10px; */
+}
+#areaListLists li {
+  list-style: none;
+  margin: 1px 0;
+  /* background-color: #ddd; */
+  /* box-shadow: 0 0 2px #66666666; */
+  /* border-radius: 10px 0 0 10px; */
+}
+#areaListLists li:first-child {
+  /* border-radius: 10px 0 0 0; */
+  /* margin-top: 0; */
+}
+/* #areaListLists li:last-child {
+  border-radius: 0 0 0 10px;
+} */
+#areaListLists li.edit span {
+  display: inline;
+}
+#areaListLists li.edit input {
+  background-color: #fff;
+  cursor: text;
+  width: calc(100% - 30px);
+}
+#areaListLists li.active {
+  /* border-top: 1px solid #999; */
+  cursor: default;
+}
+#areaListLists input {
+  background-color: #eee;
+  border: none;
+  width: calc(100% - 10px);
+  outline: none;
+  height: 40px;
+  padding-left: 10px;
+  /* border-radius: 10px 0 0 10px; */
+  cursor: default;
+  color: #666;
+}
+#areaListLists input:hover {
+  background-color: #eee;
+}
+#areaListLists input.active {
+  background-color: #fff;
+  position: relative;
+  /* box-shadow: 0 0 10px #66666666; */
+  color: #000;
+  box-shadow: 0 0 2px #66666666;
+}
+#areaListLists li span {
+  position: absolute;
+  width: 20px;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  /* z-index: 2; */
+  color: #999;
+  cursor: pointer;
+  display: none;
+}
+#areaListLists li span {
+  color: #666;
+}
+
+#listAdd {
+  display: none;
+}
+#listAdd #listAddName {
+  text-align: center;
+  padding: 0;
+  background-color: transparent;
+  /* border: 1px dashed #ccc; */
+  color: #aaa;
+  border-right: none;
+}
+#listAdd #listAddName:hover {
+  cursor: pointer;
+  color: #999;
+  /* border-color: #999; */
+}
+#listAdd #listAddName.active {
+  text-align: left;
+  border: none;
+  background-color: #fff;
+  padding-left: 10px;
+}
+
+#txtNew {
+  border: none;
+  width: calc(100% - 60px);
+  height: 36px;
+  padding: 0 10px;
+  outline: none;
+}
+#btnNew {
+  width: 30px;
+  height: 30px;
+  color: #ccc;
+  position: absolute;
+  right: 10px;
+  text-align: center;
+  line-height: 30px;
+  cursor: pointer;
+}
+#areaNew {
+  grid-column: 1;
+  grid-row: 1;
+  border-bottom: 1px solid #eee;
+}
+#areaNew:hover {
+  border-color: #ccc;
+}
+#areaNew:hover #btnNew {
+  color: #999;
+}
+
+#areaListNotes {
+  grid-column: 1;
+  grid-row: 2;
+  overflow: hidden scroll;
+}
+#areaListNotes li {
+  list-style: none;
+  height: 40px;
+  line-height: 40px;
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid #eee;
+  grid-template-columns: 26px 1fr 26px;
+  display: grid;
+}
+#areaListNotes input[type='text'] {
+  border: none;
+  /* width: calc(100% - 50px); */
+  outline: none;
+  height: 40px;
+  line-height: 40px;
+  padding-left: 10px;
+  cursor: default;
+  color: #666;
+  /* margin-left: 20px; */
+}
+#areaListNotes input[type='text'].active {
+  background-color: #fff;
+  position: relative;
+  box-shadow: 0 0 10px #66666666;
+  color: #000;
+}
+#areaListNotes li.edit input[type='text'] {
+  cursor: text;
+}
+#areaListNotes li.edit span {
+  display: inline;
+}
+#areaListNotes li:hover input[type='text'] {
+  color: #333;
+}
+#areaListNotes li:hover input[type='checkbox'] {
+  border-color: #ccc;
+}
+#areaListNotes li span {
+  color: #ccc;
+  width: 20px;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  z-index: 2;
+  cursor: pointer;
+  display: none;
+}
+#areaListNotes li span:hover {
+  color: #666;
+}
+#areaListNotes li.completed input[type='text'] {
+  color: #ccc;
+  text-decoration: line-through;
+}
