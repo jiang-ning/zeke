@@ -31,13 +31,16 @@ body {
   overflow: hidden;
 }
 header {
+  -webkit-user-select: none;
+  -webkit-app-region: drag;
   background-color: #eee;
   position: relative;;
   height: 40px;
   box-shadow: 0 0 2px #00000066;
-  -webkit-user-select: none;
-  -webkit-app-region: drag;
   z-index: 10;
+  text-align: center;
+  line-height: 40px;
+  font-size: .8rem;
 }
 input[type='checkbox'] {
   -webkit-appearance: none;

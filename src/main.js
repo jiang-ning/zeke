@@ -29,7 +29,12 @@ request.onsuccess = async function(event) {
       generateNoteItem(newNote.target.result, note.content, newNote.target.result - 1);
 
       let orderedNoteIds = JSON.parse(localStorage.getItem('noteOrder')) || {};
-      orderedNoteIds[note.list].push(newNote.target.result);
+      if(orderedNoteIds && orderedNoteIds[note.list]) {
+        orderedNoteIds[note.list].push(newNote.target.result);
+      } else {
+        orderedNoteIds[note.list] = [newNote.target.result];
+      }
+      
       localStorage.setItem('noteOrder', JSON.stringify(orderedNoteIds));
       console.log('List added successfully');
 
