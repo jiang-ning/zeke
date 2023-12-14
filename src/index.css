@@ -273,7 +273,7 @@ input[type="checkbox"]:disabled {
   line-height: 40px;
   border-top: 1px solid transparent;
   border-bottom: 1px solid #eee;
-  grid-template-columns: 26px 1fr 26px;
+  grid-template-columns: 26px 1fr 90px 36px;
   display: grid;
 }
 #areaListNotes input[type='text'] {
@@ -296,7 +296,7 @@ input[type="checkbox"]:disabled {
 #areaListNotes li.edit input[type='text'] {
   cursor: text;
 }
-#areaListNotes li.edit span {
+#areaListNotes li.edit span.noteRemove {
   display: inline;
 }
 #areaListNotes li:hover input[type='text'] {
@@ -305,7 +305,7 @@ input[type="checkbox"]:disabled {
 #areaListNotes li:hover input[type='checkbox'] {
   border-color: #ccc;
 }
-#areaListNotes li span {
+#areaListNotes li span.noteRemove {
   color: #ccc;
   width: 20px;
   height: 40px;
@@ -315,8 +315,14 @@ input[type="checkbox"]:disabled {
   cursor: pointer;
   display: none;
 }
-#areaListNotes li span:hover {
+#areaListNotes li span.noteRemove:hover {
   color: #666;
+}
+#areaListNotes li span.noteMoment {
+  font-size: 10px;
+  text-align: right;
+  color: #666;
+  padding-right: 10px;
 }
 #areaListNotes li.completed input[type='text'] {
   color: #ccc;

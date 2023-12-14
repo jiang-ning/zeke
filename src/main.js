@@ -26,7 +26,7 @@ request.onsuccess = async function(event) {
     request.onsuccess = function(newNote) {
       console.log('Note added successfully');
 
-      generateNoteItem(newNote.target.result, note.content, newNote.target.result - 1);
+      generateNoteItem(newNote.target.result, note.content, note.dateCreated, newNote.target.result - 1);
 
       let orderedNoteIds = JSON.parse(localStorage.getItem('noteOrder')) || {};
       if(orderedNoteIds && orderedNoteIds[note.list]) {
@@ -75,11 +75,11 @@ request.onsuccess = async function(event) {
         if(orderedNoteIds && orderedNoteIds[listId]) {
           const orderedNotes = orderedNoteIds[listId].map(id =>notes.find(obj => obj.id === parseInt(id)));
           orderedNotes.forEach((item, idx) => {
-            generateNoteItem(item.id, item.content, idx, true);
+            generateNoteItem(item.id, item.content, item.dateCreated, idx, true);
           });
         } else {
           notes.forEach((item, idx) => {
-            generateNoteItem(item.id, item.content, idx);
+            generateNoteItem(item.id, item.content, item.dateCreated, idx);
           });
         }
         initDnD('areaListNotes', 'noteOrder');
@@ -312,10 +312,11 @@ request.onsuccess = async function(event) {
     }
   }
 
-  function generateNoteItem(id, content, order = 0, byUserOrdered = false) {
+  function generateNoteItem(id, content, dateCreated, order = 0, byUserOrdered = false) {
     let noteItem = document.createElement('li');
     let noteCheckbox = document.createElement('input');
     let noteInput = document.createElement('input');
+    let noteMoment = document.createElement('span');
     let noteRemove = document.createElement('span');
     noteItem.draggable = true;
     noteItem.dataset.id = id;
@@ -324,9 +325,13 @@ request.onsuccess = async function(event) {
     noteInput.type = 'text';
     noteInput.value = content;
     noteInput.readOnly = true;
+    noteMoment.className = 'noteMoment';
+    noteMoment.innerText = convertTimetamp(dateCreated);
+    noteRemove.className = 'noteRemove';
     noteRemove.innerText = '-';
     noteItem.append(noteCheckbox);
     noteItem.append(noteInput);
+    noteItem.append(noteMoment);
     noteItem.append(noteRemove);
     if(byUserOrdered) {
       document.querySelector('#areaListNotes ul').append(noteItem);
@@ -536,6 +541,29 @@ function initGrid() {
     panelsContainer.style['grid-template-columns'] = localStorage.getItem('grid-template-columns');
   }
 
+}
+
+function convertTimetamp(timestamp) {
+  const seconds = Math.floor((new Date() - timestamp) / 1000);
+
+  const intervals = {
+    year: 31536000,
+    month: 2592000,
+    week: 604800,
+    day: 86400,
+    hour: 3600,
+    minute: 60,
+    second: 1
+  };
+
+  for (let interval in intervals) {
+    const value = Math.floor(seconds / intervals[interval]);
+    if (value >= 1) {
+      return value + " " + interval + (value > 1 ? "s" : "") + " ago";
+    }
+  }
+
+  return "Just now";
 }
 
 initGrid();
