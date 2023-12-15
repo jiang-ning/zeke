@@ -456,6 +456,7 @@ function initDnD(listName, storageName) {
     draggedItem = e.target;
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setData('text/plain', draggedItem.dataset.index);
+    e.target.classList.add('dragging');
   });
 
   list.addEventListener('dragover', (e) => {
@@ -473,8 +474,9 @@ function initDnD(listName, storageName) {
     }
   });
 
-  list.addEventListener('dragend', () => {
+  list.addEventListener('dragend', (e) => {
     draggedItem = null;
+    e.target.classList.remove('dragging');
     updateIndexes();
   });
 

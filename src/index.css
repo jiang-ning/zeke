@@ -275,6 +275,10 @@ input[type="checkbox"]:disabled {
   border-bottom: 1px solid #eee;
   grid-template-columns: 26px 1fr 90px 36px;
   display: grid;
+  transition: transform 0.3s;
+}
+#areaListNotes li.dragging {
+  transform: scale(.9);
 }
 #areaListNotes input[type='text'] {
   border: none;
