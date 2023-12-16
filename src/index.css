@@ -3,6 +3,61 @@
   margin: 0;
 }
 
+:root {
+  --red-33:   #db282933;
+  --red-66:   #db282966;
+  --red-cc:   #db2829cc;
+  --red-ee:   #db2829ee;
+  --red:      #db2829;
+  --orange-33:#f2711d33;
+  --orange-66:#f2711d66;
+  --orange-cc:#f2711dcc;
+  --orange-ee:#f2711dee;
+  --orange:   #f2711d;
+  --yellow-33:#fcbd0833;
+  --yellow-66:#fcbd0866;
+  --yellow-cc:#fcbd08cc;
+  --yellow-ee:#fcbd08ee;
+  --yellow:   #fcbd08;
+  --olive-33: #b6cd1833;
+  --olive-66: #b6cd1866;
+  --olive-cc: #b6cd18cc;
+  --olive-ee: #b6cd18ee;
+  --olive:    #b6cd18;
+  --green-33: #21bb4633;
+  --green-66: #21bb4666;
+  --green-cc: #21bb46cc;
+  --green-ee: #21bb46ee;
+  --green:    #21bb46;
+  --teal-33:  #00b5ae33;
+  --teal-66:  #00b5ae66;
+  --teal-cc:  #00b5aecc;
+  --teal-ee:  #00b5aeee;
+  --teal:     #00b5ae;
+  --blue-33:  #2185d133;
+  --blue-66:  #2185d166;
+  --blue-cc:  #2185d1cc;
+  --blue-ee:  #2185d1ee;
+  --blue:     #2185d1;
+  --violet-33:#6435c933;
+  --violet-66:#6435c966;
+  --violet-cc:#6435c9cc;
+  --violet-ee:#6435c9ee;
+  --violet:   #6435c9;
+  --purple-33:#a333c933;
+  --purple-66:#a333c966;
+  --purple-cc:#a333c9cc;
+  --purple-ee:#a333c9ee;
+  --purple:   #a333c9;
+  --pink-33:  #e0399833;
+  --pink-66:  #e0399866;
+  --pink-cc:  #e03998cc;
+  --pink-ee:  #e03998ee;
+  --pink:     #e03998;
+  --brown:    #a5673f;
+  --grey:     #767676; 
+}
+
 /* Hide the default scroll bar */
 ::-webkit-scrollbar {
   width: 8px;
@@ -59,14 +114,14 @@ input[type='checkbox'] {
 }
 input[type="checkbox"]::before {
   content: "";
-  color: #016936;
+  color: #333;
   width: 10px;
   height: 10px;
   transform: scale(0);
   transform-origin: bottom left;
   transition: 120ms transform ease-in-out;
   box-shadow: inset 1em 1em var(--form-control-color);
-  background-color: #016936;
+  background-color: #333;
   -webkit-clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
   clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
 }
@@ -99,10 +154,10 @@ input[type="checkbox"]:disabled {
 
 #panelList {
   grid-column: 1;
-  /* grid-row: 1; */
-  grid-row: 1 / span 2;
+  grid-row: 1;
   background-color: #eee;
-  /* border-radius: 10px 0 0 10px; */
+  display: grid;
+  grid-template-rows: 1fr 40px;
 }
 #panelList:hover #listAdd {
   display: block;
@@ -115,6 +170,10 @@ input[type="checkbox"]:disabled {
   grid-template-rows: 40px 1fr;
   background-color: #fff;
   /* padding: 10px 10px 10px 0; */
+}
+#panelNote.showModal #areaNew,
+#panelNote.showModal #areaListNotes {
+  display: none;
 }
 
 #gutter {
@@ -146,7 +205,9 @@ input[type="checkbox"]:disabled {
 }
 
 #areaListLists {
-  /* padding: 20px 0 0 10px; */
+  grid-column: 1;
+  grid-row: 1;
+  overflow: hidden auto;
 }
 #areaListLists li {
   list-style: none;
@@ -154,6 +215,8 @@ input[type="checkbox"]:disabled {
   /* background-color: #ddd; */
   /* box-shadow: 0 0 2px #66666666; */
   /* border-radius: 10px 0 0 10px; */
+  grid-template-columns: 1fr 20px;
+  display: grid;
 }
 #areaListLists li:first-child {
   /* border-radius: 10px 0 0 0; */
@@ -168,7 +231,7 @@ input[type="checkbox"]:disabled {
 #areaListLists li.edit input {
   background-color: #fff;
   cursor: text;
-  width: calc(100% - 30px);
+  width: calc(100% - 10px);
 }
 #areaListLists li.active {
   /* border-top: 1px solid #999; */
@@ -177,7 +240,7 @@ input[type="checkbox"]:disabled {
 #areaListLists input {
   background-color: #eee;
   border: none;
-  width: calc(100% - 10px);
+  width: calc(100% + 20px);
   outline: none;
   height: 40px;
   padding-left: 10px;
@@ -195,13 +258,14 @@ input[type="checkbox"]:disabled {
   color: #000;
   box-shadow: 0 0 2px #66666666;
 }
+#areaListLists input.active.hidden {
+  background-color: #eee;
+}
 #areaListLists li span {
-  position: absolute;
   width: 20px;
   height: 40px;
   line-height: 40px;
   text-align: center;
-  /* z-index: 2; */
   color: #999;
   cursor: pointer;
   display: none;
@@ -220,6 +284,7 @@ input[type="checkbox"]:disabled {
   /* border: 1px dashed #ccc; */
   color: #aaa;
   border-right: none;
+  width: 100%;
 }
 #listAdd #listAddName:hover {
   cursor: pointer;
@@ -236,18 +301,17 @@ input[type="checkbox"]:disabled {
 #txtNew {
   border: none;
   width: calc(100% - 60px);
-  height: 36px;
+  height: 39px;
   padding: 0 10px;
   outline: none;
 }
 #btnNew {
-  width: 30px;
-  height: 30px;
+  width: 40px;
+  height: 39px;
   color: #ccc;
   position: absolute;
-  right: 10px;
   text-align: center;
-  line-height: 30px;
+  line-height: 39px;
   cursor: pointer;
 }
 #areaNew {
@@ -271,8 +335,9 @@ input[type="checkbox"]:disabled {
   list-style: none;
   height: 40px;
   line-height: 40px;
-  border-top: 1px solid transparent;
+  /* border-top: 1px solid transparent; */
   border-bottom: 1px solid #eee;
+  padding-left: 6px;
   grid-template-columns: 26px 1fr 90px 36px;
   display: grid;
   transition: transform 0.3s;
@@ -311,7 +376,7 @@ input[type="checkbox"]:disabled {
 }
 #areaListNotes li span.noteRemove {
   color: #ccc;
-  width: 20px;
+  width: 30px;
   height: 40px;
   line-height: 40px;
   text-align: center;
@@ -331,4 +396,105 @@ input[type="checkbox"]:disabled {
 #areaListNotes li.completed input[type='text'] {
   color: #ccc;
   text-decoration: line-through;
+}
+#areaSettings {
+  grid-column: 1;
+  grid-row: 2;
+  line-height: 40px;
+  padding: 0 8px;
+}
+#areaSettings.active {
+  background-color: #fff;
+  z-index: 9;
+  box-shadow: 0px 0px 1px #ccc;
+}
+#areaSettings #btnSettings {
+  width: 30px;
+  text-align: center;
+  line-height: 40px;
+  cursor: pointer;
+  color: #ccc;
+}
+#areaSettings #btnSettings:hover {
+  color: #999;
+}
+
+.modal {
+  display: none;
+  position: absolute;
+  background-color: #fff;
+  width: 100%;
+  height: 100%;
+}
+.modal.open {
+  display: block;
+}
+.modal .modal-contents {
+  width: 100%;
+  height: 100%;
+  padding: 10px;
+}
+.modal .brand {
+  font-size: 24px;
+  margin-bottom: 6px;
+}
+.modal .brand-version {
+  font-size: 12px;
+}
+.modal-section {
+  padding: 10px 0;
+  margin-bottom: 10px;
+}
+.modal-section-title {
+  color: #333;
+  font-size: 12px;
+  margin-bottom: 10px;
+}
+.themeSelection {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border: 3px solid transparent;
+  border-radius: 20px;
+  margin: 0 2px;
+  cursor: pointer;
+}
+.themeSelection.selected {
+  border-color: transparent;
+}
+.red {
+  background-color: var(--red);
+}
+.orange {
+  background-color: var(--orange);
+}
+.yellow {
+  background-color: var(--yellow);
+}
+.olive {
+  background-color: var(--olive);
+}
+.green {
+  background-color: var(--green);
+}
+.teal {
+  background-color: var(--teal);
+}
+.blue {
+  background-color: var(--blue);
+}
+.violet {
+  background-color: var(--violet);
+}
+.purple {
+  background-color: var(--purple);
+}
+.pink {
+  background-color: var(--pink);
+}
+.brown {
+  background-color: var(--brown);
+}
+.grey {
+  background-color: var(--grey);
 }

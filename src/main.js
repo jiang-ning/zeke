@@ -252,6 +252,7 @@ request.onsuccess = async function(event) {
       e.target.classList.add('active');
       localStorage.setItem('listActive',e.target.dataset.id);
       getNotes(e.target.dataset.id);
+      cleanModal();
     });
 
     listInput.addEventListener('dblclick', (e) => {
@@ -405,6 +406,19 @@ request.onsuccess = async function(event) {
 
   }
 
+  function cleanModal() {
+    const modal = document.querySelector('.modal');
+    const areaSettings = document.getElementById('areaSettings');
+    const panelNote = document.getElementById('panelNote');
+    const hiddenActivedList =  document.querySelector('#areaListLists input.hidden');
+    areaSettings.classList.remove('active');
+    panelNote.classList.remove('showModal');
+    modal.classList.remove('open');
+    if(hiddenActivedList) {
+      hiddenActivedList.classList.remove('hidden');
+    }
+  }
+
   document.getElementById('btnNew').addEventListener('click', () => {
     const noteContent = document.getElementById('txtNew').value.trim();
     const listId = document.querySelector('#areaListLists li input.active').dataset.id;
@@ -545,6 +559,27 @@ function initGrid() {
 
 }
 
+function initModal() {
+  const modal = document.querySelector('.modal');
+  const themes = document.querySelectorAll('.themeSelection');
+  const areaSettings = document.getElementById('areaSettings');
+  const panelNote = document.getElementById('panelNote');
+  
+  document.getElementById('btnSettings').addEventListener('click', () => {
+    const activedList = document.querySelector('#areaListLists input.active');
+    areaSettings.classList.toggle('active');
+    panelNote.classList.toggle('showModal');
+    modal.classList.toggle('open');
+    activedList.classList.toggle('hidden');
+  });
+  themes.forEach(theme => {
+    theme.addEventListener('click', (e) => {
+      document.body.className = e.target.dataset.id;
+      localStorage.setItem('theme', e.target.dataset.id);
+    });
+  });
+}
+
 function convertTimetamp(timestamp) {
   const seconds = Math.floor((new Date() - timestamp) / 1000);
 
@@ -568,4 +603,12 @@ function convertTimetamp(timestamp) {
   return "Just now";
 }
 
-initGrid();
+function init() {
+  const theme = localStorage.getItem('theme') || '';
+  document.body.className = theme;
+
+  initGrid();
+  initModal();
+}
+
+init();

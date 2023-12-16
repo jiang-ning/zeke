@@ -1,0 +1,317 @@
+/* Common */
+[class^="theme"] ::-webkit-scrollbar-track,
+[class^="theme"] #txtNew,
+[class^="theme"] #areaListNotes li,
+[class^="theme"] #areaListLists input,
+[class^="theme"] #areaListLists input.active.hidden,
+[class^="theme"] input[type='checkbox'],
+[class^="theme"] #areaListNotes input[type='text'],
+[class^="theme"] .modal {
+  background-color: transparent;
+}
+[class^="theme"] ::-webkit-scrollbar-thumb,
+[class^="theme"] ::-webkit-scrollbar-thumb:hover,
+[class^="theme"] #listAdd #listAddName.active {
+  background-color: #ffffff99;
+}
+[class^="theme"] #panelNote,
+[class^="theme"] #gutter,
+[class^="theme"] #areaListLists input.active,
+[class^="theme"] #areaListLists li.edit,
+[class^="theme"] #txtNew:focus,
+[class^="theme"] #txtNew:focus + #btnNew,
+[class^="theme"] #areaListNotes li.edit,
+[class^="theme"] #areaSettings.active {
+  background-color: #ffffff66;
+}
+[class^="theme"] #areaListLists input,
+[class^="theme"] #listAdd #listAddName,
+[class^="theme"] #areaListLists li span {
+  color: #ffffff99;
+}
+[class^="theme"] #listAdd #listAddName:hover,
+[class^="theme"] #areaSettings #btnSettings:hover,
+[class^="theme"] #areaSettings.active #btnSettings {
+  color: #ffffffee;
+}
+[class^="theme"] #areaListLists input.active,
+[class^="theme"] #listAdd #listAddName.active {
+  color: #000;
+}
+[class^="theme"] #areaListNotes input[type='text'],
+[class^="theme"] #areaListNotes li span.noteMoment {
+  color: #00000099;
+}
+[class^="theme"] #areaListNotes li.completed input[type='text'] {
+  color: #00000033;
+}
+
+/* blue */
+.theme-blue header,
+.theme-blue .panelsContainer,
+.theme-blue #panelList,
+input[type="checkbox"]::before {
+  background-color: var(--blue);
+}
+.theme-blue #areaNew,
+.theme-blue #areaListNotes li {
+  border-color: var(--blue-33);
+}
+.theme-blue #areaNew,
+.theme-blue #areaListNotes li,
+.theme-blue input[type='checkbox'] {
+  border-color: var(--blue-66);
+}
+.theme-blue #areaListNotes li:hover input[type='checkbox'] {
+  border-color: var(--blue-cc);
+}
+.theme-blue #btnNew {
+  color: var(--blue-ee);
+}
+.theme-blue #areaNew:hover #btnNew,
+.theme-blue #areaListNotes li span.noteRemove {
+  color: var(--blue);
+}
+
+/* red */
+.theme-red header,
+.theme-red .panelsContainer,
+.theme-red #panelList,
+input[type="checkbox"]::before {
+  background-color: var(--red);
+}
+.theme-red #areaNew,
+.theme-red #areaListNotes li {
+  border-color: var(--red-33);
+}
+.theme-red #areaNew,
+.theme-red #areaListNotes li,
+.theme-red input[type='checkbox'] {
+  border-color: var(--red-66);
+}
+.theme-red #areaListNotes li:hover input[type='checkbox'] {
+  border-color: var(--red-cc);
+}
+.theme-red #btnNew {
+  color: var(--red-ee);
+}
+.theme-red #areaNew:hover #btnNew,
+.theme-red #areaListNotes li span.noteRemove {
+  color: var(--red);
+}
+
+/* orange */
+.theme-orange header,
+.theme-orange .panelsContainer,
+.theme-orange #panelList,
+input[type="checkbox"]::before {
+  background-color: var(--orange);
+}
+.theme-orange #areaNew,
+.theme-orange #areaListNotes li {
+  border-color: var(--orange-33);
+}
+.theme-orange #areaNew,
+.theme-orange #areaListNotes li,
+.theme-orange input[type='checkbox'] {
+  border-color: var(--orange-66);
+}
+.theme-orange #areaListNotes li:hover input[type='checkbox'] {
+  border-color: var(--orange-cc);
+}
+.theme-orange #btnNew {
+  color: var(--orange-ee);
+}
+.theme-orange #areaNew:hover #btnNew,
+.theme-orange #areaListNotes li span.noteRemove {
+  color: var(--orange);
+}
+
+/* yellow */
+.theme-yellow header,
+.theme-yellow .panelsContainer,
+.theme-yellow #panelList,
+input[type="checkbox"]::before {
+  background-color: var(--yellow);
+}
+.theme-yellow #areaNew,
+.theme-yellow #areaListNotes li {
+  border-color: var(--yellow-33);
+}
+.theme-yellow #areaNew,
+.theme-yellow #areaListNotes li,
+.theme-yellow input[type='checkbox'] {
+  border-color: var(--yellow-66);
+}
+.theme-yellow #areaListNotes li:hover input[type='checkbox'] {
+  border-color: var(--yellow-cc);
+}
+.theme-yellow #btnNew {
+  color: var(--yellow-ee);
+}
+.theme-yellow #areaNew:hover #btnNew,
+.theme-yellow #areaListNotes li span.noteRemove {
+  color: var(--yellow);
+}
+
+/* olive */
+.theme-olive header,
+.theme-olive .panelsContainer,
+.theme-olive #panelList,
+input[type="checkbox"]::before {
+  background-color: var(--olive);
+}
+.theme-olive #areaNew,
+.theme-olive #areaListNotes li {
+  border-color: var(--olive-33);
+}
+.theme-olive #areaNew,
+.theme-olive #areaListNotes li,
+.theme-olive input[type='checkbox'] {
+  border-color: var(--olive-66);
+}
+.theme-olive #areaListNotes li:hover input[type='checkbox'] {
+  border-color: var(--olive-cc);
+}
+.theme-olive #btnNew {
+  color: var(--olive-ee);
+}
+.theme-olive #areaNew:hover #btnNew,
+.theme-olive #areaListNotes li span.noteRemove {
+  color: var(--olive);
+}
+
+/* green */
+.theme-green header,
+.theme-green .panelsContainer,
+.theme-green #panelList,
+input[type="checkbox"]::before {
+  background-color: var(--green);
+}
+.theme-green #areaNew,
+.theme-green #areaListNotes li {
+  border-color: var(--green-33);
+}
+.theme-green #areaNew,
+.theme-green #areaListNotes li,
+.theme-green input[type='checkbox'] {
+  border-color: var(--green-66);
+}
+.theme-green #areaListNotes li:hover input[type='checkbox'] {
+  border-color: var(--green-cc);
+}
+.theme-green #btnNew {
+  color: var(--green-ee);
+}
+.theme-green #areaNew:hover #btnNew,
+.theme-green #areaListNotes li span.noteRemove {
+  color: var(--green);
+}
+
+/* teal */
+.theme-teal header,
+.theme-teal .panelsContainer,
+.theme-teal #panelList,
+input[type="checkbox"]::before {
+  background-color: var(--teal);
+}
+.theme-teal #areaNew,
+.theme-teal #areaListNotes li {
+  border-color: var(--teal-33);
+}
+.theme-teal #areaNew,
+.theme-teal #areaListNotes li,
+.theme-teal input[type='checkbox'] {
+  border-color: var(--teal-66);
+}
+.theme-teal #areaListNotes li:hover input[type='checkbox'] {
+  border-color: var(--teal-cc);
+}
+.theme-teal #btnNew {
+  color: var(--teal-ee);
+}
+.theme-teal #areaNew:hover #btnNew,
+.theme-teal #areaListNotes li span.noteRemove {
+  color: var(--teal);
+}
+
+/* violet */
+.theme-violet header,
+.theme-violet .panelsContainer,
+.theme-violet #panelList,
+input[type="checkbox"]::before {
+  background-color: var(--violet);
+}
+.theme-violet #areaNew,
+.theme-violet #areaListNotes li {
+  border-color: var(--violet-33);
+}
+.theme-violet #areaNew,
+.theme-violet #areaListNotes li,
+.theme-violet input[type='checkbox'] {
+  border-color: var(--violet-66);
+}
+.theme-violet #areaListNotes li:hover input[type='checkbox'] {
+  border-color: var(--violet-cc);
+}
+.theme-violet #btnNew {
+  color: var(--violet-ee);
+}
+.theme-violet #areaNew:hover #btnNew,
+.theme-violet #areaListNotes li span.noteRemove {
+  color: var(--violet);
+}
+
+/* purple */
+.theme-purple header,
+.theme-purple .panelsContainer,
+.theme-purple #panelList,
+input[type="checkbox"]::before {
+  background-color: var(--purple);
+}
+.theme-purple #areaNew,
+.theme-purple #areaListNotes li {
+  border-color: var(--purple-33);
+}
+.theme-purple #areaNew,
+.theme-purple #areaListNotes li,
+.theme-purple input[type='checkbox'] {
+  border-color: var(--purple-66);
+}
+.theme-purple #areaListNotes li:hover input[type='checkbox'] {
+  border-color: var(--purple-cc);
+}
+.theme-purple #btnNew {
+  color: var(--purple-ee);
+}
+.theme-purple #areaNew:hover #btnNew,
+.theme-purple #areaListNotes li span.noteRemove {
+  color: var(--purple);
+}
+
+/* pink */
+.theme-pink header,
+.theme-pink .panelsContainer,
+.theme-pink #panelList,
+input[type="checkbox"]::before {
+  background-color: var(--pink);
+}
+.theme-pink #areaNew,
+.theme-pink #areaListNotes li {
+  border-color: var(--pink-33);
+}
+.theme-pink #areaNew,
+.theme-pink #areaListNotes li,
+.theme-pink input[type='checkbox'] {
+  border-color: var(--pink-66);
+}
+.theme-pink #areaListNotes li:hover input[type='checkbox'] {
+  border-color: var(--pink-cc);
+}
+.theme-pink #btnNew {
+  color: var(--pink-ee);
+}
+.theme-pink #areaNew:hover #btnNew,
+.theme-pink #areaListNotes li span.noteRemove {
+  color: var(--pink);
+}
