@@ -564,6 +564,8 @@ function initModal() {
   const themes = document.querySelectorAll('.themeSelection');
   const areaSettings = document.getElementById('areaSettings');
   const panelNote = document.getElementById('panelNote');
+  const opacitySelection = document.getElementById('opacitySelection');
+  const opacity = localStorage.getItem('opacity') || '100';
   
   document.getElementById('btnSettings').addEventListener('click', () => {
     const activedList = document.querySelector('#areaListLists input.active');
@@ -578,6 +580,14 @@ function initModal() {
       localStorage.setItem('theme', e.target.dataset.id);
     });
   });
+
+  opacitySelection.value = opacity;
+  opacitySelection.addEventListener('click', (e) => {
+    document.body.style.opacity = e.target.value + '%';
+    localStorage.setItem('opacity', e.target.value);
+  });
+
+  
 }
 
 function convertTimetamp(timestamp) {
@@ -605,7 +615,9 @@ function convertTimetamp(timestamp) {
 
 function init() {
   const theme = localStorage.getItem('theme') || '';
+  const opacity = localStorage.getItem('opacity') || '100';
   document.body.className = theme;
+  document.body.style.opacity = opacity+ '%';
 
   initGrid();
   initModal();

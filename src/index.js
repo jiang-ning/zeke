@@ -15,7 +15,8 @@ const createWindow = () => {
       preload: path.join(__dirname, 'preload.js'),
     },
     titleBarStyle: 'hidden',
-    titleBarOverlay: true
+    titleBarOverlay: true,
+    transparent: true
   });
 
   // and load the index.html of the app.

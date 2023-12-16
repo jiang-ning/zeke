@@ -85,6 +85,9 @@ body {
   margin: auto;
   overflow: hidden;
 }
+body[style^="opacity"] {
+  background: transparent;
+}
 header {
   -webkit-user-select: none;
   -webkit-app-region: drag;
