@@ -227,7 +227,7 @@ input[type="checkbox"]:disabled {
   background-color: #fff;
   /* border-radius: 10px 0 0 10px; */
   /* margin: 10px 0; */
-  box-shadow: 0 0 3px #66666666;
+  /* box-shadow: -1px 0px 2px #cccccc33; */
 }
 
 .panelToggle {
