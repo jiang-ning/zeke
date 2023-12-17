@@ -15,7 +15,10 @@ const createWindow = () => {
       preload: path.join(__dirname, 'preload.js'),
     },
     titleBarStyle: 'hidden',
-    titleBarOverlay: true,
+    titleBarOverlay: {
+      color: '#00000000',
+      symbolColor: '#00000099'
+    },
     transparent: true
   });
 
