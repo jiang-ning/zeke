@@ -164,7 +164,7 @@ request.onsuccess = async function(event) {
       console.log('Lists:', lists);
       
       if(lists == undefined || lists.length == 0) {
-        addList({name:'Default'});
+        addList({name:'~'});
         localStorage.setItem('listActive', 1);
       } else {
         const orderedListIds = localStorage.getItem('listOrder');
