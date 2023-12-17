@@ -4,79 +4,119 @@
 }
 
 :root {
-  --red-33:   #db282933;
-  --red-66:   #db282966;
-  --red-cc:   #db2829cc;
-  --red-ee:   #db2829ee;
-  --red:      #db2829;
-  --orange-33:#f2711d33;
-  --orange-66:#f2711d66;
-  --orange-cc:#f2711dcc;
-  --orange-ee:#f2711dee;
-  --orange:   #f2711d;
-  --yellow-33:#fcbd0833;
-  --yellow-66:#fcbd0866;
-  --yellow-cc:#fcbd08cc;
-  --yellow-ee:#fcbd08ee;
-  --yellow:   #fcbd08;
-  --olive-33: #b6cd1833;
-  --olive-66: #b6cd1866;
-  --olive-cc: #b6cd18cc;
-  --olive-ee: #b6cd18ee;
-  --olive:    #b6cd18;
-  --green-33: #21bb4633;
-  --green-66: #21bb4666;
-  --green-cc: #21bb46cc;
-  --green-ee: #21bb46ee;
-  --green:    #21bb46;
-  --teal-33:  #00b5ae33;
-  --teal-66:  #00b5ae66;
-  --teal-cc:  #00b5aecc;
-  --teal-ee:  #00b5aeee;
-  --teal:     #00b5ae;
-  --blue-33:  #2185d133;
-  --blue-66:  #2185d166;
-  --blue-cc:  #2185d1cc;
-  --blue-ee:  #2185d1ee;
-  --blue:     #2185d1;
-  --violet-33:#6435c933;
-  --violet-66:#6435c966;
-  --violet-cc:#6435c9cc;
-  --violet-ee:#6435c9ee;
-  --violet:   #6435c9;
-  --purple-33:#a333c933;
-  --purple-66:#a333c966;
-  --purple-cc:#a333c9cc;
-  --purple-ee:#a333c9ee;
-  --purple:   #a333c9;
-  --pink-33:  #e0399833;
-  --pink-66:  #e0399866;
-  --pink-cc:  #e03998cc;
-  --pink-ee:  #e03998ee;
-  --pink:     #e03998;
+  --red-33:   #bb232333;
+  --red-66:   #bb232366;
+  --red-cc:   #bb2323cc;
+  --red-ee:   #bb2323ee;
+  --red:      #bb2323;
+  --orange-33:#ce601933;
+  --orange-66:#ce601966;
+  --orange-cc:#ce6019cc;
+  --orange-ee:#ce6019ee;
+  --orange:   #ce6019;
+  --yellow-33:#ad830a33;
+  --yellow-66:#ad830a66;
+  --yellow-cc:#ad830acc;
+  --yellow-ee:#ad830aee;
+  --yellow:   #ad830a;
+  --olive-33: #79881133;
+  --olive-66: #79881166;
+  --olive-cc: #798811cc;
+  --olive-ee: #798811ee;
+  --olive:    #798811;
+  --green-33: #1c9e3c33;
+  --green-66: #1c9e3c66;
+  --green-cc: #1c9e3ccc;
+  --green-ee: #1c9e3cee;
+  --green:    #1c9e3c;
+  --teal-33:  #039a9433;
+  --teal-66:  #039a9466;
+  --teal-cc:  #039a94cc;
+  --teal-ee:  #039a94ee;
+  --teal:     #039a94;
+  --blue-33:  #1c72b133;
+  --blue-66:  #1c72b166;
+  --blue-cc:  #1c72b1cc;
+  --blue-ee:  #1c72b1ee;
+  --blue:     #1c72b1;
+  --violet-33:#552dab33;
+  --violet-66:#552dab66;
+  --violet-cc:#552dabcc;
+  --violet-ee:#552dabee;
+  --violet:   #552dab;
+  --purple-33:#8b2baa33;
+  --purple-66:#8b2baa66;
+  --purple-cc:#8b2baacc;
+  --purple-ee:#8b2baaee;
+  --purple:   #8b2baa;
+  --pink-33:  #bf318033;
+  --pink-66:  #bf318066;
+  --pink-cc:  #bf3180cc;
+  --pink-ee:  #bf3180ee;
+  --pink:     #bf3180;
   --brown:    #a5673f;
-  --grey:     #767676; 
+  --grey:     #767676;
+  --dark-33:  #33333333;
+  --dark-66:  #33333366;
+  --dark-cc:  #333333cc;
+  --dark-ee:  #333333ee;
+  --dark:     #333;
+}
+.red {
+  background-color: var(--red);
+}
+.orange {
+  background-color: var(--orange);
+}
+.yellow {
+  background-color: var(--yellow);
+}
+.olive {
+  background-color: var(--olive);
+}
+.green {
+  background-color: var(--green);
+}
+.teal {
+  background-color: var(--teal);
+}
+.blue {
+  background-color: var(--blue);
+}
+.violet {
+  background-color: var(--violet);
+}
+.purple {
+  background-color: var(--purple);
+}
+.pink {
+  background-color: var(--pink);
+}
+.brown {
+  background-color: var(--brown);
+}
+.grey {
+  background-color: var(--grey);
 }
 
-/* Hide the default scroll bar */
 ::-webkit-scrollbar {
   width: 8px;
 }
-
-/* Track */
 ::-webkit-scrollbar-track {
   background-color: #f1f1f1;
 }
-
-/* Handle */
 ::-webkit-scrollbar-thumb {
   background: #ccc;
   border-radius: 4px;
 }
-
-/* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #aaa;
+}
+input[type="range"] {
+  accent-color: #ccc;
+}
+input[type="range"]:focus {
+  outline: none;
 }
 
 body {
@@ -465,39 +505,25 @@ input[type="checkbox"]:disabled {
 .themeSelection.selected {
   border-color: transparent;
 }
-.red {
-  background-color: var(--red);
+.sectionMode {
+  margin-bottom: 10px;
 }
-.orange {
-  background-color: var(--orange);
+.sectionMode .modeSelection {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  border: 3px solid transparent;
+  border-radius: 20px;
+  cursor: pointer;
+  text-align: center;
+  line-height: 33px;
+  margin: 0 2px;
 }
-.yellow {
-  background-color: var(--yellow);
+.sectionMode #mode-light {
+  background-color: #eee;
+  color: #333;
 }
-.olive {
-  background-color: var(--olive);
-}
-.green {
-  background-color: var(--green);
-}
-.teal {
-  background-color: var(--teal);
-}
-.blue {
-  background-color: var(--blue);
-}
-.violet {
-  background-color: var(--violet);
-}
-.purple {
-  background-color: var(--purple);
-}
-.pink {
-  background-color: var(--pink);
-}
-.brown {
-  background-color: var(--brown);
-}
-.grey {
-  background-color: var(--grey);
+.sectionMode #mode-dark {
+  background-color: #333;
+  color: #eee;
 }

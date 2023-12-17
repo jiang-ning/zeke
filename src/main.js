@@ -562,6 +562,7 @@ function initGrid() {
 function initModal() {
   const modal = document.querySelector('.modal');
   const themes = document.querySelectorAll('.themeSelection');
+  const modes = document.querySelectorAll('.modeSelection');
   const areaSettings = document.getElementById('areaSettings');
   const panelNote = document.getElementById('panelNote');
   const opacitySelection = document.getElementById('opacitySelection');
@@ -578,6 +579,12 @@ function initModal() {
     theme.addEventListener('click', (e) => {
       document.body.className = e.target.dataset.id;
       localStorage.setItem('theme', e.target.dataset.id);
+    });
+  });
+  modes.forEach(mode => {
+    mode.addEventListener('click', (e) => {
+      document.body.className = e.currentTarget.dataset.id;
+      localStorage.setItem('theme', e.currentTarget.dataset.id);
     });
   });
 

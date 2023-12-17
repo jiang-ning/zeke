@@ -46,11 +46,76 @@
   color: #00000033;
 }
 
+/* mode-dark */
+.theme-dark::-webkit-scrollbar-thumb,
+.theme-dark::-webkit-scrollbar-thumb:hover,
+.theme-dark #listAdd #listAddName.active {
+  background-color: #00000099;
+}
+.theme-dark #panelNote,
+.theme-dark #gutter,
+.theme-dark #areaListLists input.active,
+.theme-dark #areaListLists li.edit,
+.theme-dark #txtNew:focus,
+.theme-dark #txtNew:focus + #btnNew,
+.theme-dark #areaListNotes li.edit,
+.theme-dark #areaSettings.active {
+  background-color: #00000066;
+}
+.theme-dark input[type="checkbox"]::before {
+  background-color: #ffffffcc;
+}
+.theme-dark #listAdd #listAddName {
+  color: #00000099;
+}
+.theme-dark #listAdd #listAddName:hover,
+.theme-dark #areaSettings #btnSettings:hover,
+.theme-dark #areaSettings.active #btnSettings {
+  color: #000000ee;
+}
+.theme-dark #txtNew,
+.theme-dark #areaListLists input.active,
+.theme-dark #listAdd #listAddName.active,
+.theme-dark #areaNew:hover #btnNew,
+.theme-dark #areaListNotes li:hover input[type='text'] {
+  color: #fff;
+}
+.theme-dark #areaListNotes input[type='text'],
+.theme-dark #areaListNotes li span.noteMoment,
+.theme-dark #areaListNotes li span.noteRemove,
+.theme-dark #areaListLists li span,
+.theme-dark .modal-section,
+.theme-dark .modal-section-title {
+  color: #ffffff99;
+}
+.theme-dark #areaListLists input,
+.theme-dark #areaListNotes li.completed input[type='text'] {
+  color: #ffffff33;
+}
+.theme-dark header,
+.theme-dark .panelsContainer,
+.theme-dark #panelList {
+  background-color: var(--dark);
+}
+.theme-dark #areaNew,
+.theme-dark #areaListNotes li {
+  border-color: var(--dark-33);
+}
+.theme-dark #areaNew,
+.theme-dark #areaListNotes li,
+.theme-dark input[type='checkbox'],
+.theme-dark #areaListNotes li:hover input[type='checkbox'] {
+  border-color: var(--dark-cc);
+}
+.theme-dark input[type="range"] {
+  accent-color: var(--dark);
+}
+
 /* blue */
 .theme-blue header,
 .theme-blue .panelsContainer,
 .theme-blue #panelList,
-input[type="checkbox"]::before {
+.theme-blue input[type="checkbox"]::before {
   background-color: var(--blue);
 }
 .theme-blue #areaNew,
@@ -72,12 +137,15 @@ input[type="checkbox"]::before {
 .theme-blue #areaListNotes li span.noteRemove {
   color: var(--blue);
 }
+.theme-blue input[type="range"] {
+  accent-color: var(--blue);
+}
 
 /* red */
 .theme-red header,
 .theme-red .panelsContainer,
 .theme-red #panelList,
-input[type="checkbox"]::before {
+.theme-red input[type="checkbox"]::before {
   background-color: var(--red);
 }
 .theme-red #areaNew,
@@ -99,12 +167,15 @@ input[type="checkbox"]::before {
 .theme-red #areaListNotes li span.noteRemove {
   color: var(--red);
 }
+.theme-red input[type="range"] {
+  accent-color: var(--red);
+}
 
 /* orange */
 .theme-orange header,
 .theme-orange .panelsContainer,
 .theme-orange #panelList,
-input[type="checkbox"]::before {
+.theme-orange input[type="checkbox"]::before {
   background-color: var(--orange);
 }
 .theme-orange #areaNew,
@@ -126,12 +197,15 @@ input[type="checkbox"]::before {
 .theme-orange #areaListNotes li span.noteRemove {
   color: var(--orange);
 }
+.theme-orange input[type="range"] {
+  accent-color: var(--orange);
+}
 
 /* yellow */
 .theme-yellow header,
 .theme-yellow .panelsContainer,
 .theme-yellow #panelList,
-input[type="checkbox"]::before {
+.theme-yellow input[type="checkbox"]::before {
   background-color: var(--yellow);
 }
 .theme-yellow #areaNew,
@@ -153,12 +227,15 @@ input[type="checkbox"]::before {
 .theme-yellow #areaListNotes li span.noteRemove {
   color: var(--yellow);
 }
+.theme-yellow input[type="range"] {
+  accent-color: var(--yellow);
+}
 
 /* olive */
 .theme-olive header,
 .theme-olive .panelsContainer,
 .theme-olive #panelList,
-input[type="checkbox"]::before {
+.theme-olive input[type="checkbox"]::before {
   background-color: var(--olive);
 }
 .theme-olive #areaNew,
@@ -180,12 +257,15 @@ input[type="checkbox"]::before {
 .theme-olive #areaListNotes li span.noteRemove {
   color: var(--olive);
 }
+.theme-olive input[type="range"] {
+  accent-color: var(--olive);
+}
 
 /* green */
 .theme-green header,
 .theme-green .panelsContainer,
 .theme-green #panelList,
-input[type="checkbox"]::before {
+.theme-green input[type="checkbox"]::before {
   background-color: var(--green);
 }
 .theme-green #areaNew,
@@ -207,12 +287,15 @@ input[type="checkbox"]::before {
 .theme-green #areaListNotes li span.noteRemove {
   color: var(--green);
 }
+.theme-green input[type="range"] {
+  accent-color: var(--green);
+}
 
 /* teal */
 .theme-teal header,
 .theme-teal .panelsContainer,
 .theme-teal #panelList,
-input[type="checkbox"]::before {
+.theme-teal input[type="checkbox"]::before {
   background-color: var(--teal);
 }
 .theme-teal #areaNew,
@@ -234,12 +317,15 @@ input[type="checkbox"]::before {
 .theme-teal #areaListNotes li span.noteRemove {
   color: var(--teal);
 }
+.theme-teal input[type="range"] {
+  accent-color: var(--teal);
+}
 
 /* violet */
 .theme-violet header,
 .theme-violet .panelsContainer,
 .theme-violet #panelList,
-input[type="checkbox"]::before {
+.theme-violet input[type="checkbox"]::before {
   background-color: var(--violet);
 }
 .theme-violet #areaNew,
@@ -261,12 +347,15 @@ input[type="checkbox"]::before {
 .theme-violet #areaListNotes li span.noteRemove {
   color: var(--violet);
 }
+.theme-violet input[type="range"] {
+  accent-color: var(--violet);
+}
 
 /* purple */
 .theme-purple header,
 .theme-purple .panelsContainer,
 .theme-purple #panelList,
-input[type="checkbox"]::before {
+.theme-purple input[type="checkbox"]::before {
   background-color: var(--purple);
 }
 .theme-purple #areaNew,
@@ -288,12 +377,15 @@ input[type="checkbox"]::before {
 .theme-purple #areaListNotes li span.noteRemove {
   color: var(--purple);
 }
+.theme-purple input[type="range"] {
+  accent-color: var(--purple);
+}
 
 /* pink */
 .theme-pink header,
 .theme-pink .panelsContainer,
 .theme-pink #panelList,
-input[type="checkbox"]::before {
+.theme-pink input[type="checkbox"]::before {
   background-color: var(--pink);
 }
 .theme-pink #areaNew,
@@ -314,4 +406,7 @@ input[type="checkbox"]::before {
 .theme-pink #areaNew:hover #btnNew,
 .theme-pink #areaListNotes li span.noteRemove {
   color: var(--pink);
+}
+.theme-pink input[type="range"] {
+  accent-color: var(--pink);
 }
