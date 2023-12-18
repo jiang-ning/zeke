@@ -1,6 +1,6 @@
 
 // Open the IndexedDB database
-const request = indexedDB.open('zeke', 1);
+const request = indexedDB.open('neonote', 1);
 
 // the main container for note list
 const areaListNotes = document.getElementById('areaListNotes');

@@ -1,8 +1,8 @@
 {
-  "name": "zeke",
-  "productName": "zeke",
+  "name": "neonote",
+  "productName": "neonote",
   "version": "1.0.0",
-  "description": "My Electron application description",
+  "description": "Effortless Note-Taking: Simplify, Secure, Succeed!",
   "main": "src/index.js",
   "scripts": {
     "start": "electron-forge start",
