@@ -467,23 +467,28 @@ function initDnD(listName, storageName) {
   let draggedItem = null;
 
   list.addEventListener('dragstart', (e) => {
-    draggedItem = e.target;
-    e.dataTransfer.effectAllowed = 'move';
-    e.dataTransfer.setData('text/plain', draggedItem.dataset.index);
-    e.target.classList.add('dragging');
+    if(e.target.draggable) {
+      draggedItem = e.target;
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/plain', draggedItem.dataset.index);
+      e.target.classList.add('dragging');
+    }
+    
   });
 
   list.addEventListener('dragover', (e) => {
-    e.preventDefault();
-    e.dataTransfer.dropEffect = 'move';
-    const targetItem = e.target.closest('li');
-    if(targetItem && targetItem != draggedItem) {
-      const draggedIndex = parseInt(draggedItem.dataset.index);
-      const targetIndex = parseInt(targetItem.dataset.index);
-      if(draggedIndex < targetIndex) {
-        list.insertBefore(draggedItem, targetItem.nextSibling);
-      } else {
-        list.insertBefore(draggedItem, targetItem);
+    if(e.target.draggable) {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      const targetItem = e.target.closest('li');
+      if(draggedItem.dataset.index && targetItem && targetItem != draggedItem) {
+        const draggedIndex = parseInt(draggedItem.dataset.index);
+        const targetIndex = parseInt(targetItem.dataset.index);
+        if(draggedIndex < targetIndex) {
+          list.insertBefore(draggedItem, targetItem.nextSibling);
+        } else {
+          list.insertBefore(draggedItem, targetItem);
+        }
       }
     }
   });
