@@ -418,7 +418,7 @@ request.onsuccess = async function(event) {
 
     notePin.addEventListener('click', (e) => {
       e.preventDefault();
-      // e.stopPropagation();
+      e.stopPropagation();
       const areaPinNotes = document.querySelector('#areaPinNotes ul');
       const areaListNotes = document.querySelector('#areaListNotes ul');
       let targetListItem = e.target;
