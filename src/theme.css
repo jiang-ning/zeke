@@ -101,6 +101,7 @@
 .theme-dark #areaListNotes li {
   border-color: var(--dark-33);
 }
+.theme-dark,
 .theme-dark #areaNew,
 .theme-dark #areaListNotes li,
 .theme-dark input[type='checkbox'],
@@ -117,6 +118,9 @@
 .theme-blue #panelList,
 .theme-blue input[type="checkbox"]::before {
   background-color: var(--blue);
+}
+.theme-blue {
+  border-color: var(--blue);
 }
 .theme-blue #areaNew,
 .theme-blue #areaListNotes li {
@@ -148,6 +152,9 @@
 .theme-red input[type="checkbox"]::before {
   background-color: var(--red);
 }
+.theme-red {
+  border-color: var(--red);
+}
 .theme-red #areaNew,
 .theme-red #areaListNotes li {
   border-color: var(--red-33);
@@ -177,6 +184,9 @@
 .theme-orange #panelList,
 .theme-orange input[type="checkbox"]::before {
   background-color: var(--orange);
+}
+.theme-orange {
+  border-color: var(--orange);
 }
 .theme-orange #areaNew,
 .theme-orange #areaListNotes li {
@@ -208,6 +218,9 @@
 .theme-yellow input[type="checkbox"]::before {
   background-color: var(--yellow);
 }
+.theme-yellow {
+  border-color: var(--yellow);
+}
 .theme-yellow #areaNew,
 .theme-yellow #areaListNotes li {
   border-color: var(--yellow-33);
@@ -237,6 +250,9 @@
 .theme-olive #panelList,
 .theme-olive input[type="checkbox"]::before {
   background-color: var(--olive);
+}
+.theme-olive {
+  border-color: var(--olive);
 }
 .theme-olive #areaNew,
 .theme-olive #areaListNotes li {
@@ -268,6 +284,9 @@
 .theme-green input[type="checkbox"]::before {
   background-color: var(--green);
 }
+.theme-green {
+  border-color: var(--green);
+}
 .theme-green #areaNew,
 .theme-green #areaListNotes li {
   border-color: var(--green-33);
@@ -297,6 +316,9 @@
 .theme-teal #panelList,
 .theme-teal input[type="checkbox"]::before {
   background-color: var(--teal);
+}
+.theme-teal {
+  border-color: var(--teal);
 }
 .theme-teal #areaNew,
 .theme-teal #areaListNotes li {
@@ -328,6 +350,9 @@
 .theme-violet input[type="checkbox"]::before {
   background-color: var(--violet);
 }
+.theme-violet {
+  border-color: var(--violet);
+}
 .theme-violet #areaNew,
 .theme-violet #areaListNotes li {
   border-color: var(--violet-33);
@@ -358,6 +383,9 @@
 .theme-purple input[type="checkbox"]::before {
   background-color: var(--purple);
 }
+.theme-purple {
+  border-color: var(--purple);
+}
 .theme-purple #areaNew,
 .theme-purple #areaListNotes li {
   border-color: var(--purple-33);
@@ -387,6 +415,9 @@
 .theme-pink #panelList,
 .theme-pink input[type="checkbox"]::before {
   background-color: var(--pink);
+}
+.theme-pink {
+  border-color: var(--pink);
 }
 .theme-pink #areaNew,
 .theme-pink #areaListNotes li {
