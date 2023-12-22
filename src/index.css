@@ -211,11 +211,12 @@ input[type="checkbox"]:disabled {
   /* grid-column: 3;
   grid-row: 1; */
   display: grid;
-  grid-template-rows: 40px 1fr;
+  grid-template-rows: 40px auto 1fr;
   background-color: #fff;
   /* padding: 10px 10px 10px 0; */
 }
 #panelNote.showModal #areaNew,
+#panelNote.showModal #areaPinNotes,
 #panelNote.showModal #areaListNotes {
   display: none;
 }
@@ -358,38 +359,48 @@ input[type="checkbox"]:disabled {
   line-height: 39px;
   cursor: pointer;
 }
+
 #areaNew {
   grid-column: 1;
   grid-row: 1;
   border-bottom: 1px solid #eee;
 }
-#areaNew:hover {
+#areaPinNotes {
+  grid-column: 1;
+  grid-row: 2;
+}
+#areaListNotes {
+  grid-column: 1;
+  grid-row: 3;
+  overflow: hidden auto;
+}
+
+#areaNew:hover,
+#areaNew:has(#txtNew:focus) {
   border-color: #ccc;
 }
-#areaNew:hover #btnNew {
+#areaNew:hover #btnNew,
+#areaNew:has(#txtNew:focus) #btnNew {
   color: #999;
 }
 
-#areaListNotes {
-  grid-column: 1;
-  grid-row: 2;
-  overflow: hidden auto;
-}
-#areaListNotes li {
+#areaListNotes li,
+#areaPinNotes li {
   list-style: none;
   height: 40px;
   line-height: 40px;
   /* border-top: 1px solid transparent; */
   border-bottom: 1px solid #eee;
-  padding-left: 6px;
-  grid-template-columns: 26px 1fr 90px 36px;
+  padding: 0 10px 0 6px;
+  grid-template-columns: 26px 1fr 90px auto auto;
   display: grid;
   transition: transform 0.3s;
 }
 #areaListNotes li.dragging {
   transform: scale(.9);
 }
-#areaListNotes input[type='text'] {
+#areaListNotes input[type='text'],
+#areaPinNotes input[type='text']  {
   border: none;
   /* width: calc(100% - 50px); */
   outline: none;
@@ -400,27 +411,34 @@ input[type="checkbox"]:disabled {
   color: #666;
   /* margin-left: 20px; */
 }
-#areaListNotes input[type='text'].active {
+#areaListNotes input[type='text'].active,
+#areaPinNotes input[type='text'].active {
   background-color: #fff;
   position: relative;
   box-shadow: 0 0 10px #66666666;
   color: #000;
 }
-#areaListNotes li.edit input[type='text'] {
+#areaListNotes li.edit input[type='text'],
+#areaPinNotes li.edit input[type='text'] {
   cursor: text;
 }
-#areaListNotes li.edit span.noteRemove {
+#areaListNotes li.edit span.notePin,
+#areaListNotes li.edit span.noteRemove,
+#areaPinNotes li.edit span.noteRemove {
   display: inline;
 }
-#areaListNotes li:hover input[type='text'] {
+#areaListNotes li:hover input[type='text'],
+#areaPinNotes li:hover input[type='text'] {
   color: #333;
 }
-#areaListNotes li:hover input[type='checkbox'] {
+#areaListNotes li:hover input[type='checkbox'],
+#areaPinNotes li:hover input[type='checkbox'] {
   border-color: #ccc;
 }
-#areaListNotes li span.noteRemove {
+#areaListNotes li span.noteRemove,
+#areaPinNotes li span.noteRemove {
   color: #ccc;
-  width: 30px;
+  width: 20px;
   height: 40px;
   line-height: 40px;
   text-align: center;
@@ -428,19 +446,44 @@ input[type="checkbox"]:disabled {
   cursor: pointer;
   display: none;
 }
-#areaListNotes li span.noteRemove:hover {
+#areaListNotes li span.noteRemove:hover,
+#areaPinNotes li span.noteRemove:hover {
   color: #666;
 }
-#areaListNotes li span.noteMoment {
+#areaListNotes li span.noteMoment,
+#areaPinNotes li span.noteMoment {
   font-size: 10px;
   text-align: right;
   color: #666;
   padding-right: 10px;
 }
-#areaListNotes li.completed input[type='text'] {
+#areaListNotes li.completed input[type='text'],
+#areaPinNotes li.completed input[type='text'] {
   color: #ccc;
   text-decoration: line-through;
 }
+#areaListNotes .notePin {
+  display: none;
+  background: url('./images/pin-angle.svg') center center no-repeat;
+  filter: opacity(0.3);
+  width: 20px;
+  height: 40px;
+  line-height: 40px;
+  z-index: 2;
+  cursor: pointer;
+}
+#areaPinNotes li {
+  grid-template-columns: 26px 1fr 90px 20px auto;
+}
+#areaPinNotes li:last-child {
+  border-bottom-color: #ccc;
+}
+#areaPinNotes .notePin {
+  background: url('./images/pin-fill.svg') center center no-repeat;
+  filter: opacity(0.3);
+  cursor: pointer;
+}
+
 #areaSettings {
   grid-column: 1;
   grid-row: 2;
@@ -465,10 +508,12 @@ input[type="checkbox"]:disabled {
 
 .modal {
   display: none;
-  /* position: absolute; */
+  grid-column: 1;
+  grid-row: 1 / span 3;
   background-color: #fff;
   width: 100%;
-  height: 100%;
+  height: calc(100% - 40px);
+  z-index: 1;
 }
 .modal.open {
   display: block;
@@ -521,10 +566,9 @@ input[type="checkbox"]:disabled {
   margin: 0 2px;
 }
 .sectionMode #mode-light {
-  background-color: #eee;
-  color: #333;
+  background: url('./images/sun.svg') center center no-repeat #eee;
 }
 .sectionMode #mode-dark {
-  background-color: #333;
-  color: #eee;
+  background: url('./images/moon.svg') center center no-repeat #999;
+  filter: invert(1);
 }

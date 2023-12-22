@@ -26,7 +26,11 @@ request.onsuccess = async function(event) {
     request.onsuccess = function(newNote) {
       console.log('Note added successfully');
 
-      generateNoteItem(newNote.target.result, note.content, note.dateCreated, newNote.target.result - 1);
+      generateNoteItem({
+        id: newNote.target.result,
+        content: note.content, 
+        dateCreated: note.dateCreated
+      }, newNote.target.result - 1);
 
       let orderedNoteIds = JSON.parse(localStorage.getItem('noteOrder')) || {};
       if(orderedNoteIds && orderedNoteIds[note.list]) {
@@ -72,14 +76,27 @@ request.onsuccess = async function(event) {
       } else {
         const orderedNoteIds = JSON.parse(localStorage.getItem('noteOrder'));
         document.querySelector('#areaListNotes ul').innerHTML = '';
+        document.querySelector('#areaPinNotes ul').innerHTML = '';
         if(orderedNoteIds && orderedNoteIds[listId]) {
           const orderedNotes = orderedNoteIds[listId].map(id =>notes.find(obj => obj.id === parseInt(id)));
           orderedNotes.forEach((item, idx) => {
-            generateNoteItem(item.id, item.content, item.dateCreated, idx, true);
+            generateNoteItem({
+              id: item.id, 
+              content: item.content, 
+              dateCreated: item.dateCreated,
+              pin: item.pin,
+              completed: item.completed
+            }, idx, true);
           });
         } else {
           notes.forEach((item, idx) => {
-            generateNoteItem(item.id, item.content, item.dateCreated, idx);
+            generateNoteItem({
+              id: item.id, 
+              content: item.content, 
+              dateCreated: item.dateCreated,
+              pin: item.pin,
+              completed: item.completed
+            }, idx);
           });
         }
         initDnD('areaListNotes', 'noteOrder');
@@ -313,31 +330,47 @@ request.onsuccess = async function(event) {
     }
   }
 
-  function generateNoteItem(id, content, dateCreated, order = 0, byUserOrdered = false) {
+  /**
+   * Generate note item element <li>
+   * @param {object} note {id:int, content:string, dateCreated:timestamp}
+   * @param {int} order 
+   * @param {boolean} byUserOrdered
+   */
+  function generateNoteItem(note, order = 0, byUserOrdered = false) {
     let noteItem = document.createElement('li');
     let noteCheckbox = document.createElement('input');
     let noteInput = document.createElement('input');
     let noteMoment = document.createElement('span');
+    let notePin = document.createElement('span');
     let noteRemove = document.createElement('span');
     noteItem.draggable = true;
-    noteItem.dataset.id = id;
+    noteItem.dataset.id = note.id;
     noteItem.dataset.index = order;
+    noteItem.className = note.completed ? "completed" : "";
     noteCheckbox.type = 'checkbox';
+    noteCheckbox.checked = note.completed;
     noteInput.type = 'text';
-    noteInput.value = content;
+    noteInput.value = note.content;
     noteInput.readOnly = true;
     noteMoment.className = 'noteMoment';
-    noteMoment.innerText = convertTimetamp(dateCreated);
+    noteMoment.innerText = convertTimetamp(note.dateCreated);
+    notePin.className = 'notePin';
     noteRemove.className = 'noteRemove';
     noteRemove.innerText = '-';
     noteItem.append(noteCheckbox);
     noteItem.append(noteInput);
     noteItem.append(noteMoment);
+    noteItem.append(notePin);
     noteItem.append(noteRemove);
-    if(byUserOrdered) {
-      document.querySelector('#areaListNotes ul').append(noteItem);
+
+    if(note.pin) {
+      document.querySelector('#areaPinNotes ul').prepend(noteItem);
     } else {
-      document.querySelector('#areaListNotes ul').prepend(noteItem);
+      if(byUserOrdered) {
+        document.querySelector('#areaListNotes ul').append(noteItem);
+      } else {
+        document.querySelector('#areaListNotes ul').prepend(noteItem);
+      }
     }
     
     noteCheckbox.addEventListener('click', (e) => {
@@ -359,7 +392,7 @@ request.onsuccess = async function(event) {
     noteInput.addEventListener('blur', (e) => {
       let newVal = e.target.value.trim();
       let targetId = parseInt(e.target.parentNode.dataset.id);
-      if(newVal && newVal != content) {
+      if(newVal && newVal != note.content) {
         updateNote(targetId, {content: newVal});
       }
       noteInput.readOnly = true;
@@ -373,7 +406,7 @@ request.onsuccess = async function(event) {
         e.preventDefault();
         let newVal = e.target.value.trim();
         let targetId = parseInt(e.target.parentNode.dataset.id);
-        if(newVal && newVal != content) {
+        if(newVal && newVal != note.content) {
           updateNote(targetId, {content: newVal});
         }
         noteInput.readOnly = true;
@@ -381,6 +414,22 @@ request.onsuccess = async function(event) {
           noteItem.classList.remove('edit');
         },100);
       }
+    });
+
+    notePin.addEventListener('click', (e) => {
+      e.preventDefault();
+      // e.stopPropagation();
+      const areaPinNotes = document.querySelector('#areaPinNotes ul');
+      const areaListNotes = document.querySelector('#areaListNotes ul');
+      let targetListItem = e.target;
+      let targetId = parseInt(targetListItem.parentNode.dataset.id);
+      let isPin = areaPinNotes.contains(targetListItem);
+      if(isPin) {
+        areaListNotes.prepend(targetListItem.parentNode);
+      } else {
+        areaPinNotes.prepend(targetListItem.parentNode);
+      }
+      updateNote(targetId, {pin: !isPin});
     });
 
     noteRemove.addEventListener('click', (e) => {
@@ -398,7 +447,7 @@ request.onsuccess = async function(event) {
         currentOrder[currentListId] = newOrder;
         localStorage.setItem('noteOrder', JSON.stringify(currentOrder));
       }
-      
+
       console.log(newOrder);
       noteItem.remove();
       deleteNote(targetId);
@@ -610,9 +659,9 @@ function convertTimetamp(timestamp) {
     month: 2592000,
     week: 604800,
     day: 86400,
-    hour: 3600,
-    minute: 60,
-    second: 1
+    hr: 3600,
+    min: 60,
+    sec: 1
   };
 
   for (let interval in intervals) {
