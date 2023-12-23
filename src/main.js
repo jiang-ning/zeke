@@ -69,14 +69,13 @@ request.onsuccess = async function(event) {
       }
       
       console.log('Note:', notes);
-
       document.querySelector('#areaListNotes ul').innerHTML = '';
+      document.querySelector('#areaPinNotes ul').innerHTML = '';
+      
       if(notes == undefined || notes.length == 0) {
         // areaListNotes.innerHTML = '';
       } else {
         const orderedNoteIds = JSON.parse(localStorage.getItem('noteOrder'));
-        document.querySelector('#areaListNotes ul').innerHTML = '';
-        document.querySelector('#areaPinNotes ul').innerHTML = '';
         if(orderedNoteIds && orderedNoteIds[listId]) {
           const orderedNotes = orderedNoteIds[listId].map(id =>notes.find(obj => obj.id === parseInt(id)));
           orderedNotes.forEach((item, idx) => {
