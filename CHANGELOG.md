@@ -1,9 +1,11 @@
 # Change Log
 
-### v1.1.4
+### v1.1.6
 ##### 2023-12-24
 - Improvement: Scroll bar layout
 - Bug Fix: Pin list still showing after switch to a blank list
+- Bug Fix: Pin and remove button doesn't works time to time
+- Bug Fix: Note lost after ordering list
 
 ### v1.1.3
 ##### 2023-12-22

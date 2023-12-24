@@ -464,9 +464,9 @@ input[type="checkbox"]:disabled {
 }
 #areaListNotes .notePin {
   display: none;
-  background: url('./images/pin-angle.svg') center center no-repeat;
+  background: url('./images/pin-angle.svg') center center no-repeat transparent;
   filter: opacity(0.3);
-  width: 20px;
+  width: 30px;
   height: 40px;
   line-height: 40px;
   z-index: 2;
@@ -479,7 +479,7 @@ input[type="checkbox"]:disabled {
   border-bottom-color: #ccc;
 }
 #areaPinNotes .notePin {
-  background: url('./images/pin-fill.svg') center center no-repeat;
+  background: url('./images/pin-fill.svg') center center no-repeat transparent;
   filter: opacity(0.3);
   cursor: pointer;
 }

@@ -30,7 +30,7 @@ request.onsuccess = async function(event) {
         id: newNote.target.result,
         content: note.content, 
         dateCreated: note.dateCreated
-      }, newNote.target.result - 1);
+      }, 'areaListNotes', newNote.target.result - 1);
 
       let orderedNoteIds = JSON.parse(localStorage.getItem('noteOrder')) || {};
       if(orderedNoteIds && orderedNoteIds[note.list]) {
@@ -76,30 +76,37 @@ request.onsuccess = async function(event) {
         // areaListNotes.innerHTML = '';
       } else {
         const orderedNoteIds = JSON.parse(localStorage.getItem('noteOrder'));
+        const orderedPinNoteIds = JSON.parse(localStorage.getItem('pinNoteOrder'));
+        let listNotes = notes;
         if(orderedNoteIds && orderedNoteIds[listId]) {
-          const orderedNotes = orderedNoteIds[listId].map(id =>notes.find(obj => obj.id === parseInt(id)));
-          orderedNotes.forEach((item, idx) => {
-            generateNoteItem({
-              id: item.id, 
-              content: item.content, 
-              dateCreated: item.dateCreated,
-              pin: item.pin,
-              completed: item.completed
-            }, idx, true);
-          });
-        } else {
-          notes.forEach((item, idx) => {
-            generateNoteItem({
-              id: item.id, 
-              content: item.content, 
-              dateCreated: item.dateCreated,
-              pin: item.pin,
-              completed: item.completed
-            }, idx);
-          });
+          listNotes = orderedNoteIds[listId].map(id =>notes.find(obj => obj.id === parseInt(id)));
         }
-        initDnD('areaListNotes', 'noteOrder');
+        if(orderedPinNoteIds && orderedPinNoteIds[listId]) {
+          const pinNotes = orderedPinNoteIds[listId].map(id =>notes.find(obj => obj.id === parseInt(id)));
+          pinNotes.forEach((item, idx) => {
+            generateNoteItem({
+              id: item.id, 
+              list: item.list,
+              content: item.content, 
+              dateCreated: item.dateCreated,
+              pin: item.pin,
+              completed: item.completed
+            }, 'areaPinNotes', idx, orderedPinNoteIds && orderedPinNoteIds[listId]);
+          });
+          initDnD('areaPinNotes', 'pinNoteOrder');
+        }
+        listNotes.forEach((item, idx) => {
+          generateNoteItem({
+            id: item.id, 
+            list: item.list,
+            content: item.content, 
+            dateCreated: item.dateCreated,
+            pin: item.pin,
+            completed: item.completed
+          }, 'areaListNotes', idx, orderedNoteIds && orderedNoteIds[listId]);
+        });
         
+        initDnD('areaListNotes', 'noteOrder');
       }
     };
     
@@ -186,7 +193,7 @@ request.onsuccess = async function(event) {
         const orderedListIds = localStorage.getItem('listOrder');
         document.querySelector('#areaListLists ul').innerHTML = '';
         // if more than one list
-        if(orderedListIds.includes(',')) {
+        if(orderedListIds && orderedListIds.includes(',')) {
           const currentOrderedIds = orderedListIds.split(',');
           const orderedLists = currentOrderedIds.map(id =>lists.find(obj => obj.id === parseInt(id)));
           orderedLists.forEach((item, idx) => {
@@ -332,10 +339,11 @@ request.onsuccess = async function(event) {
   /**
    * Generate note item element <li>
    * @param {object} note {id:int, content:string, dateCreated:timestamp}
+   * @param {string} area The area where the notes gones to: areaListLists|areaPinNotes|areaListNotes
    * @param {int} order 
    * @param {boolean} byUserOrdered
    */
-  function generateNoteItem(note, order = 0, byUserOrdered = false) {
+  function generateNoteItem(note, area, order = 0, byUserOrdered = false) {
     let noteItem = document.createElement('li');
     let noteCheckbox = document.createElement('input');
     let noteInput = document.createElement('input');
@@ -362,14 +370,10 @@ request.onsuccess = async function(event) {
     noteItem.append(notePin);
     noteItem.append(noteRemove);
 
-    if(note.pin) {
-      document.querySelector('#areaPinNotes ul').prepend(noteItem);
+    if(byUserOrdered) {
+      document.querySelector(`#${area} ul`).append(noteItem);
     } else {
-      if(byUserOrdered) {
-        document.querySelector('#areaListNotes ul').append(noteItem);
-      } else {
-        document.querySelector('#areaListNotes ul').prepend(noteItem);
-      }
+      document.querySelector(`#${area} ul`).prepend(noteItem);
     }
     
     noteCheckbox.addEventListener('click', (e) => {
@@ -384,11 +388,15 @@ request.onsuccess = async function(event) {
     });
 
     noteInput.addEventListener('dblclick', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
       noteInput.readOnly = false;
       noteItem.classList.add('edit');
     });
 
     noteInput.addEventListener('blur', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
       let newVal = e.target.value.trim();
       let targetId = parseInt(e.target.parentNode.dataset.id);
       if(newVal && newVal != note.content) {
@@ -416,19 +424,19 @@ request.onsuccess = async function(event) {
     });
 
     notePin.addEventListener('click', (e) => {
+      console.log('pin clicked');
       e.preventDefault();
       e.stopPropagation();
-      const areaPinNotes = document.querySelector('#areaPinNotes ul');
-      const areaListNotes = document.querySelector('#areaListNotes ul');
-      let targetListItem = e.target;
-      let targetId = parseInt(targetListItem.parentNode.dataset.id);
-      let isPin = areaPinNotes.contains(targetListItem);
-      if(isPin) {
-        areaListNotes.prepend(targetListItem.parentNode);
+
+      if(note.pin) {
+        document.querySelector('#areaListNotes ul').prepend(noteItem);
       } else {
-        areaPinNotes.prepend(targetListItem.parentNode);
+        document.querySelector('#areaPinNotes ul').appendChild(noteItem);
       }
-      updateNote(targetId, {pin: !isPin});
+
+      note.pin = !note.pin;
+      updateNote(note.id, {pin: note.pin});
+      updateOrderNotes(note.list);
     });
 
     noteRemove.addEventListener('click', (e) => {
@@ -465,6 +473,28 @@ request.onsuccess = async function(event) {
     if(hiddenActivedList) {
       hiddenActivedList.classList.remove('hidden');
     }
+  }
+
+  function updateOrderNotes(notesListId) {
+    const pinNotes = document.querySelectorAll('#areaPinNotes li');
+    const unpinNotes = document.querySelectorAll('#areaListNotes li');
+    let storagePinNotes = JSON.parse(localStorage.getItem('pinNoteOrder')) || {};
+    let storageUnpinNotes = JSON.parse(localStorage.getItem('noteOrder')) || {};
+    let newPinNotes = [];
+    let newUnpinNotes = [];
+
+    pinNotes.forEach(pinNote => {
+      newPinNotes.push(parseInt(pinNote.dataset.id));
+    });
+    unpinNotes.forEach(unpinNote => {
+      newUnpinNotes.push(parseInt(unpinNote.dataset.id));
+    });
+
+    storagePinNotes[notesListId] = newPinNotes;
+    storageUnpinNotes[notesListId] = newUnpinNotes;
+
+    localStorage.setItem('pinNoteOrder', JSON.stringify(storagePinNotes));
+    localStorage.setItem('noteOrder', JSON.stringify(storageUnpinNotes));
   }
 
   document.getElementById('btnNew').addEventListener('click', () => {
@@ -552,16 +582,16 @@ function initDnD(listName, storageName) {
     let newOrder = [];
     items.forEach((item, index) => {
       item.dataset.index = index;
-      newOrder.push(item.dataset.id);
+      newOrder.push(parseInt(item.dataset.id));
     });
-    if(storageName == 'noteOrder') {
+    if(storageName != 'listOrder') {
       /**
-       * noteOrder: {listId: [noteId, ...noteId], ...}
+       * noteOrder|PinOrder: {listId:[noteId,...],...}
        */
-      let allNoteOrder = JSON.parse(localStorage.getItem('noteOrder')) || {};
+      let allNoteOrder = JSON.parse(localStorage.getItem(storageName)) || {};
       const currentListId = parseInt(document.querySelector('#areaListLists li input.active').dataset.id);
       allNoteOrder[currentListId] = newOrder;
-      localStorage.setItem('noteOrder', JSON.stringify(allNoteOrder));
+      localStorage.setItem(storageName, JSON.stringify(allNoteOrder));
     } else {
       // list order
       localStorage.setItem(storageName, newOrder);
