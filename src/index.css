@@ -579,14 +579,3 @@ input[type="checkbox"]:disabled {
 .web {
   border: none;
 }
-.web header {
-  display: none;
-}
-.web .container {
-  padding: 60px;
-}
-.web .panelsContainer {
-  height: calc(100vh - 120px);
-  border-radius: 10px;
-  box-shadow: 0 0 10px #00000066;
-}
