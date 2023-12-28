@@ -585,10 +585,24 @@ input[type="checkbox"]:disabled {
 #web .panelsContainer {
   border-radius: 10px;
   box-shadow: 0 0 10px #00000066;
-  margin: 100px auto;
+  margin: 100px auto 30px;
   width: 60%;
-  height: calc(100vh - 200px);
+  height: calc(100vh - 300px);
 }
 #web #btnNew {
   border-radius: 0 10px 0 0;
+}
+#web footer {
+  font-size: 9px;
+  margin: 10px auto;
+  width: 60%;
+  height: 160px;
+  text-align: center;
+}
+#web #links {
+  margin: 10px;
+}
+#web #links a {
+  color: #000;
+  padding: 0 3px;
 }
