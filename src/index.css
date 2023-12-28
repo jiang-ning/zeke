@@ -397,10 +397,6 @@ input[type="checkbox"]:disabled {
   padding: 0 10px 0 6px;
   grid-template-columns: 26px 1fr 90px auto auto;
   display: grid;
-  transition: transform 0.3s;
-}
-#areaListNotes li.dragging {
-  transform: scale(.9);
 }
 #areaListNotes input[type='text'],
 #areaPinNotes input[type='text']  {
@@ -574,6 +570,21 @@ input[type="checkbox"]:disabled {
 .sectionMode #mode-dark {
   background: url('./images/moon.svg') center center no-repeat #999;
   filter: invert(1);
+}
+
+.sortable-ghost {
+  opacity: .6;
+}
+.sortable-chosen input[type='checkbox'] {
+  background-color: #ffffff33;
+}
+.sortable-chosen,
+.sortable-chosen input {
+  background-color: #eee;
+}
+.sortable-fallback,
+.sortable-fallback input {
+  background-color: #fff;
 }
 
 #web {

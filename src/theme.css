@@ -11,6 +11,8 @@
 [class^="theme"] .modal {
   background-color: transparent;
 }
+[class^="theme"] #panelList li.sortable-fallback,
+[class^="theme"] #panelNote li.sortable-fallback,
 [class^="theme"] #listAdd #listAddName.active {
   background-color: #ffffff99;
 }
@@ -25,6 +27,7 @@
 [class^="theme"] #areaSettings.active {
   background-color: #ffffff66;
 }
+[class^="theme"] #panelList .sortable-chosen,
 [class^="theme"] ::-webkit-scrollbar-thumb,
 [class^="theme"] ::-webkit-scrollbar-thumb:hover {
   background-color: #00000033;
@@ -57,9 +60,13 @@
 /* mode-dark */
 .theme-dark header,
 .theme-dark .panelsContainer,
-.theme-dark #panelList {
+.theme-dark #panelList,
+.theme-dark #panelList li.sortable-fallback,
+.theme-dark #panelNote li.sortable-fallback {
   background-color: var(--dark);
 }
+.theme-dark #panelList .sortable-chosen,
+.theme-dark #panelNote .sortable-chosen,
 .theme-dark #listAdd #listAddName.active {
   background-color: #00000099;
 }
@@ -152,6 +159,7 @@
 .theme-blue header,
 .theme-blue .panelsContainer,
 .theme-blue #panelList,
+.theme-blue #panelNote .sortable-chosen,
 .theme-blue input[type="checkbox"]::before {
   background-color: var(--blue);
 }
@@ -194,6 +202,7 @@
 .theme-red header,
 .theme-red .panelsContainer,
 .theme-red #panelList,
+.theme-red #panelNote .sortable-chosen,
 .theme-red input[type="checkbox"]::before {
   background-color: var(--red);
 }
@@ -236,6 +245,7 @@
 .theme-orange header,
 .theme-orange .panelsContainer,
 .theme-orange #panelList,
+.theme-orange #panelNote .sortable-chosen,
 .theme-orange input[type="checkbox"]::before {
   background-color: var(--orange);
 }
@@ -278,6 +288,7 @@
 .theme-yellow header,
 .theme-yellow .panelsContainer,
 .theme-yellow #panelList,
+.theme-yellow #panelNote .sortable-chosen,
 .theme-yellow input[type="checkbox"]::before {
   background-color: var(--yellow);
 }
@@ -320,6 +331,7 @@
 .theme-olive header,
 .theme-olive .panelsContainer,
 .theme-olive #panelList,
+.theme-olive #panelNote .sortable-chosen,
 .theme-olive input[type="checkbox"]::before {
   background-color: var(--olive);
 }
@@ -362,6 +374,7 @@
 .theme-green header,
 .theme-green .panelsContainer,
 .theme-green #panelList,
+.theme-green #panelNote .sortable-chosen,
 .theme-green input[type="checkbox"]::before {
   background-color: var(--green);
 }
@@ -404,6 +417,7 @@
 .theme-teal header,
 .theme-teal .panelsContainer,
 .theme-teal #panelList,
+.theme-teal #panelNote .sortable-chosen,
 .theme-teal input[type="checkbox"]::before {
   background-color: var(--teal);
 }
@@ -446,6 +460,7 @@
 .theme-violet header,
 .theme-violet .panelsContainer,
 .theme-violet #panelList,
+.theme-violet #panelNote .sortable-chosen,
 .theme-violet input[type="checkbox"]::before {
   background-color: var(--violet);
 }
@@ -488,6 +503,7 @@
 .theme-purple header,
 .theme-purple .panelsContainer,
 .theme-purple #panelList,
+.theme-purple #panelNote .sortable-chosen,
 .theme-purple input[type="checkbox"]::before {
   background-color: var(--purple);
 }
@@ -530,6 +546,7 @@
 .theme-pink header,
 .theme-pink .panelsContainer,
 .theme-pink #panelList,
+.theme-pink #panelNote .sortable-chosen,
 .theme-pink input[type="checkbox"]::before {
   background-color: var(--pink);
 }
