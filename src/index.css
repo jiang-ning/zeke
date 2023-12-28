@@ -576,6 +576,19 @@ input[type="checkbox"]:disabled {
   filter: invert(1);
 }
 
-.web {
+#web {
   border: none;
+}
+#web header {
+  display: none;
+}
+#web .panelsContainer {
+  border-radius: 10px;
+  box-shadow: 0 0 10px #00000066;
+  margin: 100px auto;
+  width: 60%;
+  height: calc(100vh - 200px);
+}
+#web #btnNew {
+  border-radius: 0 10px 0 0;
 }

@@ -709,9 +709,9 @@ function init() {
   document.body.className = theme;
   document.body.style.opacity = opacity+ '%';
 
-  if (window.location.host == 'jiang-ning.github.io') {
-    document.body.classList.add('web');
-  }
+  // if (window.location.host == 'jiang-ning.github.io') {
+  //   document.body.classList.add('web');
+  // }
 
   initGrid();
   initModal();
