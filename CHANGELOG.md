@@ -2,6 +2,7 @@
 
 ### v1.1.6
 ##### 2023-12-29
+- Improvement: New logo
 - Improvement: Scroll bar layout
 - Improvement: Sortable list
 - Bug Fix: Pin list still showing after switch to a blank list
