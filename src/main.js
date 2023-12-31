@@ -1,4 +1,4 @@
-const Sortable = require('sortablejs');
+const Sortable = require('sortablejs') || require('./vendor/Sortable.min.js');
 // Open the IndexedDB database
 const request = indexedDB.open('neonote', 1);
 

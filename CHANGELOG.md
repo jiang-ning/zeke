@@ -1,5 +1,10 @@
 # Change Log
 
+### v1.2.1
+##### 2023-12-31
+- New Feature: Auto update
+- Bug Fix: Reference external SortableJS for web independently without required es6 module
+
 ### v1.1.6
 ##### 2023-12-29
 - Improvement: New logo

@@ -25,6 +25,18 @@ module.exports = {
       config: {},
     },
   ],
+  publishers: [
+    {
+      name: '@electron-forge/publisher-github',
+      config: {
+        repository: {
+          owner: "Mr.J's",
+          name: 'neonote'
+        },
+        prerelease: true
+      }
+    }
+  ],
   plugins: [
     {
       name: '@electron-forge/plugin-auto-unpack-natives',
