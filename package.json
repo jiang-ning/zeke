@@ -1,7 +1,7 @@
 {
   "name": "neonote",
   "productName": "neonote",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "Effortless Note-Taking: Simplify, Secure, Succeed!",
   "main": "src/index.js",
   "scripts": {
@@ -16,14 +16,13 @@
     "name": "Mr.J's",
     "email": "jiang.ning.dl@gmail.com"
   },
-  "repository": { 
-    "type": "git", 
-    "url": "https://github.com/jiang-ning/zeke.git" 
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jiang-ning/zeke.git"
   },
   "license": "MIT",
   "dependencies": {
     "electron-squirrel-startup": "^1.0.0",
-    "sortablejs": "^1.15.1",
     "update-electron-app": "^3.0.0"
   },
   "devDependencies": {
