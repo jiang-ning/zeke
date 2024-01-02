@@ -1,7 +1,7 @@
 {
   "name": "neonote",
   "productName": "neonote",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "Effortless Note-Taking: Simplify, Secure, Succeed!",
   "main": "src/index.js",
   "scripts": {
@@ -32,6 +32,7 @@
     "@electron-forge/maker-squirrel": "^6.4.2",
     "@electron-forge/maker-zip": "^6.4.2",
     "@electron-forge/plugin-auto-unpack-natives": "^6.4.2",
+    "@electron-forge/publisher-github": "^7.2.0",
     "electron": "^27.0.4"
   }
 }

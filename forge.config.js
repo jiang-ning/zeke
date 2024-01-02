@@ -30,10 +30,11 @@ module.exports = {
       name: '@electron-forge/publisher-github',
       config: {
         repository: {
-          owner: "Mr.J's",
-          name: 'neonote'
+          owner: "jiang-ning",
+          name: 'zeke'
         },
-        prerelease: true
+        prerelease: false,
+        draft: true
       }
     }
   ],
