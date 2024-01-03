@@ -1,7 +1,7 @@
 # Change Log
 
-### v1.2.2
-##### 2024-01-02
+### v1.2.3
+##### 2024-01-03
 - Bug Fix: Auto update issue
 
 ### v1.2.1
