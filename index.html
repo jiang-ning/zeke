@@ -3,13 +3,13 @@
 <html>
   <head>
     <meta charset="UTF-8" />
-    <title>Neonote</title>
+    <title>neonote</title>
     <script type="text/javascript" src="./src/vendor/Sortable.min.js"></script>
     <link rel="stylesheet" href="./src/index.css" />
     <link rel="stylesheet" href="./src/theme.css" />
   </head>
   <body id="web" class="">
-    <header id="titlebar">Neonote</header>
+    <header id="titlebar">neonote</header>
     <div class="container">
 
       <div id="panelsContainer" class="panelsContainer" style="grid-template-columns:200px 10px 1fr">
@@ -47,8 +47,8 @@
           <div class="modal">
             <div class="modal-contents">
               <div class="modal-section">
-                <div class="brand">Neonote</div>
-                <div class="brand-version">v1.2.3</div>
+                <div class="brand">neonote</div>
+                <div class="brand-version">v1.5.2</div>
               </div>
               <div class="modal-section">
                 <div class="modal-section-title">Theme</div>
@@ -74,6 +74,16 @@
                 <div class="sectionOpacity">
                   <input id="opacitySelection" type="range" min="30" max="100" value="100" step="10" />
                 </div>
+              </div>
+              <div class="modal-section">
+                <div class="modal-section-title">Custom Settings</div>
+                <div class="modal-section-desc">Click button to restore sorts, pins and theme.</div>
+                <button id="restore">Restore</button>
+              </div>
+              <div class="modal-section">
+                <div class="modal-section-title">Data Storage</div>
+                <div class="modal-section-desc">Disk space usage:<span id="db-usage">0</span>KB, click button to remove all the data.</div>
+                <button id="clear">Clear all data</button>
               </div>
             </div>
           </div>

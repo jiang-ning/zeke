@@ -147,7 +147,7 @@ input[type='checkbox'] {
   appearance: none;
   background-color: #fff;
   border: 1px solid #ddd;
-  border-radius: 4px;
+  border-radius: 50%;
   color: #016936;
   width: 20px;
   height: 20px;
@@ -172,10 +172,6 @@ input[type="checkbox"]::before {
 input[type="checkbox"]:checked::before {
   transform: scale(1);
 }
-input[type="checkbox"]:focus {
-  /* outline: max(2px, 0.15em) solid currentColor;
-  outline-offset: max(2px, 0.15em); */
-}
 input[type="checkbox"]:disabled {
   color: #ccc;
   cursor: not-allowed;
@@ -190,9 +186,6 @@ input[type="checkbox"]:disabled {
   grid-template-rows: 1fr;
   height: calc(100vh - 42px);
   overflow: hidden;
-  /* background-color: #ccc; */
-  /* border-radius: 10px; */
-  /* box-shadow: 0 0 10px #00000066; */
 }
 
 .panelsContainer.viewFocused {
@@ -211,12 +204,9 @@ input[type="checkbox"]:disabled {
 }
 
 #panelNote {
-  /* grid-column: 3;
-  grid-row: 1; */
   display: grid;
   grid-template-rows: 40px auto 1fr;
   background-color: #fff;
-  /* padding: 10px 10px 10px 0; */
 }
 #panelNote.showModal #areaNew,
 #panelNote.showModal #areaPinNotes,
@@ -230,9 +220,6 @@ input[type="checkbox"]:disabled {
   width: 10px;
   cursor: col-resize;
   background-color: #fff;
-  /* border-radius: 10px 0 0 10px; */
-  /* margin: 10px 0; */
-  /* box-shadow: -1px 0px 2px #cccccc33; */
 }
 
 .panelToggle {
@@ -252,6 +239,51 @@ input[type="checkbox"]:disabled {
   overflow: hidden auto;
 }
 
+.icon {
+  border-radius: 20px;
+  color: #ccc;
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  line-height: 18px;
+  margin: 10px 0;
+}
+.icon:hover {
+  background-color: #eeeeee;
+  color: #666;
+}
+.noteContent {
+  margin-right: 6px;
+}
+.noteSub {
+  display: none;
+  z-index: 2;
+}
+li.edit .noteSub {
+  display: inline;
+}
+.noteCollapse {
+  background: url('./images/chevron-left.svg') center center no-repeat transparent;
+  filter: opacity(0);
+  width: 30px;
+  height: 40px;
+  line-height: 40px;
+  z-index: 2;
+  cursor: pointer;
+  transition: linear .1s;
+}
+.noteCollapse.show {
+  filter: opacity(0.3);
+}
+.noteCollapse.show:hover {
+  filter: opacity(0.9);
+}
+.noteCollapse.show.active {
+  transform: rotate(-90deg);
+  transition: linear .1s;
+}
+
 #areaListLists {
   grid-column: 1;
   grid-row: 1;
@@ -260,41 +292,31 @@ input[type="checkbox"]:disabled {
 #areaListLists li {
   list-style: none;
   margin-bottom: 1px;
-  /* background-color: #ddd; */
-  /* box-shadow: 0 0 2px #66666666; */
-  /* border-radius: 10px 0 0 10px; */
-  grid-template-columns: 1fr 20px;
+  grid-template-columns: 1fr 30px;
   display: grid;
 }
-#areaListLists li:first-child {
-  /* border-radius: 10px 0 0 0; */
-  /* margin-top: 0; */
-}
-/* #areaListLists li:last-child {
-  border-radius: 0 0 0 10px;
-} */
 #areaListLists li.edit span {
   display: inline;
 }
 #areaListLists li.edit input {
   background-color: #fff;
   cursor: text;
-  width: calc(100% - 10px);
+  width: calc(100% - 20px);
+  border-radius: 0 40px 40px 0;
 }
 #areaListLists li.active {
-  /* border-top: 1px solid #999; */
   cursor: default;
 }
 #areaListLists input {
   background-color: #eee;
   border: none;
-  width: calc(100% + 20px);
+  width: calc(100% + 10px);
   outline: none;
   height: 40px;
-  padding-left: 10px;
-  /* border-radius: 10px 0 0 10px; */
+  padding: 0 10px;
   cursor: default;
   color: #666;
+  text-overflow: ellipsis;
 }
 #areaListLists input:hover {
   background-color: #eee;
@@ -302,7 +324,6 @@ input[type="checkbox"]:disabled {
 #areaListLists input.active {
   background-color: #fff;
   position: relative;
-  /* box-shadow: 0 0 10px #66666666; */
   color: #000;
   box-shadow: 0 0 2px #66666666;
 }
@@ -321,6 +342,14 @@ input[type="checkbox"]:disabled {
 #areaListLists li span {
   color: #666;
 }
+#areaListLists .listRemove {
+  height: 20px;
+  line-height: 18px;
+  margin: 10px 6px;
+}
+#areaListLists .listRemove:hover {
+  background-color: #ddd;
+}
 
 #listAdd {
   display: none;
@@ -329,7 +358,6 @@ input[type="checkbox"]:disabled {
   text-align: center;
   padding: 0;
   background-color: transparent;
-  /* border: 1px dashed #ccc; */
   color: #aaa;
   border-right: none;
   width: 100%;
@@ -337,7 +365,6 @@ input[type="checkbox"]:disabled {
 #listAdd #listAddName:hover {
   cursor: pointer;
   color: #999;
-  /* border-color: #999; */
 }
 #listAdd #listAddName.active {
   text-align: left;
@@ -354,13 +381,19 @@ input[type="checkbox"]:disabled {
   outline: none;
 }
 #btnNew {
-  width: 40px;
-  height: 39px;
+  border-radius: 11px;
   color: #ccc;
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
   position: absolute;
   text-align: center;
-  line-height: 39px;
-  cursor: pointer;
+  line-height: 18px;
+  margin: 10px 0;
+}
+#btnNew:hover {
+  background-color: #eeeeee;
+  color: #666;
 }
 
 #areaNew {
@@ -382,33 +415,27 @@ input[type="checkbox"]:disabled {
 #areaNew:has(#txtNew:focus) {
   border-color: #ccc;
 }
-#areaNew:hover #btnNew,
-#areaNew:has(#txtNew:focus) #btnNew {
-  color: #999;
-}
 
 #areaListNotes li,
 #areaPinNotes li {
   list-style: none;
-  height: 40px;
+  height: auto;
   line-height: 40px;
-  /* border-top: 1px solid transparent; */
   border-bottom: 1px solid #eee;
   padding: 0 10px 0 6px;
-  grid-template-columns: 26px 1fr 90px auto auto;
+  grid-template-columns: 26px 1fr 90px auto auto auto auto auto;
   display: grid;
 }
 #areaListNotes input[type='text'],
 #areaPinNotes input[type='text']  {
   border: none;
-  /* width: calc(100% - 50px); */
   outline: none;
   height: 40px;
   line-height: 40px;
   padding-left: 10px;
   cursor: default;
   color: #666;
-  /* margin-left: 20px; */
+  text-overflow: ellipsis;
 }
 #areaListNotes input[type='text'].active,
 #areaPinNotes input[type='text'].active {
@@ -417,14 +444,28 @@ input[type="checkbox"]:disabled {
   box-shadow: 0 0 10px #66666666;
   color: #000;
 }
-#areaListNotes li.edit input[type='text'],
-#areaPinNotes li.edit input[type='text'] {
+#areaListNotes li.edit > input[type='text'],
+#areaPinNotes li.edit > input[type='text'] {
   cursor: text;
+  background-color: #ffffff99;
+  border: 1px solid #ccc;
+  height: 30px;
+  line-height: 30px;
+  margin-top: 4px;
+  border-radius: 30px;
 }
 #areaListNotes li.edit span.notePin,
 #areaListNotes li.edit span.noteRemove,
 #areaPinNotes li.edit span.noteRemove {
   display: inline;
+}
+#areaPinNotes li.edit span.noteMoment,
+#areaListNotes li.edit span.noteMoment {
+  display: none;
+}
+#areaPinNotes li.edit:has(.noteMoment),
+#areaListNotes li.edit:has(.noteMoment) {
+  grid-template-columns: 26px 1fr auto auto auto auto;
 }
 #areaListNotes li:hover input[type='text'],
 #areaPinNotes li:hover input[type='text'] {
@@ -436,18 +477,8 @@ input[type="checkbox"]:disabled {
 }
 #areaListNotes li span.noteRemove,
 #areaPinNotes li span.noteRemove {
-  color: #ccc;
-  width: 20px;
-  height: 40px;
-  line-height: 40px;
-  text-align: center;
   z-index: 2;
-  cursor: pointer;
   display: none;
-}
-#areaListNotes li span.noteRemove:hover,
-#areaPinNotes li span.noteRemove:hover {
-  color: #666;
 }
 #areaListNotes li span.noteMoment,
 #areaPinNotes li span.noteMoment {
@@ -455,32 +486,59 @@ input[type="checkbox"]:disabled {
   text-align: right;
   color: #666;
   padding-right: 10px;
+  text-overflow: ellipsis;
+  height: 40px;
 }
 #areaListNotes li.completed input[type='text'],
 #areaPinNotes li.completed input[type='text'] {
-  color: #ccc;
+  background-color: transparent;
+  color: #999;
   text-decoration: line-through;
+}
+#areaPinNotes li.completed .noteMoment,
+#areaListNotes li.completed .noteMoment {
+  color: #999;
+}
+#areaPinNotes li.completed input[type="checkbox"]::before,
+#areaListNotes li.completed input[type="checkbox"]::before {
+  background-color: #ccc;
 }
 #areaListNotes .notePin {
   display: none;
-  background: url('./images/pin-angle.svg') center center no-repeat transparent;
-  filter: opacity(0.3);
-  width: 30px;
-  height: 40px;
-  line-height: 40px;
   z-index: 2;
-  cursor: pointer;
+  line-height: 24px;
 }
 #areaPinNotes li {
-  grid-template-columns: 26px 1fr 90px 20px auto;
+  grid-template-columns: 26px 1fr 90px 20px auto auto;
 }
 #areaPinNotes li:last-child {
   border-bottom-color: #ccc;
 }
 #areaPinNotes .notePin {
-  background: url('./images/pin-fill.svg') center center no-repeat transparent;
-  filter: opacity(0.3);
-  cursor: pointer;
+  line-height: 24px;
+  background-color: #eeeeee99;
+}
+
+#areaListNotes .noteSubList, 
+#areaPinNotes .noteSubList {
+  display: none;
+  margin-left: 10px;
+  margin-right: 20px;
+  grid-column: 1 / -1;
+  height: 0%;
+}
+#areaListNotes .noteSubList li, 
+#areaPinNotes .noteSubList li {
+  grid-template-columns: 26px 1fr auto auto;
+  border: none;
+}
+#areaListNotes li.edit .noteSubList,
+#areaPinNotes li.edit .noteSubList {
+  display: grid;
+}
+#areaListNotes li.expand .noteSubList,
+#areaPinNotes li.expand .noteSubList {
+  display: grid;
 }
 
 #areaSettings {
@@ -538,6 +596,27 @@ input[type="checkbox"]:disabled {
   font-size: 12px;
   margin-bottom: 10px;
 }
+.modal-section-desc {
+  color: #666666cc;
+  font-size: 10px;
+  margin-bottom: 10px;
+}
+.modal-section button {
+  background-color: #eeeeee99;
+  border: 1px solid #cccccc99;
+  border-radius: 30px;
+  color: #00000099;
+  cursor: pointer;
+  font-size: 12px;
+  height: 30px;
+  line-height: 16px;
+  padding: 6px 12px;
+}
+.modal-section button:hover {
+  background-color: #eeeeeeee;
+  border: 1px solid #ccccccee;
+  color: #000000ee;
+}
 .themeSelection {
   display: inline-block;
   width: 12px;
@@ -572,15 +651,20 @@ input[type="checkbox"]:disabled {
   filter: invert(1);
 }
 
-.sortable-ghost {
+#areaListNotes .sortable-ghost,
+#areaPinNotes .sortable-ghost  {
   opacity: .6;
+  background-color: #fff;
 }
 .sortable-chosen input[type='checkbox'] {
   background-color: #ffffff33;
 }
-.sortable-chosen,
-.sortable-chosen input {
+#areaListNotes .sortable-chosen,
+#areaListNotes .sortable-chosen input,
+#areaPinNotes .sortable-chosen,
+#areaPinNotes .sortable-chosen input {
   background-color: #eee;
+  border: none;
 }
 .sortable-fallback,
 .sortable-fallback input {

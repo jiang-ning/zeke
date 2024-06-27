@@ -1,5 +1,15 @@
 # Change Log
 
+### v1.5.2
+##### 2024-06-28
+- New Feature: Subtasks.
+- New Feature: Settings - Restore.
+- New Feature: Settings - Clear all data.
+- Improvement: Short date name.
+- Improvement: New layout of check box, text input and icons.
+- Bug Fix: Edit note issue when blur.
+- Bug Fix: Sorting when text selection in edit note.
+
 ### v1.2.3
 ##### 2024-01-03
 - Bug Fix: Auto update issue

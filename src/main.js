@@ -18,7 +18,7 @@ request.onupgradeneeded = function(event) {
 request.onsuccess = async function(event) {
   const db = event.target.result;
 
-  // Add a new todo
+  // Add a new note
   function addNote(note) {
     const transaction = db.transaction(['note'], 'readwrite');
     const objectStore = transaction.objectStore('note');
@@ -27,11 +27,20 @@ request.onsuccess = async function(event) {
     request.onsuccess = function(newNote) {
       console.log('Note added successfully');
 
-      generateNoteItem({
-        id: newNote.target.result,
-        content: note.content, 
-        dateCreated: note.dateCreated
-      }, 'areaListNotes', newNote.target.result - 1);
+      if(note.parent > 0) {
+        generateSubNoteItem({
+          id: newNote.target.result,
+          content: note.content, 
+          dateCreated: note.dateCreated,
+          parent: note.parent
+        }, 'areaListNotes');
+      } else {
+        generateNoteItem({
+          id: newNote.target.result,
+          content: note.content, 
+          dateCreated: note.dateCreated
+        }, 'areaListNotes', newNote.target.result - 1);
+      }
 
       let orderedNoteIds = JSON.parse(localStorage.getItem('noteOrder')) || {};
       if(orderedNoteIds && orderedNoteIds[note.list]) {
@@ -41,7 +50,8 @@ request.onsuccess = async function(event) {
       }
       
       localStorage.setItem('noteOrder', JSON.stringify(orderedNoteIds));
-      console.log('List added successfully');
+      
+      console.log('Note added successfully');
 
     };
     
@@ -50,10 +60,9 @@ request.onsuccess = async function(event) {
     };
   }
 
-  function getNotes(listId = 0, orderDesc = true) {
+  function renderNotes(listId = 0, orderDesc = true) {
     const transaction = db.transaction(['note'], 'readonly');
     const objectStore = transaction.objectStore('note');
-    // const request = indexName ? objectStore.index(indexName) : objectStore.getAll();
     const request = objectStore.getAll();
     
     request.onsuccess = function(event) {
@@ -81,34 +90,69 @@ request.onsuccess = async function(event) {
         let listNotes = notes;
         if(orderedNoteIds && orderedNoteIds[listId]) {
           listNotes = orderedNoteIds[listId].map(id =>notes.find(obj => obj.id === parseInt(id)));
+          if(listNotes.length != notes.length) {
+            listNotes = notes;
+          }
         }
         if(orderedPinNoteIds && orderedPinNoteIds[listId]) {
           const pinNotes = orderedPinNoteIds[listId].map(id =>notes.find(obj => obj.id === parseInt(id)));
-          pinNotes.forEach((item, idx) => {
-            generateNoteItem({
-              id: item.id, 
-              list: item.list,
-              content: item.content, 
-              dateCreated: item.dateCreated,
-              pin: item.pin,
-              completed: item.completed
-            }, 'areaPinNotes', idx, orderedPinNoteIds && orderedPinNoteIds[listId]);
-          });
-          initDnD('areaPinNotes', 'pinNoteOrder');
+          if(pinNotes.length > 0 && pinNotes[0] != undefined) {
+            // 1.1. render pinned parent notes
+            pinNotes.forEach((item, idx) => {
+              if(item && (item.parent == 0 || item.parent === true)) {
+                generateNoteItem({
+                  id: item.id, 
+                  list: item.list,
+                  content: item.content, 
+                  dateCreated: item.dateCreated,
+                  pin: item.pin,
+                  completed: item.completed
+                }, 'areaPinNotes', idx, orderedPinNoteIds && orderedPinNoteIds[listId]);
+                initDnD('areaPinNotes', 'pinNoteOrder');
+              }
+            });
+            // 1.2. render pinned subnotes
+            pinNotes.forEach((item, idx) => {
+              if(item && item.parent > 0 && item.parent !== true) {
+                generateSubNoteItem(item, 'areaPinNotes', idx, orderedPinNoteIds && orderedPinNoteIds[listId]);
+                initDnD('areaPinNotes', 'pinNoteOrder', true);
+    
+                updateCompletionPercentage(item.parent);
+              }
+            });
+          }
         }
-        listNotes.forEach((item, idx) => {
-          generateNoteItem({
-            id: item.id, 
-            list: item.list,
-            content: item.content, 
-            dateCreated: item.dateCreated,
-            pin: item.pin,
-            completed: item.completed
-          }, 'areaListNotes', idx, orderedNoteIds && orderedNoteIds[listId]);
-        });
         
-        initDnD('areaListNotes', 'noteOrder');
+        // 2.1 render parent note
+        listNotes.forEach((item, idx) => {
+          if(item && !item.pin && (item.parent == 0 || item.parent === true || item.parent == undefined)) {
+            generateNoteItem(
+              item,
+              'areaListNotes',
+              idx,
+              orderedNoteIds && orderedNoteIds[listId] && orderedNoteIds[listId].includes(item.id));
+          }
+          initDnD('areaListNotes', 'noteOrder');
+          
+        });
+
+        // 2.2 fetch subtasks
+        listNotes.forEach((item, idx) => {
+          if(item && item.parent > 0 && item.parent !== true) {
+            generateSubNoteItem(item,
+              'areaListNotes',
+              idx,
+              orderedNoteIds && orderedNoteIds[listId] && orderedNoteIds[listId].includes(item.id));
+            initDnD('areaListNotes', 'noteOrder', true);
+
+            updateCompletionPercentage(item.parent);
+          }
+        });
       }
+
+      // calculate usage
+      const usage = (JSON.stringify(notes).length / 1024).toFixed(2);
+      document.getElementById('db-usage').innerText = usage;
     };
     
     request.onerror = function() {
@@ -157,6 +201,26 @@ request.onsuccess = async function(event) {
     request.onerror = function() {
       console.error('Error deleting note');
     };
+  }
+
+  function deleteNotesInList(listId) {
+    const transaction = db.transaction(['note'], 'readonly');
+    const objectStore = transaction.objectStore('note');
+    const request = objectStore.getAll();
+    request.onsuccess = function(event) {
+      const allNotes = event.target.result;
+      const notes = allNotes.filter(note =>note.list === parseInt(listId));
+      notes.forEach(note => {
+        deleteNote(note.id);
+        console.log('Deleted note id ' + note.id + ' in list ' + listId);
+      });
+      // remove ordered notes in localstorage as well
+      let orderedNotes = JSON.parse(localStorage.getItem('noteOrder'));
+      if(orderedNotes && orderedNotes[listId]) {
+        delete orderedNotes[listId];
+        localStorage.setItem('noteOrder',JSON.stringify(orderedNotes));
+      }
+    }
   }
 
   function addList(list) {
@@ -232,8 +296,9 @@ request.onsuccess = async function(event) {
     const transaction = db.transaction(['list'], 'readwrite');
     const objectStore = transaction.objectStore('list');
     const request = objectStore.delete(id);
-    
+
     request.onsuccess = function() {
+      deleteNotesInList(id);
       console.log('List deleted successfully');
     };
     
@@ -264,6 +329,8 @@ request.onsuccess = async function(event) {
     listInput.readOnly = true;
     listRemove.dataset.id = id;
     listRemove.innerText = '-';
+    listRemove.title = 'Remove';
+    listRemove.className = 'icon listRemove';
     listItem.append(listInput);
     listItem.append(listRemove);
     document.querySelector('#areaListLists ul').append(listItem);
@@ -275,7 +342,7 @@ request.onsuccess = async function(event) {
       }
       e.target.classList.add('active');
       localStorage.setItem('listActive',e.target.dataset.id);
-      getNotes(e.target.dataset.id);
+      renderNotes(e.target.dataset.id);
       cleanModal();
     });
 
@@ -351,6 +418,9 @@ request.onsuccess = async function(event) {
     let noteMoment = document.createElement('span');
     let notePin = document.createElement('span');
     let noteRemove = document.createElement('span');
+    let noteCollapse = document.createElement('span');
+    let noteSub = document.createElement('span');
+    let noteSubList = document.createElement('ul');
     noteItem.draggable = true;
     noteItem.dataset.id = note.id;
     noteItem.dataset.index = order;
@@ -358,18 +428,34 @@ request.onsuccess = async function(event) {
     noteCheckbox.type = 'checkbox';
     noteCheckbox.checked = note.completed;
     noteInput.type = 'text';
+    noteInput.className = 'noteContent';
     noteInput.value = note.content;
     noteInput.readOnly = true;
     noteMoment.className = 'noteMoment';
     noteMoment.innerText = convertTimetamp(note.dateCreated);
-    notePin.className = 'notePin';
-    noteRemove.className = 'noteRemove';
+    noteCollapse.className = 'noteCollapse';
+    noteSub.className = 'icon noteSub';
+    noteSub.innerText = '+';
+    noteSub.title = 'New subtask';
+    noteSubList.className = 'noteSubList';
+    notePin.innerText = '^';
+    notePin.title = note.pin ? 'Unpin' : 'Pin';
+    notePin.className = 'icon notePin';
+    noteRemove.className = 'icon noteRemove';
     noteRemove.innerText = '-';
+    noteRemove.title = 'Remove';
     noteItem.append(noteCheckbox);
     noteItem.append(noteInput);
+    noteItem.append(noteSub);
     noteItem.append(noteMoment);
-    noteItem.append(notePin);
     noteItem.append(noteRemove);
+    noteItem.append(notePin);
+    noteItem.append(noteCollapse);
+    noteItem.append(noteSubList);
+
+    if(note.parent > 0 || note.parent === true) {
+      noteCollapse.classList.add('show');
+    }
 
     if(byUserOrdered) {
       document.querySelector(`#${area} ul`).append(noteItem);
@@ -379,35 +465,44 @@ request.onsuccess = async function(event) {
     
     noteCheckbox.addEventListener('click', (e) => {
       const noteId = parseInt(e.target.parentNode.dataset.id);
+      const subnotesList = document.querySelector(`li[data-id="${noteId}"] .noteSubList`);
+      const subnotesIncomplete = subnotesList.querySelectorAll(`li:not(.completed)`);
+      const subnotesCompleted = subnotesList.querySelectorAll(`li.completed`);
       if(noteCheckbox.checked == true) {
         noteItem.classList.add('completed');
         updateNote(noteId, {completed: true, dateCompleted: Date.now()});
+        if(subnotesIncomplete.length > 0) {
+          subnotesIncomplete.forEach((subnote) => {
+            subnote.querySelector('input[type="checkbox"]').click();
+          });
+        }
       } else {
         noteItem.classList.remove('completed');
         updateNote(noteId, {completed: false, dateCompleted: null});
+        if(subnotesCompleted.length > 0) {
+          subnotesCompleted.forEach((subnote) => {
+            subnote.querySelector('input[type="checkbox"]').click();
+          });
+        }
       }
     });
 
     noteInput.addEventListener('dblclick', (e) => {
       e.preventDefault();
       e.stopPropagation();
-      noteInput.readOnly = false;
-      noteItem.classList.add('edit');
-    });
 
-    noteInput.addEventListener('blur', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      let newVal = e.target.value.trim();
-      let targetId = parseInt(e.target.parentNode.dataset.id);
-      if(newVal && newVal != note.content) {
-        updateNote(targetId, {content: newVal});
+      // close any other opened edit item
+      const editingNote = document.querySelector('li.edit');
+      const editingNoteInput = document.querySelector('li.edit .noteContent');
+      if(editingNote && e.target != editingNote) {
+        closeEditingNote();
+      } else {
+        e.target.parentElement.classList.toggle('edit');
+        e.target.readOnly = false;
+        e.target.focus();
       }
-      noteInput.readOnly = true;
-      setTimeout(()=>{
-        noteItem.classList.remove('edit');
-      },100);
-    }, true);
+      
+    });
 
     noteInput.addEventListener('keypress', (e) => {
       if (e.key == "Enter") {
@@ -424,20 +519,86 @@ request.onsuccess = async function(event) {
       }
     });
 
+    noteSub.addEventListener('click', e => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      // if add subnote button is not clicked on current parent note
+      if(e.target.parentElement.dataset.id != document.querySelector('#panelNote li.edit').dataset.id) {
+        closeEditingNote();
+      }
+
+      let subNoteItem = document.createElement('li');
+      let subNoteCheckbox = document.createElement('input');
+      let subNoteInput = document.createElement('input');
+      let subNoteRemove = document.createElement('span');
+
+      subNoteItem.className = 'subNoteNew edit';
+      subNoteCheckbox.type = 'checkbox';
+      subNoteCheckbox.className = 'subNoteCheck';
+      subNoteInput.type = 'text';
+      subNoteInput.readOnly = false;
+      subNoteInput.className = 'noteContent';
+      subNoteRemove.className = 'noteRemove';
+
+      subNoteInput.addEventListener('keypress', e => {
+        if (e.key == "Enter") {
+          e.preventDefault();
+          e.stopPropagation();
+          const noteContent = subNoteInput.value.trim();
+          const currentListId = note.list || document.querySelector('#areaListLists input.active').dataset.id;
+          if(noteContent && currentListId) {
+            addNote({
+              list: parseInt(currentListId), 
+              parent: note.id,
+              content: noteContent,
+              completed: false,
+              dateCreated: Date.now(),
+              dateCompleted: ''
+            });
+            // update parent note to indicate it's a parent task
+            updateNote(note.id, {
+              parent: true
+            });
+            noteCollapse.classList.add('show');
+            noteCollapse.classList.add('active');
+            noteItem.classList.add('expand');
+            subNoteItem.remove(); // remove origin after new subnote added
+            updateCompletionPercentage(note.id);
+          }
+        }
+      });
+
+      subNoteItem.append(subNoteCheckbox);
+      subNoteItem.append(subNoteInput);
+      subNoteItem.append(subNoteRemove);
+      noteSubList.prepend(subNoteItem);
+
+      subNoteInput.focus();
+    });
+
     notePin.addEventListener('click', (e) => {
       console.log('pin clicked');
       e.preventDefault();
       e.stopPropagation();
 
+      const listId = document.querySelector('#areaListLists input.active').dataset.id;
+
       if(note.pin) {
         document.querySelector('#areaListNotes ul').prepend(noteItem);
+        note.title = 'Pin';
       } else {
         document.querySelector('#areaPinNotes ul').appendChild(noteItem);
+        note.title = 'Unpin';
+      }
+
+      if(noteItem.classList.contains('edit')) {
+        noteItem.classList.remove('edit');
       }
 
       note.pin = !note.pin;
       updateNote(note.id, {pin: note.pin});
-      updateOrderNotes(note.list);
+      updateOrderNotes(listId);
     });
 
     noteRemove.addEventListener('click', (e) => {
@@ -459,6 +620,120 @@ request.onsuccess = async function(event) {
       console.log(newOrder);
       noteItem.remove();
       deleteNote(targetId);
+    });
+
+    noteCollapse.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      if(noteCollapse.classList.contains('show')) {
+        setTimeout(()=>{
+          noteCollapse.classList.toggle('active');
+          noteItem.classList.toggle('expand');
+        },100);
+        noteItem.classList.remove('edit');
+        noteInput.readOnly = true;
+        noteInput.blur();
+      }
+    });
+
+  }
+
+  /**
+   * Generate subnote list<li>
+   */
+  function generateSubNoteItem(subNote, area, order = 0, byUserOrdered = false) {
+    let subNoteItem = document.createElement('li');
+    let subNoteCheckbox = document.createElement('input');
+    let subNoteInput = document.createElement('input');
+    let subNoteMoment = document.createElement('span');
+    let subNoteRemove = document.createElement('span');
+    subNoteItem.draggable = true;
+    subNoteItem.dataset.id = subNote.id;
+    subNoteItem.dataset.index = order;
+    subNoteItem.className = subNote.completed ? "completed" : "";
+    subNoteCheckbox.type = 'checkbox';
+    subNoteCheckbox.checked = subNote.completed;
+    subNoteInput.type = 'text';
+    subNoteInput.className = 'noteContent';
+    subNoteInput.value = subNote.content;
+    subNoteInput.readOnly = true;
+    subNoteMoment.className = 'noteMoment';
+    subNoteMoment.innerText = convertTimetamp(subNote.dateCreated);
+    subNoteRemove.className = 'icon noteRemove';
+    subNoteRemove.innerText = '-';
+
+    subNoteItem.append(subNoteCheckbox);
+    subNoteItem.append(subNoteInput);
+    subNoteItem.append(subNoteMoment);
+    subNoteItem.append(subNoteRemove);
+
+    if(byUserOrdered) {
+      document.querySelector(`#${area} li[data-id='${subNote.parent}'] ul`).append(subNoteItem);
+    } else {
+      document.querySelector(`#${area} li[data-id='${subNote.parent}'] ul`).prepend(subNoteItem);
+    }
+    
+    subNoteCheckbox.addEventListener('click', (e) => {
+      const subNoteId = parseInt(e.target.parentNode.dataset.id);
+      if(subNoteCheckbox.checked == true) {
+        subNoteItem.classList.add('completed');
+        updateNote(subNoteId, {completed: true, dateCompleted: Date.now()});
+      } else {
+        subNoteItem.classList.remove('completed');
+        updateNote(subNoteId, {completed: false, dateCompleted: null});
+      }
+      updateCompletionPercentage(subNote.parent);
+    });
+
+    subNoteInput.addEventListener('keypress', (e) => {
+      if (e.key == "Enter") {
+        e.preventDefault();
+        let newVal = e.target.value.trim();
+        let targetId = parseInt(e.target.parentNode.dataset.id);
+        if(newVal && newVal != subNote.content) {
+          updateNote(targetId, {content: newVal});
+        }
+        subNoteInput.readOnly = true;
+        setTimeout(()=>{
+          subNoteItem.classList.remove('edit');
+        },100);
+      }
+    });
+
+    subNoteRemove.addEventListener('click', (e) => {
+      e.preventDefault();
+      const currentListId = parseInt(document.querySelector('#areaListLists li input.active').dataset.id);
+      let targetId = parseInt(e.target.parentNode.dataset.id);
+      let currentOrder = JSON.parse(localStorage.getItem('noteOrder')) || {};
+      let newOrder = [];
+      if(currentOrder && currentOrder[currentListId]) {
+        for(let i = 0; i < currentOrder[currentListId].length; i++) {
+          if(currentOrder[currentListId][i] != targetId) {
+            newOrder.push(currentOrder[currentListId][i]);
+          }
+        }
+        currentOrder[currentListId] = newOrder;
+        localStorage.setItem('noteOrder', JSON.stringify(currentOrder));
+      }
+
+      subNoteItem.remove();
+      deleteNote(targetId);
+    });
+
+    subNoteItem.addEventListener('dblclick', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      // close any other opened edit item
+      const editingNote = document.querySelector('li.edit');
+      if(editingNote && e.target != editingNote) {
+        closeEditingNote();
+      } else {
+        e.target.parentElement.classList.toggle('edit');
+        e.target.readOnly = false;
+        e.target.focus();
+      }
+      
     });
 
   }
@@ -498,6 +773,98 @@ request.onsuccess = async function(event) {
     localStorage.setItem('noteOrder', JSON.stringify(storageUnpinNotes));
   }
 
+  function initDnD(listName, storageName, noteSubList = false) {
+    const list = document.querySelectorAll(`#${listName} ul${noteSubList?' ul':''}`);
+    list.forEach((li, idx) => {
+      Sortable.create(li, {
+        group: listName,
+        animation: 150,
+        fallbackOnBody: true,
+        swapThreshold: 0.65,
+        invertSwap: true,
+        direction: 'vertical',
+        ghostClass: "sortable-ghost",
+        chosenClass: "sortable-chosen",
+        fallbackClass: "sortable-fallback",
+        dragClass: "sortable-drag",
+        filter: "li.edit input.noteContent",
+        preventOnFilter: false,
+        onMove: function (evt) {
+          if(evt.dragged.querySelectorAll('.noteSubList li').length > 0 &&
+            evt.related.parentElement.classList.contains('noteSubList')){
+            return false;
+          }
+        },
+        onEnd: function (evt) {
+          // if subnote to parent note
+          if(evt.from.classList.contains('noteSubList') && !evt.to.classList.contains('noteSubList')) {
+            updateNote(parseInt(evt.item.dataset.id), {
+              parent: 0
+            });
+            renderNotes(
+              parseInt(localStorage.getItem('listActive'))
+            );
+          };
+          // if parent note to subnote
+          if(evt.item.querySelector('span.noteSub') && 
+            evt.to.classList.contains('noteSubList')) {
+              updateNote(parseInt(evt.item.dataset.id), {
+                parent: parseInt(evt.to.parentElement.dataset.id)
+              });
+              renderNotes(
+                parseInt(localStorage.getItem('listActive'))
+              );
+          };
+          updateIndexes();
+        }
+      });
+  
+    });
+  
+    function updateIndexes() {
+      const items = document.querySelectorAll(`#${listName} ul li`);
+      let newOrder = [];
+      items.forEach((item, index) => {
+        item.dataset.index = index;
+        newOrder.push(parseInt(item.dataset.id));
+      });
+      if(storageName == 'noteOrder' || storageName == 'pinNoteOrder') {
+        /**
+         * noteOrder|PinOrder: {listId:[noteId,...],...}
+         */
+        let allNoteOrder = JSON.parse(localStorage.getItem(storageName)) || {};
+        const currentListId = parseInt(document.querySelector('#areaListLists li input.active').dataset.id);
+        allNoteOrder[currentListId] = newOrder;
+        localStorage.setItem(storageName, JSON.stringify(allNoteOrder));
+      } else {
+        // list order
+        localStorage.setItem(storageName, newOrder);
+      }
+    }
+  }
+
+  function updateCompletionPercentage(parentId) {
+    const parentNote = document.querySelector(`#panelNote li[data-id="${parentId}"]`);
+    const parentCompletionButton = parentNote.querySelector(`input[type="checkbox"]`);
+    const subnoteCompletedCount = parentNote.querySelectorAll('.noteSubList li.completed').length;
+    const subnoteTotalCount = parentNote.querySelectorAll('.noteSubList li').length;
+    const completionPercentage = (subnoteCompletedCount / subnoteTotalCount * 100).toFixed();
+
+    if(completionPercentage == 100) {
+      parentCompletionButton.style = '';
+      if(!parentNote.classList.contains('completed')) {
+        parentCompletionButton.click();
+      }
+    } else {
+      if(parentNote.classList.contains('completed')) {
+        parentNote.classList.remove('completed');
+        parentCompletionButton.checked = false;
+      }
+      parentCompletionButton.style.backgroundImage = `conic-gradient(transparent ${completionPercentage}%, #eeeeee66 0)`;
+    }
+    
+  }
+
   document.getElementById('btnNew').addEventListener('click', () => {
     const noteContent = document.getElementById('txtNew').value.trim();
     const listId = document.querySelector('#areaListLists li input.active').dataset.id;
@@ -533,83 +900,18 @@ request.onsuccess = async function(event) {
     document.getElementById('listAddName').classList.remove('active');
     document.getElementById('listAddName').value = '+';
   }, true);
+  document.getElementById('panelsContainer').addEventListener('click', (e) => {
+    if(e.target.readOnly || e.target.nodeName !== 'INPUT') {
+      closeEditingNote();
+    }
+  });
 
   getLists();
-  getNotes(
+  renderNotes(
     parseInt(localStorage.getItem('listActive'))
   );
 
 };
-
-function initDnD(listName, storageName) {
-  const list = document.querySelector(`#${listName} ul`);
-  Sortable.create(list, {
-    animation: 150,
-    direction: 'vertical',
-    ghostClass: "sortable-ghost",
-    chosenClass: "sortable-chosen",
-    fallbackClass: "sortable-fallback",
-    dragClass: "sortable-drag", 
-    onEnd: function (evt) {
-      updateIndexes();
-    }
-  });
-
-  // let draggedItem = null;
-  // list.addEventListener('dragstart', (e) => {
-  //   if(e.target.draggable) {
-  //     draggedItem = e.target;
-  //     e.dataTransfer.effectAllowed = 'move';
-  //     e.dataTransfer.setData('text/plain', draggedItem.dataset.index);
-  //     e.target.classList.add('dragging');
-  //   }
-    
-  // });
-
-  // list.addEventListener('dragover', (e) => {
-  //   if(e.target.draggable) {
-  //     e.preventDefault();
-  //     e.dataTransfer.dropEffect = 'move';
-  //     const targetItem = e.target.closest('li');
-  //     if(draggedItem.dataset.index && targetItem && targetItem != draggedItem) {
-  //       const draggedIndex = parseInt(draggedItem.dataset.index);
-  //       const targetIndex = parseInt(targetItem.dataset.index);
-  //       if(draggedIndex < targetIndex) {
-  //         list.insertBefore(draggedItem, targetItem.nextSibling);
-  //       } else {
-  //         list.insertBefore(draggedItem, targetItem);
-  //       }
-  //     }
-  //   }
-  // });
-
-  // list.addEventListener('dragend', (e) => {
-  //   draggedItem = null;
-  //   e.target.classList.remove('dragging');
-  //   updateIndexes();
-  // });
-
-  function updateIndexes() {
-    const items = list.querySelectorAll('li');
-    let newOrder = [];
-    items.forEach((item, index) => {
-      item.dataset.index = index;
-      newOrder.push(parseInt(item.dataset.id));
-    });
-    if(storageName != 'listOrder') {
-      /**
-       * noteOrder|PinOrder: {listId:[noteId,...],...}
-       */
-      let allNoteOrder = JSON.parse(localStorage.getItem(storageName)) || {};
-      const currentListId = parseInt(document.querySelector('#areaListLists li input.active').dataset.id);
-      allNoteOrder[currentListId] = newOrder;
-      localStorage.setItem(storageName, JSON.stringify(allNoteOrder));
-    } else {
-      // list order
-      localStorage.setItem(storageName, newOrder);
-    }
-  }
-}
 
 function initGrid() {
 
@@ -633,8 +935,8 @@ function initGrid() {
     const diffX = e.clientX - startX;
     let newWidth = parseInt(startWidth + diffX);
     const currentWidth = parseInt(getComputedStyle(panelsContainer).width.slice(0,-2));
-    // 20px magnet
-    if(newWidth < 20) {
+    // 40px magnet
+    if(newWidth < 40) {
       newWidth = 0;
     }
     if(newWidth > currentWidth / 2) {
@@ -662,6 +964,8 @@ function initModal() {
   const panelNote = document.getElementById('panelNote');
   const opacitySelection = document.getElementById('opacitySelection');
   const opacity = localStorage.getItem('opacity') || '100';
+  const restore = document.getElementById('restore');
+  const clear = document.getElementById('clear');
   
   document.getElementById('btnSettings').addEventListener('click', () => {
     const activedList = document.querySelector('#areaListLists input.active');
@@ -689,6 +993,19 @@ function initModal() {
     localStorage.setItem('opacity', e.target.value);
   });
 
+  restore.addEventListener('click', (e) => {
+    localStorage.removeItem('noteOrder');
+    localStorage.removeItem('pinNoteOrder');
+    localStorage.removeItem('listOrder');
+    localStorage.removeItem('theme');
+    localStorage.removeItem('opacity');
+  });
+
+  clear.addEventListener('click', (e) => {
+    restore.click();
+    window.indexedDB.deleteDatabase('neonote');
+    location.reload();
+  });
   
 }
 
@@ -715,15 +1032,25 @@ function convertTimetamp(timestamp) {
   return "Just now";
 }
 
+function closeEditingNote() {
+  const editingNote = document.querySelector('#panelNote li.edit');
+  const editingNoteInput = document.querySelector('#panelNote li.edit .noteContent');
+  if(editingNote) {
+    if(editingNote.classList.contains('subNoteNew') && editingNoteInput.value.trim() == '') {
+      editingNote.remove();
+    } else {
+      editingNote.classList.remove('edit');
+      editingNoteInput.readOnly = true;
+      editingNoteInput.blur();
+    }
+  }
+}
+
 function init() {
   const theme = localStorage.getItem('theme') || '';
   const opacity = localStorage.getItem('opacity') || '100';
   document.body.className = theme;
-  document.body.style.opacity = opacity+ '%';
-
-  // if (window.location.host == 'jiang-ning.github.io') {
-  //   document.body.classList.add('web');
-  // }
+  document.body.style.opacity = opacity + '%';
 
   initGrid();
   initModal();
