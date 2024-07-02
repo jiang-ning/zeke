@@ -945,7 +945,7 @@ function initGrid() {
     panelsContainer.setAttribute('style',`grid-template-columns:${newWidth}px 10px 1fr;`);
   });
 
-  document.addEventListener('mouseup', () => {
+  gutter.addEventListener('mouseup', () => {
     isResizing = false;
     localStorage.setItem('grid-template-columns', panelsContainer.style['grid-template-columns']);
   });
@@ -1009,6 +1009,48 @@ function initModal() {
   
 }
 
+function initTitlebar() {
+  const btnSidebar= document.querySelector('.appSidebar');
+  const btnAlwaysOnTop = document.querySelector('.appAlwaysOnTop');
+  const btnMinimize = document.querySelector('.appMinimize');
+  const btnQuit= document.querySelector('.appQuit');
+
+  // init always on top
+  if(localStorage.getItem('alwaysOnTop') === 'true') {
+    window.electronAPI.setAlwaysOnTop(true);
+    btnAlwaysOnTop.classList.add('active');
+  };
+  
+  btnAlwaysOnTop.addEventListener('click', (e) => {
+    const isAlwaysOnTop = btnAlwaysOnTop.classList.contains('active');
+    window.electronAPI.setAlwaysOnTop(!isAlwaysOnTop);
+    btnAlwaysOnTop.classList.toggle('active');
+    localStorage.setItem('alwaysOnTop', !isAlwaysOnTop);
+  });
+
+  btnMinimize.addEventListener('click', (e) => {
+    window.electronAPI.minimize();
+  });
+
+  btnQuit.addEventListener('click', (e) => {
+    window.electronAPI.close();
+  });
+
+  btnSidebar.addEventListener('click', (e) => {
+    let panelsContainer = document.getElementById('panelsContainer');
+    const currentGrid = panelsContainer.style.gridTemplateColumns;
+    const rememberedGrid = localStorage.getItem('grid-template-columns') || '200px 10px 1fr';
+
+    if(currentGrid == '0px 10px 1fr') {
+      panelsContainer.style.gridTemplateColumns = rememberedGrid;
+    } else {
+      localStorage.setItem('grid-template-columns',rememberedGrid); // remember previouse size
+      panelsContainer.style.gridTemplateColumns = '0px 10px 1fr';
+    }
+    
+  });
+}
+
 function convertTimetamp(timestamp) {
   const seconds = Math.floor((new Date() - timestamp) / 1000);
 
@@ -1052,6 +1094,9 @@ function init() {
   document.body.className = theme;
   document.body.style.opacity = opacity + '%';
 
+  if(!document.body.id == 'web') {
+    initTitlebar();
+  }
   initGrid();
   initModal();
 }

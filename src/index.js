@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, ipcMain } = require('electron');
 const { updateElectronApp } = require('update-electron-app');
 const path = require('path');
 
@@ -19,14 +19,64 @@ const createWindow = () => {
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: true,
-      contextIsolation: false
+      contextIsolation: true
     },
     titleBarStyle: 'hidden',
     titleBarOverlay: {
       color: '#00000000',
       symbolColor: '#00000099'
     },
-    transparent: true
+    transparent: true,
+    frame: false
+  });
+
+  ipcMain.on('set-always-on-top', (event, enable) => {
+    const webContents = event.sender;
+    const win = BrowserWindow.fromWebContents(webContents);
+    win.setAlwaysOnTop(enable,'screen-saver');
+  });
+
+  // ipcMain.on('is-always-on-top', async (event) => {
+  //   const webContents = event.sender
+  //   const win = BrowserWindow.fromWebContents(webContents)
+  //   const result = await win.isAlwaysOnTop()
+  //   return result
+  // });
+
+  ipcMain.on('maximize', (event) => {
+    const webContents = event.sender;
+    const win = BrowserWindow.fromWebContents(webContents);
+    win.maximize();
+  });
+
+  ipcMain.on('unmaximize', (event) => {
+    const webContents = event.sender;
+    const win = BrowserWindow.fromWebContents(webContents);
+    win.unmaximize();
+  });
+
+  ipcMain.on('is-maximized', (event) => {
+    const webContents = event.sender;
+    const win = BrowserWindow.fromWebContents(webContents);
+    win.isMaximized();
+  });
+
+  ipcMain.on('minimize', (event) => {
+    const webContents = event.sender;
+    const win = BrowserWindow.fromWebContents(webContents);
+    win.minimize();
+  });
+
+  ipcMain.on('is-minimized', (event) => {
+    const webContents = event.sender;
+    const win = BrowserWindow.fromWebContents(webContents);
+    win.isMinimized();
+  });
+
+  ipcMain.on('close', (event) => {
+    const webContents = event.sender;
+    const win = BrowserWindow.fromWebContents(webContents);
+    win.close();
   });
 
   // and load the index.html of the app.

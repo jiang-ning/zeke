@@ -125,13 +125,12 @@ body {
   margin: auto;
   overflow: hidden;
   border: 1px solid #ccc;
+  border-radius: 9px;
 }
 body[style^="opacity"] {
   background: transparent;
 }
 header {
-  -webkit-user-select: none;
-  -webkit-app-region: drag;
   background-color: #eee;
   position: relative;;
   height: 40px;
@@ -140,6 +139,7 @@ header {
   text-align: center;
   line-height: 40px;
   font-size: .8rem;
+  border-radius: 6px 6px 0 0;
 }
 input[type='checkbox'] {
   -webkit-appearance: none;
@@ -177,7 +177,11 @@ input[type="checkbox"]:disabled {
   cursor: not-allowed;
 }
 
-.container * {
+.container {
+  border-radius: 0 0 6px 6px;
+}
+.container *:not(.noteContent),
+header .appIcon {
   transition: background-color .3s, border-color .3s, color .3s;
 }
 .panelsContainer {
@@ -186,6 +190,7 @@ input[type="checkbox"]:disabled {
   grid-template-rows: 1fr;
   height: calc(100vh - 42px);
   overflow: hidden;
+  border-radius: 0 0 6px 6px;
 }
 
 .panelsContainer.viewFocused {
@@ -374,6 +379,7 @@ li.edit .noteSub {
 }
 
 #txtNew {
+  background: transparent;
   border: none;
   width: calc(100% - 60px);
   height: 39px;
@@ -381,15 +387,15 @@ li.edit .noteSub {
   outline: none;
 }
 #btnNew {
+  display: inline-block;
   border-radius: 11px;
   color: #ccc;
   cursor: pointer;
   width: 20px;
   height: 20px;
-  position: absolute;
   text-align: center;
   line-height: 18px;
-  margin: 10px 0;
+  margin: 10px 5px;
 }
 #btnNew:hover {
   background-color: #eeeeee;
@@ -671,6 +677,44 @@ li.edit .noteSub {
   background-color: #fff;
 }
 
+#brand,
+.placeholder {
+  -webkit-user-select: none;
+  -webkit-app-region: drag;
+}
+#titlebar {
+  display: grid;
+  grid-template-columns: 30px 30px 30px 1fr 30px 30px 30px;
+  align-items: center;
+  padding: 0 10px;
+}
+span.appIcon {
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+  opacity: .3;
+}
+span.appIcon:hover {
+  opacity: 1;
+  background-color: #cccccc66;
+  box-shadow: inset #cccccc66;
+}
+.appSidebar {
+  background: url('./images/layout-sidebar.svg') center center no-repeat transparent;
+}
+.appAlwaysOnTop {
+  background: url('./images/pin.svg') center center no-repeat transparent;
+}
+.appAlwaysOnTop.active {
+  background: url('./images/pin-fill.svg') center center no-repeat transparent;
+}
+.appMinimize {
+  background: url('./images/dash.svg') center center no-repeat transparent;
+}
+.appQuit {
+  background: url('./images/x.svg') center center no-repeat transparent;
+}
+
 #web {
   border: none;
 }
@@ -683,9 +727,6 @@ li.edit .noteSub {
   margin: 100px auto 30px;
   width: 60%;
   height: calc(100vh - 300px);
-}
-#web #btnNew {
-  border-radius: 0 10px 0 0;
 }
 #web footer {
   font-size: 9px;

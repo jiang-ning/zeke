@@ -169,6 +169,9 @@
 .theme-blue #panelNote .sortable-chosen {
   background-color: var(--blue);
 }
+.theme-blue #areaPinNotes .notePin {
+  background-color: var(--blue-33);
+}
 .theme-blue,
 .theme-blue input[type='checkbox'] {
   border-color: var(--blue);
@@ -212,6 +215,9 @@
 .theme-red #panelList,
 .theme-red #panelNote .sortable-chosen {
   background-color: var(--red);
+}
+.theme-red #areaPinNotes .notePin {
+  background-color: var(--red-33);
 }
 .theme-red,
 .theme-red input[type='checkbox'] {
@@ -257,6 +263,9 @@
 .theme-orange #panelNote .sortable-chosen {
   background-color: var(--orange);
 }
+.theme-orange #areaPinNotes .notePin {
+  background-color: var(--orange-33);
+}
 .theme-orange,
 .theme-orange input[type='checkbox'] {
   border-color: var(--orange);
@@ -300,6 +309,9 @@
 .theme-yellow #panelList,
 .theme-yellow #panelNote .sortable-chosen {
   background-color: var(--yellow);
+}
+.theme-yellow #areaPinNotes .notePin {
+  background-color: var(--yellow-33);
 }
 .theme-yellow,
 .theme-yellow input[type='checkbox'] {
@@ -345,6 +357,9 @@
 .theme-olive #panelNote .sortable-chosen {
   background-color: var(--olive);
 }
+.theme-olive #areaPinNotes .notePin {
+  background-color: var(--olive-33);
+}
 .theme-olive,
 .theme-olive input[type='checkbox'] {
   border-color: var(--olive);
@@ -388,6 +403,9 @@
 .theme-green #panelList,
 .theme-green #panelNote .sortable-chosen {
   background-color: var(--green);
+}
+.theme-green #areaPinNotes .notePin {
+  background-color: var(--green-33);
 }
 .theme-green,
 .theme-green input[type='checkbox'] {
@@ -433,6 +451,9 @@
 .theme-teal #panelNote .sortable-chosen {
   background-color: var(--teal);
 }
+.theme-teal #areaPinNotes .notePin {
+  background-color: var(--teal-33);
+}
 .theme-teal,
 .theme-teal input[type='checkbox'] {
   border-color: var(--teal);
@@ -476,6 +497,9 @@
 .theme-violet #panelList,
 .theme-violet #panelNote .sortable-chosen {
   background-color: var(--violet);
+}
+.theme-violet #areaPinNotes .notePin {
+  background-color: var(--violet-33);
 }
 .theme-violet,
 .theme-violet input[type='checkbox'] {
@@ -521,6 +545,9 @@
 .theme-purple #panelNote .sortable-chosen {
   background-color: var(--purple);
 }
+.theme-purple #areaPinNotes .notePin {
+  background-color: var(--purple-33);
+}
 .theme-purple,
 .theme-purple input[type='checkbox'] {
   border-color: var(--purple);
@@ -564,6 +591,9 @@
 .theme-pink #panelList,
 .theme-pink #panelNote .sortable-chosen {
   background-color: var(--pink);
+}
+.theme-pink #areaPinNotes .notePin {
+  background-color: var(--pink-33);
 }
 .theme-pink,
 .theme-pink input[type='checkbox'] {
