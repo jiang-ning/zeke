@@ -22,13 +22,17 @@ const createWindow = () => {
       contextIsolation: true
     },
     titleBarStyle: 'hidden',
-    titleBarOverlay: {
-      color: '#00000000',
-      symbolColor: '#00000099'
-    },
     transparent: true,
     frame: false
   });
+
+  mainWindow.on('blur', () => {
+    mainWindow.setBackgroundColor('#00000000')
+  });
+
+  mainWindow.on('focus', () => {
+    mainWindow.setBackgroundColor('#00000000')
+  })
 
   ipcMain.on('set-always-on-top', (event, enable) => {
     const webContents = event.sender;

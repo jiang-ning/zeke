@@ -134,7 +134,7 @@ header {
   background-color: #eee;
   position: relative;;
   height: 40px;
-  box-shadow: 0 0 2px #00000066;
+  /* box-shadow: 0 0 2px #00000066; */
   z-index: 10;
   text-align: center;
   line-height: 40px;

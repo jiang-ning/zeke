@@ -1,5 +1,10 @@
 # Change Log
 
+### v1.6.3
+##### 2024-07-14
+- Improvement: Remember window position and size
+- Bug Fix: Title bar border radius issue on Windows
+
 ### v1.6.2
 ##### 2024-07-02
 - New Feature: Always on top
