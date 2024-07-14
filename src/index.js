@@ -73,6 +73,20 @@ const createWindow = () => {
     win.isMinimized();
   });
 
+  // TODO: issue on mac after reboot app
+  ipcMain.handle('get-bounds', async (event) => {
+    const webContents = event.sender;
+    const win = BrowserWindow.fromWebContents(webContents);
+    const bounds = await win.getBounds();
+    return bounds;
+  });
+
+  ipcMain.on('set-bounds', (event, bounds) => {
+    const webContents = event.sender;
+    const win = BrowserWindow.fromWebContents(webContents);
+    win.setBounds(bounds);
+  });
+
   ipcMain.on('close', (event) => {
     const webContents = event.sender;
     const win = BrowserWindow.fromWebContents(webContents);

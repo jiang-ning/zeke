@@ -1032,7 +1032,9 @@ function initTitlebar() {
     window.electronAPI.minimize();
   });
 
-  btnQuit.addEventListener('click', (e) => {
+  btnQuit.addEventListener('click', async () => {
+    const bounds = await window.electronAPI.getBounds();
+    localStorage.setItem('bounds', JSON.stringify(bounds));
     window.electronAPI.close();
   });
 
@@ -1091,10 +1093,15 @@ function closeEditingNote() {
 function init() {
   const theme = localStorage.getItem('theme') || '';
   const opacity = localStorage.getItem('opacity') || '100';
+  const bounds = localStorage.getItem('bounds');
   document.body.className = theme;
   document.body.style.opacity = opacity + '%';
 
-  if(!document.body.id == 'web') {
+  if(bounds) {
+    window.electronAPI.setBounds(JSON.parse(bounds));
+  }
+
+  if(document.body.id !== 'web') {
     initTitlebar();
   }
   initGrid();

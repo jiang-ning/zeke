@@ -12,7 +12,6 @@ contextBridge.exposeInMainWorld('electronAPI', {
   minimize: () => ipcRenderer.send('minimize'),
   isMinimized: () => ipcRenderer.send('is-minimized'),
   close: () => ipcRenderer.send('close'),
-  storedWindowWidth: () => {
-    localStorage.getItem('winWidth') || 800;
-  }
+  getBounds: () => ipcRenderer.invoke('get-bounds'),
+  setBounds: (bounds) => ipcRenderer.send('set-bounds', bounds),
 });
