@@ -26,14 +26,6 @@ const createWindow = () => {
     frame: false
   });
 
-  mainWindow.on('blur', () => {
-    mainWindow.setBackgroundColor('#00000000')
-  });
-
-  mainWindow.on('focus', () => {
-    mainWindow.setBackgroundColor('#00000000')
-  })
-
   ipcMain.on('set-always-on-top', (event, enable) => {
     const webContents = event.sender;
     const win = BrowserWindow.fromWebContents(webContents);
