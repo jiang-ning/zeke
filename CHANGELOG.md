@@ -3,6 +3,7 @@
 ### v1.6.3
 ##### 2024-07-14
 - Improvement: Remember window position and size
+- Improvement: Add window min width and height
 - Bug Fix: Title bar border radius issue on Windows
 
 ### v1.6.2
