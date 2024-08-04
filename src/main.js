@@ -860,7 +860,8 @@ request.onsuccess = async function(event) {
         parentNote.classList.remove('completed');
         parentCompletionButton.checked = false;
       }
-      parentCompletionButton.style.backgroundImage = `conic-gradient(transparent ${completionPercentage}%, #eeeeee66 0)`;
+      const currentThemeStrokeColor = getCurrentThemeColor();
+      parentCompletionButton.style.backgroundImage = `conic-gradient(transparent ${completionPercentage}%, ${currentThemeStrokeColor + '-ee' || '#eeeeeecc'} 0)`;
     }
     
   }
@@ -973,6 +974,9 @@ function initModal() {
     panelNote.classList.toggle('showModal');
     modal.classList.toggle('open');
     activedList.classList.toggle('hidden');
+    if(!modal.classList.contains('open')) {
+      activedList.click();
+    }
   });
   themes.forEach(theme => {
     theme.addEventListener('click', (e) => {
@@ -1090,12 +1094,25 @@ function closeEditingNote() {
   }
 }
 
+function getCurrentThemeColor() {
+  const currentTheme = document.body.className.substring(6);
+  const style = window.getComputedStyle(document.body);
+  const cssVariableValue = style.getPropertyValue('--' + currentTheme).trim();
+
+  return cssVariableValue;
+}
+
 function init() {
   const theme = localStorage.getItem('theme') || '';
   const opacity = localStorage.getItem('opacity') || '100';
   const bounds = localStorage.getItem('bounds');
+
   document.body.className = theme;
   document.body.style.opacity = opacity + '%';
+
+  if(!getCurrentThemeColor()) {
+    document.body.className = 'origin-theme-light';
+  }
 
   if(bounds) {
     window.electronAPI.setBounds(JSON.parse(bounds));

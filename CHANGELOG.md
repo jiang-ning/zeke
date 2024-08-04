@@ -1,9 +1,13 @@
 # Change Log
 
+### v1.7.0
+##### 2024-08-14
+- Improvement: New color themes
+
 ### v1.6.3
 ##### 2024-07-14
 - Improvement: Remember window position and size
-- Improvement: Add window min width and height
+- Improvement: Restrict minimum window size
 - Bug Fix: Title bar border radius issue on Windows
 
 ### v1.6.2
