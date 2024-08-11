@@ -5,6 +5,7 @@
 - Improvement: New color themes
 - Improvement: New layout
 - Improvement: Show list name instead brand on title bar
+- Bug Fix: Window corners radius issue
 
 ### v1.6.3
 ##### 2024-07-14

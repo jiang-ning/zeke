@@ -147,7 +147,7 @@ body {
   margin: auto;
   overflow: hidden;
   border: 1px solid #ccc;
-  border-radius: 9px;
+  border-radius: 10px;
 }
 body[style^="opacity"] {
   background: transparent;
@@ -188,9 +188,6 @@ input[type="checkbox"]:disabled {
   cursor: not-allowed;
 }
 
-.container {
-  border-radius: 0 0 6px 6px;
-}
 .container *:not(.noteContent),
 #titlebar .appIcon {
   transition: background-color .3s, border-color .3s, color .3s;
@@ -202,7 +199,7 @@ input[type="checkbox"]:disabled {
   /* height: calc(100vh - 42px); */
   height: 100vh;
   overflow: hidden;
-  border-radius: 6px;
+  border-radius: 10px;
   background: #eee;
 }
 
@@ -216,7 +213,6 @@ input[type="checkbox"]:disabled {
   background-color: #eee;
   display: grid;
   grid-template-rows: 1fr 40px;
-  border-top-left-radius: 6px;
 }
 #panelList:hover #listAdd {
   display: block;
@@ -227,7 +223,7 @@ input[type="checkbox"]:disabled {
   display: grid;
   grid-template-rows: 40px 40px auto 1fr;
   background-color: #fff;
-  border-radius: 6px;
+  border-radius: 10px;
   box-shadow: -1px 0px 6px #cccccc99;
 }
 #panelNote.showModal #areaNew,
