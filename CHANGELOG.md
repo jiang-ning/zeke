@@ -1,8 +1,10 @@
 # Change Log
-
-### v1.7.0
-##### 2024-08-14
+-
+### v1.9.6
+##### 2024-08-12
 - Improvement: New color themes
+- Improvement: New layout
+- Improvement: Show list name instead brand on title bar
 
 ### v1.6.3
 ##### 2024-07-14

@@ -152,17 +152,6 @@ body {
 body[style^="opacity"] {
   background: transparent;
 }
-header {
-  background-color: #eee;
-  position: relative;;
-  height: 40px;
-  /* box-shadow: 0 0 2px #00000066; */
-  z-index: 10;
-  text-align: center;
-  line-height: 40px;
-  font-size: .8rem;
-  border-radius: 6px 6px 0 0;
-}
 input[type='checkbox'] {
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -203,16 +192,18 @@ input[type="checkbox"]:disabled {
   border-radius: 0 0 6px 6px;
 }
 .container *:not(.noteContent),
-header .appIcon {
+#titlebar .appIcon {
   transition: background-color .3s, border-color .3s, color .3s;
 }
 .panelsContainer {
   display: grid;
   grid-template-columns: 200px 10px 1fr;
   grid-template-rows: 1fr;
-  height: calc(100vh - 42px);
+  /* height: calc(100vh - 42px); */
+  height: 100vh;
   overflow: hidden;
-  border-radius: 0 0 6px 6px;
+  border-radius: 6px;
+  background: #eee;
 }
 
 .panelsContainer.viewFocused {
@@ -225,15 +216,19 @@ header .appIcon {
   background-color: #eee;
   display: grid;
   grid-template-rows: 1fr 40px;
+  border-top-left-radius: 6px;
 }
 #panelList:hover #listAdd {
   display: block;
+  text-align: center;
 }
 
 #panelNote {
   display: grid;
-  grid-template-rows: 40px auto 1fr;
+  grid-template-rows: 40px 40px auto 1fr;
   background-color: #fff;
+  border-radius: 6px;
+  box-shadow: -1px 0px 6px #cccccc99;
 }
 #panelNote.showModal #areaNew,
 #panelNote.showModal #areaPinNotes,
@@ -246,7 +241,6 @@ header .appIcon {
   grid-row: 1;
   width: 10px;
   cursor: col-resize;
-  background-color: #fff;
 }
 
 .panelToggle {
@@ -337,7 +331,8 @@ li.edit .noteSub {
 #areaListLists input {
   background-color: #eee;
   border: none;
-  width: calc(100% + 10px);
+  border-left: 3px solid transparent;
+  width: calc(100% + 7px);
   outline: none;
   height: 40px;
   padding: 0 10px;
@@ -349,10 +344,9 @@ li.edit .noteSub {
   background-color: #eee;
 }
 #areaListLists input.active {
-  background-color: #fff;
   position: relative;
   color: #000;
-  box-shadow: 0 0 2px #66666666;
+  border-left-color: #ccc;
 }
 #areaListLists input.active.hidden {
   background-color: #eee;
@@ -382,22 +376,23 @@ li.edit .noteSub {
   display: none;
 }
 #listAdd #listAddName {
-  text-align: center;
+  display: none;
   padding: 0;
   background-color: transparent;
   color: #aaa;
   border-right: none;
-  width: 100%;
+  width: calc(100% - 10px);
 }
 #listAdd #listAddName:hover {
   cursor: pointer;
   color: #999;
 }
 #listAdd #listAddName.active {
-  text-align: left;
+  display: block;
   border: none;
   background-color: #fff;
   padding-left: 10px;
+  border-radius: 0 40px 40px 0;
 }
 
 #txtNew {
@@ -408,7 +403,8 @@ li.edit .noteSub {
   padding: 0 10px;
   outline: none;
 }
-#btnNew {
+#btnNew,
+#btnNewList {
   display: inline-block;
   border-radius: 11px;
   color: #ccc;
@@ -419,23 +415,27 @@ li.edit .noteSub {
   line-height: 18px;
   margin: 10px 0;
 }
-#btnNew:hover {
+#btnNew:hover,
+#btnNewList:hover {
   background-color: #eeeeee;
   color: #666;
+}
+#btnNewList.hide {
+  display: none;
 }
 
 #areaNew {
   grid-column: 1;
-  grid-row: 1;
+  grid-row: 2;
   border-bottom: 1px solid #eee;
 }
 #areaPinNotes {
   grid-column: 1;
-  grid-row: 2;
+  grid-row: 3;
 }
 #areaListNotes {
   grid-column: 1;
-  grid-row: 3;
+  grid-row: 4;
   overflow: hidden auto;
 }
 
@@ -450,7 +450,7 @@ li.edit .noteSub {
   height: auto;
   line-height: 40px;
   border-bottom: 1px solid #eee;
-  padding: 0 10px 0 6px;
+  padding: 0 10px;
   grid-template-columns: 26px 1fr 90px auto auto auto auto auto;
   display: grid;
 }
@@ -574,11 +574,11 @@ li.edit .noteSub {
   grid-row: 2;
   line-height: 40px;
   padding: 0 8px;
+  border-left: 4px solid transparent;
 }
 #areaSettings.active {
-  background-color: #fff;
   z-index: 9;
-  box-shadow: 0px 0px 1px #ccc;
+  border-left-color: #ccc;
 }
 #areaSettings #btnSettings {
   width: 30px;
@@ -587,6 +587,7 @@ li.edit .noteSub {
   cursor: pointer;
   color: #ccc;
 }
+#areaSettings.active #btnSettings,
 #areaSettings #btnSettings:hover {
   color: #999;
 }
@@ -594,10 +595,11 @@ li.edit .noteSub {
 .modal {
   display: none;
   grid-column: 1;
-  grid-row: 1 / span 3;
+  grid-row: 2 / span 3;
   background-color: #fff;
   width: 100%;
   height: calc(100% - 40px);
+  padding-left: 10px;
   z-index: 1;
 }
 .modal.open {
@@ -706,9 +708,18 @@ li.edit .noteSub {
 }
 #titlebar {
   display: grid;
+  grid-row: 1;
   grid-template-columns: 30px 30px 30px 1fr 30px 30px 30px;
   align-items: center;
-  padding: 0 10px;
+  padding: 0 10px 0 4px;
+  position: relative;;
+  height: 40px;
+  z-index: 10;
+  text-align: center;
+  line-height: 40px;
+  font-size: .8rem;
+  border-bottom: 1px solid #ccc;
+  /* border-radius: 6px 6px 0 0; */
 }
 span.appIcon {
   width: 30px;
@@ -740,7 +751,7 @@ span.appIcon:hover {
 #web {
   border: none;
 }
-#web header {
+#web #titlebar {
   display: none;
 }
 #web .panelsContainer {

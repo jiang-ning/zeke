@@ -271,6 +271,8 @@ request.onsuccess = async function(event) {
         }
         initDnD('areaListLists', 'listOrder');
       }
+
+      document.getElementById('brand').innerText = document.querySelector('#areaListLists input.active').value;
     };
     
     request.onerror = function() {
@@ -313,8 +315,9 @@ request.onsuccess = async function(event) {
       addList({name: listName});
     }
     document.getElementById('listAdd').classList.remove('active');
-    document.getElementById('listAddName').value = '+';
+    document.getElementById('listAddName').value = '';
     document.getElementById('listAddName').blur();
+    document.getElementById('btnNewList').classList.remove('hide');
   }
 
   function generateListItem(id, name, order = 0) {
@@ -342,6 +345,7 @@ request.onsuccess = async function(event) {
       }
       e.target.classList.add('active');
       localStorage.setItem('listActive',e.target.dataset.id);
+      document.getElementById('brand').innerHTML = e.target.value;
       renderNotes(e.target.dataset.id);
       cleanModal();
     });
@@ -887,9 +891,11 @@ request.onsuccess = async function(event) {
       document.getElementById('btnNew').click();
     }
   });
-  document.getElementById('listAddName').addEventListener('click', () => {
+  document.getElementById('btnNewList').addEventListener('click', () => {
+    document.getElementById('btnNewList').classList.add('hide');
     document.getElementById('listAddName').classList.add('active');
     document.getElementById('listAddName').value = '';
+    document.getElementById('listAddName').focus();
   });
   document.getElementById('listAddName').addEventListener('keypress', (e) => {
     if (e.key == "Enter") {
@@ -898,8 +904,9 @@ request.onsuccess = async function(event) {
     }
   });
   document.getElementById('listAddName').addEventListener('blur', (e) => {
+    document.getElementById('btnNewList').classList.remove('hide');
     document.getElementById('listAddName').classList.remove('active');
-    document.getElementById('listAddName').value = '+';
+    document.getElementById('listAddName').value = '';
   }, true);
   document.getElementById('panelsContainer').addEventListener('click', (e) => {
     if(e.target.readOnly || e.target.nodeName !== 'INPUT') {
@@ -936,8 +943,8 @@ function initGrid() {
     const diffX = e.clientX - startX;
     let newWidth = parseInt(startWidth + diffX);
     const currentWidth = parseInt(getComputedStyle(panelsContainer).width.slice(0,-2));
-    // 40px magnet
-    if(newWidth < 40) {
+    // 60px magnet
+    if(newWidth < 60) {
       newWidth = 0;
     }
     if(newWidth > currentWidth / 2) {
@@ -1053,7 +1060,6 @@ function initTitlebar() {
       localStorage.setItem('grid-template-columns',rememberedGrid); // remember previouse size
       panelsContainer.style.gridTemplateColumns = '0px 10px 1fr';
     }
-    
   });
 }
 
@@ -1121,6 +1127,7 @@ function init() {
   if(document.body.id !== 'web') {
     initTitlebar();
   }
+
   initGrid();
   initModal();
 }

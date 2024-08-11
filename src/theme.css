@@ -19,13 +19,12 @@
 [class^="theme"] #panelNote li.sortable-fallback,
 [class^="theme"] #areaPinNotes li.edit > .noteContent,
 [class^="theme"] #areaListNotes li.edit > .noteContent,
+[class^="theme"] #areaListLists li.edit input,
 [class^="theme"] #listAdd #listAddName.active {
   background-color: #ffffff99;
 }
 [class^="theme"] #panelNote,
-[class^="theme"] #gutter,
-[class^="theme"] #areaListLists input.active,
-[class^="theme"] #areaSettings.active,
+[class^="theme"] #areaListLists .listRemove:hover,
 [class^="theme"] span.appIcon:hover {
   background-color: #ffffff66;
 }
@@ -39,11 +38,9 @@
 [class^="theme"] #areaListLists li span {
   color: #ffffff99;
 } */
-[class^="theme"] #listAdd #listAddName,
 [class^="theme"] #areaSettings #btnSettings {
   color: #ffffff99;
 }
-[class^="theme"] #listAdd #listAddName:hover,
 [class^="theme"] #areaSettings #btnSettings:hover,
 [class^="theme"] #areaSettings.active #btnSettings {
   color: #ffffffee;
@@ -52,9 +49,12 @@
 [class^="theme"] #listAdd #listAddName.active {
   color: #000;
 }
-[class^="theme"] #areaListLists input {
+[class^="theme"] #listAdd #listAddName {
   color: #00000099;
 }
+/* [class^="theme"] #areaListLists input {
+  color: #00000099;
+} */
 /* [class^="theme"] #areaPinNotes input[type='text'],
 [class^="theme"] #areaListNotes input[type='text'],
 [class^="theme"] #areaPinNotes li span.noteMoment,
@@ -67,7 +67,7 @@
 } */
 
 /* mode-dark */
-.theme-dark header,
+/* .theme-dark #titlebar, */
 .theme-dark .panelsContainer,
 .theme-dark #panelList,
 .theme-dark #panelList li.sortable-fallback,
@@ -80,12 +80,10 @@
   background-color: #00000099;
 }
 .theme-dark #panelNote,
-.theme-dark #gutter,
-.theme-dark #areaListLists input.active,
-.theme-dark #areaListLists li.edit,
 .theme-dark #areaPinNotes li.edit > .noteContent,
 .theme-dark #areaListNotes li.edit > .noteContent,
-.theme-dark #areaSettings.active {
+.theme-dark #areaListLists li.edit input,
+.theme-dark #titlebar .appIcon:hover {
   background-color: #00000066;
 }
 .theme-dark input[type="checkbox"]::before,
@@ -109,12 +107,13 @@
   color: #000000ee;
 }
 .theme-dark #txtNew,
-.theme-dark #areaListLists input.active,
-.theme-dark #listAdd #listAddName.active,
 .theme-dark #areaPinNotes li:hover input[type='text'],
 .theme-dark #areaListNotes li:hover input[type='text'] {
   color: #fff;
 }
+.theme-dark #brand,
+.theme-dark #areaListLists input.active,
+.theme-dark #listAdd #listAddName.active,
 .theme-dark #areaListNotes input[type='text'],
 .theme-dark #areaListNotes li span.noteMoment,
 .theme-dark #areaListLists li span,
@@ -145,6 +144,7 @@
 .theme-dark #areaPinNotes li:last-child {
   border-color: #ffffff66;
 }
+.theme-dark #titlebar,
 .theme-dark input[type='checkbox'],
 .theme-dark #areaListNotes li.edit > input[type='text'], 
 .theme-dark #areaPinNotes li.edit > input[type='text'] {
@@ -160,8 +160,12 @@
 .theme-dark .noteCollapse.show {
   filter: invert(.6);
 }
+.theme-dark span.appIcon,
 .theme-dark .noteCollapse.show:hover {
   filter: invert(.9);
+}
+.theme-dark #panelNote {
+  box-shadow: -1px 0px 6px #000000cc;
 }
 #web.theme-dark {
   background-image: radial-gradient(var(--dark-cc), #000);
@@ -171,7 +175,6 @@
 }
 
 /* blue */
-.theme-blue header,
 .theme-blue .panelsContainer,
 .theme-blue #panelList,
 .theme-blue #panelNote .sortable-chosen,
@@ -193,12 +196,23 @@
 }
 .theme-blue #areaNew:hover,
 .theme-blue #areaNew:has(#txtNew:focus),
-.theme-blue #areaPinNotes li:last-child,
 .theme-blue #areaPinNotes li:hover input[type='checkbox'],
 .theme-blue #areaListNotes li:hover input[type='checkbox'],
 .theme-blue #areaPinNotes li.edit > input[type='text'],
 .theme-blue #areaListNotes li.edit > input[type='text'] {
   border-color: var(--blue-cc);
+}
+.theme-blue #titlebar,
+.theme-blue #areaPinNotes li:last-child {
+  border-color: var(--blue-stroke-66);
+}
+.theme-blue #areaListLists input.active,
+.theme-blue #areaSettings.active,
+.theme-blue .modal-section button {
+  border-color: var(--blue-stroke-cc);
+}
+.theme-blue #panelNote {
+  box-shadow: -1px 0px 6px var(--blue-stroke-66);
 }
 .theme-blue #btnNew {
   color: var(--blue-ee);
@@ -206,6 +220,7 @@
 .theme-blue #areaNew:hover #btnNew,
 .theme-blue #areaNew:has(#txtNew:focus) #btnNew,
 .theme-blue .icon,
+.theme-blue #areaListLists input,
 .theme-blue #areaListLists .listRemove:hover,
 .theme-blue #areaPinNotes input[type='text'],
 .theme-blue #areaListNotes input[type='text'],
@@ -228,7 +243,6 @@
 }
 
 /* red */
-.theme-red header,
 .theme-red .panelsContainer,
 .theme-red #panelList,
 .theme-red #panelNote .sortable-chosen,
@@ -250,12 +264,24 @@
 }
 .theme-red #areaNew:hover,
 .theme-red #areaNew:has(#txtNew:focus),
-.theme-red #areaPinNotes li:last-child,
+/* .theme-red #areaPinNotes li:last-child, */
 .theme-red #areaPinNotes li:hover input[type='checkbox'],
 .theme-red #areaListNotes li:hover input[type='checkbox'],
 .theme-red #areaPinNotes li.edit > input[type='text'],
 .theme-red #areaListNotes li.edit > input[type='text'] {
   border-color: var(--red-cc);
+}
+.theme-red #titlebar,
+.theme-red #areaPinNotes li:last-child {
+  border-color: var(--red-stroke-66);
+}
+.theme-red #areaListLists input.active,
+.theme-red #areaSettings.active,
+.theme-red .modal-section button {
+  border-color: var(--red-stroke-cc);
+}
+.theme-red #panelNote {
+  box-shadow: -1px 0px 6px var(--red-stroke-66);
 }
 .theme-red #btnNew {
   color: var(--red-ee);
@@ -285,7 +311,6 @@
 }
 
 /* orange */
-.theme-orange header,
 .theme-orange .panelsContainer,
 .theme-orange #panelList,
 .theme-orange #panelNote .sortable-chosen,
@@ -307,12 +332,24 @@
 }
 .theme-orange #areaNew:hover,
 .theme-orange #areaNew:has(#txtNew:focus),
-.theme-orange #areaPinNotes li:last-child,
+/* .theme-orange #areaPinNotes li:last-child, */
 .theme-orange #areaPinNotes li:hover input[type='checkbox'],
 .theme-orange #areaListNotes li:hover input[type='checkbox'],
 .theme-orange #areaPinNotes li.edit > input[type='text'],
 .theme-orange #areaListNotes li.edit > input[type='text'] {
   border-color: var(--orange-cc);
+}
+.theme-orange #titlebar,
+.theme-orange #areaPinNotes li:last-child {
+  border-color: var(--orange-stroke-66);
+}
+.theme-orange #areaListLists input.active,
+.theme-orange #areaSettings.active,
+.theme-orange .modal-section button {
+  border-color: var(--orange-stroke-cc);
+}
+.theme-orange #panelNote {
+  box-shadow: -1px 0px 6px var(--orange-stroke-66);
 }
 .theme-orange #btnNew {
   color: var(--orange-ee);
@@ -342,7 +379,6 @@
 }
 
 /* amber */
-.theme-amber header,
 .theme-amber .panelsContainer,
 .theme-amber #panelList,
 .theme-amber #panelNote .sortable-chosen {
@@ -366,12 +402,24 @@
 }
 .theme-amber #areaNew:hover,
 .theme-amber #areaNew:has(#txtNew:focus),
-.theme-amber #areaPinNotes li:last-child,
+/* .theme-amber #areaPinNotes li:last-child, */
 .theme-amber #areaPinNotes li:hover input[type='checkbox'],
 .theme-amber #areaListNotes li:hover input[type='checkbox'],
 .theme-amber #areaPinNotes li.edit > input[type='text'],
 .theme-amber #areaListNotes li.edit > input[type='text'] {
   border-color: var(--amber-cc);
+}
+.theme-amber #titlebar,
+.theme-amber #areaPinNotes li:last-child {
+  border-color: var(--amber-stroke-66);
+}
+.theme-amber #areaListLists input.active,
+.theme-amber #areaSettings.active,
+.theme-amber .modal-section button {
+  border-color: var(--amber-stroke-cc);
+}
+.theme-amber #panelNote {
+  box-shadow: -1px 0px 6px var(--amber-stroke-66);
 }
 .theme-amber #btnNew {
   color: var(--amber-ee);
@@ -401,7 +449,6 @@
 }
 
 /* green */
-.theme-green header,
 .theme-green .panelsContainer,
 .theme-green #panelList,
 .theme-green #panelNote .sortable-chosen,
@@ -423,12 +470,24 @@
 }
 .theme-green #areaNew:hover,
 .theme-green #areaNew:has(#txtNew:focus),
-.theme-green #areaPinNotes li:last-child,
+/* .theme-green #areaPinNotes li:last-child, */
 .theme-green #areaPinNotes li:hover input[type='checkbox'],
 .theme-green #areaListNotes li:hover input[type='checkbox'],
 .theme-green #areaPinNotes li.edit > input[type='text'],
 .theme-green #areaListNotes li.edit > input[type='text'] {
   border-color: var(--green-cc);
+}
+.theme-green #titlebar,
+.theme-green #areaPinNotes li:last-child {
+  border-color: var(--green-stroke-66);
+}
+.theme-green #areaListLists input.active,
+.theme-green #areaSettings.active,
+.theme-green .modal-section button {
+  border-color: var(--green-stroke-cc);
+}
+.theme-green #panelNote {
+  box-shadow: -1px 0px 6px var(--green-stroke-66);
 }
 .theme-green #btnNew {
   color: var(--green-ee);
@@ -458,7 +517,6 @@
 }
 
 /* teal */
-.theme-teal header,
 .theme-teal .panelsContainer,
 .theme-teal #panelList,
 .theme-teal #panelNote .sortable-chosen,
@@ -480,12 +538,24 @@
 }
 .theme-teal #areaNew:hover,
 .theme-teal #areaNew:has(#txtNew:focus),
-.theme-teal #areaPinNotes li:last-child,
+/* .theme-teal #areaPinNotes li:last-child, */
 .theme-teal #areaPinNotes li:hover input[type='checkbox'],
 .theme-teal #areaListNotes li:hover input[type='checkbox'],
 .theme-teal #areaPinNotes li.edit > input[type='text'],
 .theme-teal #areaListNotes li.edit > input[type='text'] {
   border-color: var(--teal-cc);
+}
+.theme-teal #titlebar,
+.theme-teal #areaPinNotes li:last-child {
+  border-color: var(--teal-stroke-66);
+}
+.theme-teal #areaListLists input.active,
+.theme-teal #areaSettings.active,
+.theme-teal .modal-section button {
+  border-color: var(--teal-stroke-cc);
+}
+.theme-teal #panelNote {
+  box-shadow: -1px 0px 6px var(--teal-stroke-66);
 }
 .theme-teal #btnNew {
   color: var(--teal-ee);
@@ -515,7 +585,6 @@
 }
 
 /* violet */
-.theme-violet header,
 .theme-violet .panelsContainer,
 .theme-violet #panelList,
 .theme-violet #panelNote .sortable-chosen,
@@ -537,12 +606,24 @@
 }
 .theme-violet #areaNew:hover,
 .theme-violet #areaNew:has(#txtNew:focus),
-.theme-violet #areaPinNotes li:last-child,
+/* .theme-violet #areaPinNotes li:last-child, */
 .theme-violet #areaPinNotes li:hover input[type='checkbox'],
 .theme-violet #areaListNotes li:hover input[type='checkbox'],
 .theme-violet #areaPinNotes li.edit > input[type='text'],
 .theme-violet #areaListNotes li.edit > input[type='text'] {
   border-color: var(--violet-cc);
+}
+.theme-violet #titlebar,
+.theme-violet #areaPinNotes li:last-child {
+  border-color: var(--violet-stroke-66);
+}
+.theme-violet #areaListLists input.active,
+.theme-violet #areaSettings.active,
+.theme-violet .modal-section button {
+  border-color: var(--violet-stroke-cc);
+}
+.theme-violet #panelNote {
+  box-shadow: -1px 0px 6px var(--violet-stroke-66);
 }
 .theme-violet #btnNew {
   color: var(--violet-ee);
@@ -572,7 +653,6 @@
 }
 
 /* purple */
-.theme-purple header,
 .theme-purple .panelsContainer,
 .theme-purple #panelList,
 .theme-purple #panelNote .sortable-chosen,
@@ -594,12 +674,24 @@
 }
 .theme-purple #areaNew:hover,
 .theme-purple #areaNew:has(#txtNew:focus),
-.theme-purple #areaPinNotes li:last-child,
+/* .theme-purple #areaPinNotes li:last-child, */
 .theme-purple #areaPinNotes li:hover input[type='checkbox'],
 .theme-purple #areaListNotes li:hover input[type='checkbox'],
 .theme-purple #areaPinNotes li.edit > input[type='text'],
 .theme-purple #areaListNotes li.edit > input[type='text'] {
   border-color: var(--purple-cc);
+}
+.theme-purple #titlebar,
+.theme-purple #areaPinNotes li:last-child {
+  border-color: var(--purple-stroke-66);
+}
+.theme-purple #areaListLists input.active,
+.theme-purple #areaSettings.active,
+.theme-purple .modal-section button {
+  border-color: var(--purple-stroke-cc);
+}
+.theme-purple #panelNote {
+  box-shadow: -1px 0px 6px var(--purple-stroke-66);
 }
 .theme-purple #btnNew {
   color: var(--purple-ee);
@@ -629,7 +721,6 @@
 }
 
 /* pink */
-.theme-pink header,
 .theme-pink .panelsContainer,
 .theme-pink #panelList,
 .theme-pink #panelNote .sortable-chosen,
@@ -651,13 +742,25 @@
 }
 .theme-pink #areaNew:hover,
 .theme-pink #areaNew:has(#txtNew:focus),
-.theme-pink #areaPinNotes li:last-child,
+/* .theme-pink #areaPinNotes li:last-child, */
 .theme-pink #areaPinNotes li:hover input[type='checkbox'],
 .theme-pink #areaListNotes li:hover input[type='checkbox'],
 .theme-pink #areaPinNotes li.edit > input[type='text'],
 .theme-pink #areaListNotes li.edit > input[type='text'],
 .theme-pink .modal-section button {
   border-color: var(--pink-cc);
+}
+.theme-pink #titlebar,
+.theme-pink #areaPinNotes li:last-child {
+  border-color: var(--pink-stroke-66);
+}
+.theme-pink #areaListLists input.active,
+.theme-pink #areaSettings.active,
+.theme-pink .modal-section button {
+  border-color: var(--pink-stroke-cc);
+}
+.theme-pink #panelNote {
+  box-shadow: -1px 0px 6px var(--pink-stroke-66);
 }
 .theme-pink #btnNew {
   color: var(--pink-ee);
