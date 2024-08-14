@@ -148,6 +148,7 @@ body {
   overflow: hidden;
   border: 1px solid #ccc;
   border-radius: 10px;
+  width: calc(100% - 3px);
 }
 body[style^="opacity"] {
   background: transparent;
@@ -196,10 +197,9 @@ input[type="checkbox"]:disabled {
   display: grid;
   grid-template-columns: 200px 10px 1fr;
   grid-template-rows: 1fr;
-  /* height: calc(100vh - 42px); */
-  height: 100vh;
+  height: calc(100vh - 3px);
   overflow: hidden;
-  border-radius: 10px;
+  border-radius: 8px;
   background: #eee;
 }
 
