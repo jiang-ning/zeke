@@ -11,91 +11,107 @@ if (require('electron-squirrel-startup')) {
   app.quit();
 }
 
+let mainWindow = null;
+
+const gotTheLock = app.requestSingleInstanceLock();
+
 const createWindow = () => {
-  // Create the browser window.
-  const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
-    minWidth: 300,
-    minHeight: 160,
-    webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
-      nodeIntegration: true,
-      contextIsolation: true
-    },
-    titleBarStyle: 'hidden',
-    transparent: true,
-    frame: false
-  });
 
-  ipcMain.on('set-always-on-top', (event, enable) => {
-    const webContents = event.sender;
-    const win = BrowserWindow.fromWebContents(webContents);
-    win.setAlwaysOnTop(enable,'screen-saver');
-  });
+  if(!gotTheLock) {
+    app.quit();
+  } else {
+    // Create the browser window.
+    mainWindow = new BrowserWindow({
+      width: 800,
+      height: 600,
+      minWidth: 300,
+      minHeight: 160,
+      webPreferences: {
+        preload: path.join(__dirname, 'preload.js'),
+        nodeIntegration: true,
+        contextIsolation: true
+      },
+      titleBarStyle: 'hidden',
+      transparent: true,
+      frame: false
+    });
 
-  // ipcMain.on('is-always-on-top', async (event) => {
-  //   const webContents = event.sender
-  //   const win = BrowserWindow.fromWebContents(webContents)
-  //   const result = await win.isAlwaysOnTop()
-  //   return result
-  // });
+    app.on('second-instance', () => {
+      if (mainWindow) {
+        if (mainWindow.isMinimized()) mainWindow.restore();
+        mainWindow.focus();
+      }
+    });
 
-  ipcMain.on('maximize', (event) => {
-    const webContents = event.sender;
-    const win = BrowserWindow.fromWebContents(webContents);
-    win.maximize();
-  });
+    ipcMain.on('set-always-on-top', (event, enable) => {
+      const webContents = event.sender;
+      const win = BrowserWindow.fromWebContents(webContents);
+      win.setAlwaysOnTop(enable,'screen-saver');
+    });
 
-  ipcMain.on('unmaximize', (event) => {
-    const webContents = event.sender;
-    const win = BrowserWindow.fromWebContents(webContents);
-    win.unmaximize();
-  });
+    // ipcMain.on('is-always-on-top', async (event) => {
+    //   const webContents = event.sender
+    //   const win = BrowserWindow.fromWebContents(webContents)
+    //   const result = await win.isAlwaysOnTop()
+    //   return result
+    // });
 
-  ipcMain.on('is-maximized', (event) => {
-    const webContents = event.sender;
-    const win = BrowserWindow.fromWebContents(webContents);
-    win.isMaximized();
-  });
+    ipcMain.on('maximize', (event) => {
+      const webContents = event.sender;
+      const win = BrowserWindow.fromWebContents(webContents);
+      win.maximize();
+    });
 
-  ipcMain.on('minimize', (event) => {
-    const webContents = event.sender;
-    const win = BrowserWindow.fromWebContents(webContents);
-    win.minimize();
-  });
+    ipcMain.on('unmaximize', (event) => {
+      const webContents = event.sender;
+      const win = BrowserWindow.fromWebContents(webContents);
+      win.unmaximize();
+    });
 
-  ipcMain.on('is-minimized', (event) => {
-    const webContents = event.sender;
-    const win = BrowserWindow.fromWebContents(webContents);
-    win.isMinimized();
-  });
+    ipcMain.on('is-maximized', (event) => {
+      const webContents = event.sender;
+      const win = BrowserWindow.fromWebContents(webContents);
+      win.isMaximized();
+    });
 
-  // TODO: issue on mac after reboot app
-  ipcMain.handle('get-bounds', async (event) => {
-    const webContents = event.sender;
-    const win = BrowserWindow.fromWebContents(webContents);
-    const bounds = await win.getBounds();
-    return bounds;
-  });
+    ipcMain.on('minimize', (event) => {
+      const webContents = event.sender;
+      const win = BrowserWindow.fromWebContents(webContents);
+      win.minimize();
+    });
 
-  ipcMain.on('set-bounds', (event, bounds) => {
-    const webContents = event.sender;
-    const win = BrowserWindow.fromWebContents(webContents);
-    win.setBounds(bounds);
-  });
+    ipcMain.on('is-minimized', (event) => {
+      const webContents = event.sender;
+      const win = BrowserWindow.fromWebContents(webContents);
+      win.isMinimized();
+    });
 
-  ipcMain.on('close', (event) => {
-    const webContents = event.sender;
-    const win = BrowserWindow.fromWebContents(webContents);
-    win.close();
-  });
+    // TODO: issue on mac after reboot app
+    ipcMain.handle('get-bounds', async (event) => {
+      const webContents = event.sender;
+      const win = BrowserWindow.fromWebContents(webContents);
+      const bounds = await win.getBounds();
+      return bounds;
+    });
 
-  // and load the index.html of the app.
-  mainWindow.loadFile(path.join(__dirname, 'index.html'));
+    ipcMain.on('set-bounds', (event, bounds) => {
+      const webContents = event.sender;
+      const win = BrowserWindow.fromWebContents(webContents);
+      win.setBounds(bounds);
+    });
 
-  // Open the DevTools.
-  // mainWindow.webContents.openDevTools();
+    ipcMain.on('close', (event) => {
+      const webContents = event.sender;
+      const win = BrowserWindow.fromWebContents(webContents);
+      win.close();
+    });
+
+    // and load the index.html of the app.
+    mainWindow.loadFile(path.join(__dirname, 'index.html'));
+
+    // Open the DevTools.
+    // mainWindow.webContents.openDevTools();
+  }
 };
 
 // This method will be called when Electron has finished
@@ -107,9 +123,9 @@ app.on('ready', createWindow);
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
 app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
+  // if (process.platform !== 'darwin') {
     app.quit();
-  }
+  // }
 });
 
 app.on('activate', () => {

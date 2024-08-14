@@ -1,11 +1,12 @@
 # Change Log
 -
-### v1.9.6
+### v1.8.2
 ##### 2024-08-12
 - Improvement: New color themes
 - Improvement: New layout
 - Improvement: Show list name instead brand on title bar
 - Bug Fix: Window corners radius issue
+- Bug Fix: Disallowed open multiple window instances
 
 ### v1.6.3
 ##### 2024-07-14
