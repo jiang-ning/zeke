@@ -938,19 +938,21 @@ function initGrid() {
     startWidth = parseFloat(getComputedStyle(panelList).width);
   });
 
-  document.addEventListener('mousemove', (e) => {
-    if (!isResizing) return;
-    const diffX = e.clientX - startX;
-    let newWidth = parseInt(startWidth + diffX);
-    const currentWidth = parseInt(getComputedStyle(panelsContainer).width.slice(0,-2));
-    // 60px magnet
-    if(newWidth < 60) {
-      newWidth = 0;
-    }
-    if(newWidth > currentWidth / 2) {
-      newWidth = currentWidth / 2;
-    }
-    panelsContainer.setAttribute('style',`grid-template-columns:${newWidth}px 10px 1fr;`);
+  gutter.addEventListener('mousemove', (e) => {
+    if (isResizing) {
+      const diffX = e.clientX - startX;
+      let widthList = parseInt(startWidth + diffX);
+      let widthGutter = 10;
+      const currentWidth = parseInt(getComputedStyle(panelsContainer).width.slice(0,-2));
+      // 60px magnet
+      if(widthList < 60) {
+        widthList = widthGutter = 0;
+      }
+      if(widthList > currentWidth / 2) {
+        widthList = currentWidth / 2;
+      }
+      panelsContainer.setAttribute('style',`grid-template-columns:${widthList}px ${widthGutter}px 1fr;`);
+    };
   });
 
   gutter.addEventListener('mouseup', () => {
@@ -1052,13 +1054,13 @@ function initTitlebar() {
   btnSidebar.addEventListener('click', (e) => {
     let panelsContainer = document.getElementById('panelsContainer');
     const currentGrid = panelsContainer.style.gridTemplateColumns;
-    const rememberedGrid = localStorage.getItem('grid-template-columns') || '200px 10px 1fr';
+    const rememberedGrid = localStorage.getItem('grid-template-columns') || '100px 10px 1fr';
 
-    if(currentGrid == '0px 10px 1fr') {
+    if(currentGrid == '0px 0px 1fr') {
       panelsContainer.style.gridTemplateColumns = rememberedGrid;
     } else {
       localStorage.setItem('grid-template-columns',rememberedGrid); // remember previouse size
-      panelsContainer.style.gridTemplateColumns = '0px 10px 1fr';
+      panelsContainer.style.gridTemplateColumns = '0px 0px 1fr';
     }
   });
 }

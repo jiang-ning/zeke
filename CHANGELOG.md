@@ -6,8 +6,9 @@
 - Improvement: New layout
 - Improvement: Show list name instead brand on title bar
 - Improvement: Use single click to edit note instead of double click
-- Bug Fix: Window corners radius issue
+- Bug Fix: Window corners radius layout issue
 - Bug Fix: Disallowed open multiple window instances
+- Bug Fix: List panel resize issue
 
 ### v1.6.3
 ##### 2024-07-14

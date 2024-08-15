@@ -195,7 +195,7 @@ input[type="checkbox"]:disabled {
 }
 .panelsContainer {
   display: grid;
-  grid-template-columns: 200px 10px 1fr;
+  grid-template-columns: 100px 10px 1fr;
   grid-template-rows: 1fr;
   height: calc(100vh - 3px);
   overflow: hidden;
@@ -225,6 +225,7 @@ input[type="checkbox"]:disabled {
   background-color: #fff;
   border-radius: 10px;
   box-shadow: -1px 0px 6px #cccccc99;
+  transition: box-shadow .3s;
 }
 #panelNote.showModal #areaNew,
 #panelNote.showModal #areaPinNotes,
@@ -237,6 +238,10 @@ input[type="checkbox"]:disabled {
   grid-row: 1;
   width: 10px;
   cursor: col-resize;
+}
+#gutter:hover + #panelNote {
+  box-shadow: -1px 0px 6px #ccccccff;
+  transition: box-shadow .3s;
 }
 
 .panelToggle {

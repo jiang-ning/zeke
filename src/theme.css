@@ -167,6 +167,9 @@
 .theme-dark #panelNote {
   box-shadow: -1px 0px 6px #000000cc;
 }
+.theme-dark #gutter:hover + #panelNote {
+  box-shadow: -1px 0px 6px #000000;
+}
 #web.theme-dark {
   background-image: radial-gradient(var(--dark-cc), #000);
 }
@@ -213,6 +216,9 @@
 }
 .theme-blue #panelNote {
   box-shadow: -1px 0px 6px var(--blue-stroke-66);
+}
+.theme-blue #gutter:hover + #panelNote {
+  box-shadow: -1px 0px 6px var(--blue-stroke);
 }
 .theme-blue #btnNew {
   color: var(--blue-ee);
@@ -283,6 +289,9 @@
 .theme-red #panelNote {
   box-shadow: -1px 0px 6px var(--red-stroke-66);
 }
+.theme-red #gutter:hover + #panelNote {
+  box-shadow: -1px 0px 6px var(--red-stroke);
+}
 .theme-red #btnNew {
   color: var(--red-ee);
 }
@@ -350,6 +359,9 @@
 }
 .theme-orange #panelNote {
   box-shadow: -1px 0px 6px var(--orange-stroke-66);
+}
+.theme-orange #gutter:hover + #panelNote {
+  box-shadow: -1px 0px 6px var(--orange-stroke);
 }
 .theme-orange #btnNew {
   color: var(--orange-ee);
@@ -421,6 +433,9 @@
 .theme-amber #panelNote {
   box-shadow: -1px 0px 6px var(--amber-stroke-66);
 }
+.theme-amber #gutter:hover + #panelNote {
+  box-shadow: -1px 0px 6px var(--amber-stroke);
+}
 .theme-amber #btnNew {
   color: var(--amber-ee);
 }
@@ -488,6 +503,9 @@
 }
 .theme-green #panelNote {
   box-shadow: -1px 0px 6px var(--green-stroke-66);
+}
+.theme-green #gutter:hover + #panelNote {
+  box-shadow: -1px 0px 6px var(--green-stroke);
 }
 .theme-green #btnNew {
   color: var(--green-ee);
@@ -557,6 +575,9 @@
 .theme-teal #panelNote {
   box-shadow: -1px 0px 6px var(--teal-stroke-66);
 }
+.theme-teal #gutter:hover + #panelNote {
+  box-shadow: -1px 0px 6px var(--teal-stroke);
+}
 .theme-teal #btnNew {
   color: var(--teal-ee);
 }
@@ -624,6 +645,9 @@
 }
 .theme-violet #panelNote {
   box-shadow: -1px 0px 6px var(--violet-stroke-66);
+}
+.theme-violet #gutter:hover + #panelNote {
+  box-shadow: -1px 0px 6px var(--violet-stroke);
 }
 .theme-violet #btnNew {
   color: var(--violet-ee);
@@ -693,6 +717,9 @@
 .theme-purple #panelNote {
   box-shadow: -1px 0px 6px var(--purple-stroke-66);
 }
+.theme-purple #gutter:hover + #panelNote {
+  box-shadow: -1px 0px 6px var(--purple-stroke);
+}
 .theme-purple #btnNew {
   color: var(--purple-ee);
 }
@@ -761,6 +788,9 @@
 }
 .theme-pink #panelNote {
   box-shadow: -1px 0px 6px var(--pink-stroke-66);
+}
+.theme-pink #gutter:hover + #panelNote {
+  box-shadow: -1px 0px 6px var(--pink-stroke);
 }
 .theme-pink #btnNew {
   color: var(--pink-ee);
