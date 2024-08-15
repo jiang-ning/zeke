@@ -491,7 +491,7 @@ request.onsuccess = async function(event) {
       }
     });
 
-    noteInput.addEventListener('dblclick', (e) => {
+    noteInput.addEventListener('click', (e) => {
       e.preventDefault();
       e.stopPropagation();
 
