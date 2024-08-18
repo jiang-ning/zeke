@@ -2,6 +2,7 @@
 
 // Open the IndexedDB database
 const request = indexedDB.open('neonote', 1);
+let languages = {};
 
 // // the main container for note list
 // const areaListNotes = document.getElementById('areaListNotes');
@@ -440,14 +441,17 @@ request.onsuccess = async function(event) {
     noteCollapse.className = 'noteCollapse';
     noteSub.className = 'icon noteSub';
     noteSub.innerText = '+';
-    noteSub.title = 'New subtask';
+    noteSub.title = translate('__new_subtask__') || 'New Subtask';
+    noteSub.dataset['langTitle'] = '__new_subtask__';
     noteSubList.className = 'noteSubList';
     notePin.innerText = '^';
-    notePin.title = note.pin ? 'Unpin' : 'Pin';
+    notePin.dataset['langTitle'] = note.pin ? '__unpin__' : '__pin__';
+    notePin.title = translate(notePin.dataset['langTitle']) || note.pin ? 'Unpin' : 'Pin';
     notePin.className = 'icon notePin';
     noteRemove.className = 'icon noteRemove';
     noteRemove.innerText = '-';
-    noteRemove.title = 'Remove';
+    noteRemove.dataset['langTitle'] = '__remove__';
+    noteRemove.title = translate('__remove__') || 'Remove';
     noteItem.append(noteCheckbox);
     noteItem.append(noteInput);
     noteItem.append(noteSub);
@@ -665,6 +669,8 @@ request.onsuccess = async function(event) {
     subNoteMoment.innerText = convertTimetamp(subNote.dateCreated);
     subNoteRemove.className = 'icon noteRemove';
     subNoteRemove.innerText = '-';
+    subNoteRemove.dataset['langTitle'] = '__remove__';
+    subNoteRemove.title = translate('__remove__') || 'Remove';
 
     subNoteItem.append(subNoteCheckbox);
     subNoteItem.append(subNoteInput);
@@ -973,10 +979,12 @@ function initModal() {
   const areaSettings = document.getElementById('areaSettings');
   const panelNote = document.getElementById('panelNote');
   const opacitySelection = document.getElementById('opacitySelection');
-  const opacity = localStorage.getItem('opacity') || '100';
+  const languageList = document.getElementById('languageList');
   const restore = document.getElementById('restore');
   const clear = document.getElementById('clear');
-  
+  const opacity = localStorage.getItem('opacity') || '100';
+  const rememberedLanguage = localStorage.getItem('language') || 'en';
+
   document.getElementById('btnSettings').addEventListener('click', () => {
     const activedList = document.querySelector('#areaListLists input.active');
     areaSettings.classList.toggle('active');
@@ -987,12 +995,21 @@ function initModal() {
       activedList.click();
     }
   });
+
+  languageList.addEventListener('change', e => {
+    changeLanguage(e.target.value);
+    localStorage.setItem('language', e.target.value);
+  });
+
+  languageList.value = rememberedLanguage;
+
   themes.forEach(theme => {
     theme.addEventListener('click', (e) => {
       document.body.className = e.target.dataset.id;
       localStorage.setItem('theme', e.target.dataset.id);
     });
   });
+
   modes.forEach(mode => {
     mode.addEventListener('click', (e) => {
       document.body.className = e.currentTarget.dataset.id;
@@ -1067,6 +1084,14 @@ function initTitlebar() {
   });
 }
 
+async function initLanguage() {
+  const rememberedLanguage = localStorage.getItem('language') || 'en';
+  await fetch('./lang.json').then(res => res.json()).then(json => {
+    languages = json;
+    changeLanguage(rememberedLanguage);
+  });
+}
+
 function convertTimetamp(timestamp) {
   const seconds = Math.floor((new Date() - timestamp) / 1000);
 
@@ -1112,6 +1137,22 @@ function getCurrentThemeColor() {
   return cssVariableValue;
 }
 
+function changeLanguage(languageCode) {
+  const elementsInnerText = document.querySelectorAll('[data-lang-innertext]');
+  const elementsTitle = document.querySelectorAll('[data-lang-title]');
+  elementsInnerText.forEach(el => {
+    el.innerText = languages[languageCode][el.dataset['langInnertext']] || el.innerText;
+  });
+  elementsTitle.forEach(el => {
+    el.title = languages[languageCode][el.dataset['langTitle']] || el.title;
+  });
+}
+
+function translate(wordsCode) {
+  const currentLanguage = localStorage.getItem('language') || 'en';
+  return languages[currentLanguage][wordsCode] || false;
+}
+
 function init() {
   const theme = localStorage.getItem('theme') || '';
   const opacity = localStorage.getItem('opacity') || '100';
@@ -1134,6 +1175,7 @@ function init() {
 
   initGrid();
   initModal();
+  initLanguage();
 }
 
 init();
