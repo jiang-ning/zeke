@@ -2,7 +2,6 @@
 
 // Open the IndexedDB database
 const request = indexedDB.open('neonote', 1);
-let languages = {};
 
 // // the main container for note list
 // const areaListNotes = document.getElementById('areaListNotes');
@@ -1029,6 +1028,12 @@ function initModal() {
     localStorage.removeItem('listOrder');
     localStorage.removeItem('theme');
     localStorage.removeItem('opacity');
+    localStorage.removeItem('bounds');
+    localStorage.removeItem('listActive');
+    localStorage.removeItem('language');
+    localStorage.removeItem('grid-template-columns');
+    localStorage.removeItem('listOpened');
+    localStorage.removeItem('alwaysOnTop');
   });
 
   clear.addEventListener('click', (e) => {
@@ -1084,16 +1089,22 @@ function initTitlebar() {
   });
 }
 
-async function initLanguage() {
+function initLanguage() {
   const rememberedLanguage = localStorage.getItem('language') || 'en';
-  await fetch('./lang.json').then(res => res.json()).then(json => {
-    languages = json;
-    changeLanguage(rememberedLanguage);
-  });
+  // await fetch('./lang.json').then(res => res.json()).then(json => {
+  //   languages = json;
+  //   changeLanguage(rememberedLanguage);
+  // });
+  // languages = Language;
+  if(rememberedLanguage === 'ar') {
+    document.body.classList.add('ar');
+  }
+  changeLanguage(rememberedLanguage);
 }
 
 function convertTimetamp(timestamp) {
   const seconds = Math.floor((new Date() - timestamp) / 1000);
+  const language = localStorage.getItem('language') || 'en';
 
   const intervals = {
     year: 31536000,
@@ -1108,11 +1119,11 @@ function convertTimetamp(timestamp) {
   for (let interval in intervals) {
     const value = Math.floor(seconds / intervals[interval]);
     if (value >= 1) {
-      return value + " " + interval + (value > 1 ? "s" : "") + " ago";
+      return value + " " + (translate(`__${interval}__`) || interval) + (value > 1 && language === 'en' ? "s ago" : "");
     }
   }
 
-  return "Just now";
+  return language === 'en' ? "Just now" : translate(`__just_now__`) || "Just now";
 }
 
 function closeEditingNote() {
@@ -1141,16 +1152,16 @@ function changeLanguage(languageCode) {
   const elementsInnerText = document.querySelectorAll('[data-lang-innertext]');
   const elementsTitle = document.querySelectorAll('[data-lang-title]');
   elementsInnerText.forEach(el => {
-    el.innerText = languages[languageCode][el.dataset['langInnertext']] || el.innerText;
+    el.innerText = Languages[languageCode][el.dataset['langInnertext']] || el.innerText;
   });
   elementsTitle.forEach(el => {
-    el.title = languages[languageCode][el.dataset['langTitle']] || el.title;
+    el.title = Languages[languageCode][el.dataset['langTitle']] || el.title;
   });
 }
 
 function translate(wordsCode) {
   const currentLanguage = localStorage.getItem('language') || 'en';
-  return languages[currentLanguage][wordsCode] || false;
+  return Languages[currentLanguage][wordsCode] || false;
 }
 
 function init() {

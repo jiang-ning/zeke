@@ -1,8 +1,8 @@
 # Change Log
 -
-### v1.8.2
-##### 2024-08-18
-- New Feature: Multi-language support: German, Spain, French, Japanese, Portugal, Russian, Chinese Simplified and Chinese Traditional
+### v1.7.3
+##### 2024-08-20
+- New Feature: Multi-language support: Arabic, German, Spain, French, Japanese, Portugal, Russian, Chinese Simplified and Chinese Traditional
 - Improvement: New color themes
 - Improvement: New layout
 - Improvement: Show list name instead brand on title bar

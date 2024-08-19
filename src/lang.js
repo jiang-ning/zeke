@@ -1,4 +1,36 @@
-{
+const Languages = {
+    "ar" : {
+        "name" : "العربية",
+        "__language__" : "اللغة",
+        "__theme__" : "موضوع",
+        "__opacity__" : "العتامه",
+        "__custom_settings__" : "إعدادات مخصصة",
+        "__custom_settings_desc__" : "انقر فوق الزر لاستعادة الأنواع والدبابيس والسمة.",
+        "__restore__" : "يستعيد",
+        "__data_storage__" : "تخزين البيانات",
+        "__disk_space_usage__" : "استخدام مساحة القرص:",
+        "__click_to_remove__" : "KB ، انقر فوق الزر لإزالة جميع البيانات.",
+        "__clear_all_data__" : "مسح جميع البيانات",
+        "__show_hide_list__" : "إظهار / إخفاء القائمة",
+        "__always_on_top__" : "دائما في المقدمة",
+        "__minimize__" : "تصغير",
+        "__quit__" : "انهاء",
+        "__create__" : "خلق",
+        "__new_list__" : "قائمة جديدة",
+        "__settings__" : "اعدادات",
+        "__pin__" : "دبوس",
+        "__unpin__" : "حذف",
+        "__new_subtask__" : "مهمة فرعية جديدة",
+        "__remove__" : "أبعد",
+        "__just_now__" : "منذ لحظة واحدة",
+        "__sec__" : "ثانية",
+        "__min__" : "دقائق",
+        "__hr__" : "ساعات",
+        "__day__" : "أيام",
+        "__week__" : "أسابيع",
+        "__month__" : "أشهر",
+        "__year__" : "سنوات"
+    },
     "de" : {
         "name" : "Deutsch",
         "__language__" : "Sprache",
@@ -21,7 +53,15 @@
         "__pin__" : "Stecknadel",
         "__unpin__" : "Losheften",
         "__new_subtask__" : "Neue Unteraufgabe",
-        "__remove__" : "Entfernen"
+        "__remove__" : "Entfernen",
+        "__just_now__" : "gerade eben",
+        "__sec__" : "Sekunden vor",
+        "__min__" : "Minuten vor",
+        "__hr__" : "Stunden vor",
+        "__day__" : "Tagen vor",
+        "__week__" : "Wochen vor",
+        "__month__" : "Monate vor",
+        "__year__" : "Jahr vor"
     },
     "en" : {
         "name" : "English",
@@ -45,7 +85,15 @@
         "__pin__" : "Pin",
         "__unpin__" : "Unpin",
         "__new_subtask__" : "New Subtask",
-        "__remove__" : "Remove"
+        "__remove__" : "Remove",
+        "__just_now__" : "Just now",
+        "__sec__" : "sec",
+        "__min__" : "min",
+        "__hr__" : "hr",
+        "__day__" : "day",
+        "__week__" : "week",
+        "__month__" : "month",
+        "__year__" : "year"
     },
     "es" : {
         "name" : "Español",
@@ -69,7 +117,15 @@
         "__pin__" : "Anclar",
         "__unpin__" : "Desanclar",
         "__new_subtask__" : "Nueva subtarea",
-        "__remove__" : "Eliminar"
+        "__remove__" : "Eliminar",
+        "__just_now__" : "hace un momento",
+        "__sec__" : "segundos",
+        "__min__" : "minutos",
+        "__hr__" : "horas",
+        "__day__" : "días",
+        "__week__" : "semanas",
+        "__month__" : "meses",
+        "__year__" : "año"
     },
     "fr" : {
         "name" : "Française",
@@ -93,7 +149,15 @@
         "__pin__" : "Épingler",
         "__unpin__" : "Désépingler",
         "__new_subtask__" : "Nouvelle sous-tâche",
-        "__remove__" : "Enlever"
+        "__remove__" : "Enlever",
+        "__just_now__" : "Il y a quelques instants",
+        "__sec__" : "secondes",
+        "__min__" : "minutes",
+        "__hr__" : "heures",
+        "__day__" : "jours",
+        "__week__" : "semaines",
+        "__month__" : "mois",
+        "__year__" : "an"
     },
     "jp" : {
         "name" : "日本語",
@@ -117,7 +181,15 @@
         "__pin__" : "ピン",
         "__unpin__" : "解除",
         "__new_subtask__" : "新規サブタスク",
-        "__remove__" : "取り去る"
+        "__remove__" : "取り去る",
+        "__just_now__" : "今才",
+        "__sec__" : "秒前",
+        "__min__" : "分前",
+        "__hr__" : "時間前",
+        "__day__" : "日前",
+        "__week__" : "週間前",
+        "__month__" : "ヶ月前",
+        "__year__" : "年前"
     },
     "pt" : {
         "name" : "Português",
@@ -141,7 +213,15 @@
         "__pin__" : "Pino",
         "__unpin__" : "Desafixar",
         "__new_subtask__" : "Nova subtarefa",
-        "__remove__" : "Remover"
+        "__remove__" : "Remover",
+        "__just_now__" : "só agora",
+        "__sec__" : "segundos",
+        "__min__" : "minutos",
+        "__hr__" : "horas",
+        "__day__" : "dias",
+        "__week__" : "semanas",
+        "__month__" : "meses",
+        "__year__" : "ano"
     },
     "ru" : {
         "name" : "Русский",
@@ -165,7 +245,15 @@
         "__pin__" : "Булавка",
         "__unpin__" : "Откалывать",
         "__new_subtask__" : "Новая подзадача",
-        "__remove__" : "Убирать"
+        "__remove__" : "Убирать",
+        "__just_now__" : "только что",
+        "__sec__" : "секунды назад",
+        "__min__" : "минуты назад",
+        "__hr__" : "часа назад",
+        "__day__" : "дня назад",
+        "__week__" : "недели назад",
+        "__month__" : "месяц назад",
+        "__year__" : "год назад"
     },
     "zhCN" : {
         "name" : "简体中文",
@@ -189,7 +277,15 @@
         "__pin__" : "置顶",
         "__unpin__" : "取消置顶",
         "__new_subtask__" : "新建子任务",
-        "__remove__" : "移除"
+        "__remove__" : "移除",
+        "__just_now__" : "刚刚",
+        "__sec__" : "秒前",
+        "__min__" : "分前",
+        "__hr__" : "小时前",
+        "__day__" : "天前",
+        "__week__" : "周前",
+        "__month__" : "月前",
+        "__year__" : "年前"
     },
     "zhTW" : {
         "name" : "繁體中文",
@@ -213,6 +309,14 @@
         "__pin__" : "固定",
         "__unpin__" : "取消固定",
         "__new_subtask__" : "新建子任務",
-        "__remove__" : "刪除"
+        "__remove__" : "刪除",
+        "__just_now__" : "剛才",
+        "__sec__" : "秒前",
+        "__min__" : "分鐘前",
+        "__hr__" : "小時前",
+        "__day__" : "天前",
+        "__week__" : "周前",
+        "__month__" : "月前",
+        "__year__" : "年前"
     }
 }
