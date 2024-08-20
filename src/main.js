@@ -494,7 +494,7 @@ request.onsuccess = async function(event) {
       }
     });
 
-    noteInput.addEventListener('click', (e) => {
+    noteInput.addEventListener('dblclick', (e) => {
       e.preventDefault();
       e.stopPropagation();
 
@@ -1151,6 +1151,14 @@ function getCurrentThemeColor() {
 function changeLanguage(languageCode) {
   const elementsInnerText = document.querySelectorAll('[data-lang-innertext]');
   const elementsTitle = document.querySelectorAll('[data-lang-title]');
+
+  if(languageCode === 'ar') {
+    document.body.classList.add('ar');
+  }
+  if(languageCode !== 'ar' && document.body.classList.contains('ar')) {
+    document.body.classList.remove('ar');
+  }
+  
   elementsInnerText.forEach(el => {
     el.innerText = Languages[languageCode][el.dataset['langInnertext']] || el.innerText;
   });

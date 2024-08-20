@@ -6,7 +6,6 @@
 - Improvement: New color themes
 - Improvement: New layout
 - Improvement: Show list name instead brand on title bar
-- Improvement: Use single click to edit note instead of double click
 - Improvement: Remember list show / hide status
 - Bug Fix: Window corners radius layout issue
 - Bug Fix: Disallowed open multiple window instances
