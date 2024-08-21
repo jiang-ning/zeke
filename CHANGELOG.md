@@ -2,7 +2,7 @@
 -
 ### v1.7.3
 ##### 2024-08-20
-- New Feature: Multi-language support: Arabic, German, Spain, French, Japanese, Portugal, Russian, Chinese Simplified and Chinese Traditional
+- New Feature: Multi-language support: Arabic, German, Spain, French, Hindi, Italian, Japanese, Korean, Urdu, Portugal, Russian, Chinese Simplified and Chinese Traditional
 - Improvement: New color themes
 - Improvement: New layout
 - Improvement: Show list name instead brand on title bar
