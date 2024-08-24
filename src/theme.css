@@ -216,7 +216,8 @@
 }
 .theme-blue #areaListLists input.active,
 .theme-blue #areaSettings.active,
-.theme-blue .modal-section button {
+.theme-blue .modal-section button,
+.theme-blue select {
   border-color: var(--blue-stroke-cc);
 }
 .theme-blue #panelNote {
@@ -293,7 +294,8 @@
 }
 .theme-red #areaListLists input.active,
 .theme-red #areaSettings.active,
-.theme-red .modal-section button {
+.theme-red .modal-section button,
+.theme-red select {
   border-color: var(--red-stroke-cc);
 }
 .theme-red #panelNote {
@@ -369,7 +371,8 @@
 }
 .theme-orange #areaListLists input.active,
 .theme-orange #areaSettings.active,
-.theme-orange .modal-section button {
+.theme-orange .modal-section button,
+.theme-orange select {
   border-color: var(--orange-stroke-cc);
 }
 .theme-orange #panelNote {
@@ -447,7 +450,8 @@
 }
 .theme-amber #areaListLists input.active,
 .theme-amber #areaSettings.active,
-.theme-amber .modal-section button {
+.theme-amber .modal-section button,
+.theme-amber select {
   border-color: var(--amber-stroke-cc);
 }
 .theme-amber #panelNote {
@@ -523,7 +527,8 @@
 }
 .theme-green #areaListLists input.active,
 .theme-green #areaSettings.active,
-.theme-green .modal-section button {
+.theme-green .modal-section button,
+.theme-green select {
   border-color: var(--green-stroke-cc);
 }
 .theme-green #panelNote {
@@ -599,7 +604,8 @@
 }
 .theme-teal #areaListLists input.active,
 .theme-teal #areaSettings.active,
-.theme-teal .modal-section button {
+.theme-teal .modal-section button,
+.theme-teal select {
   border-color: var(--teal-stroke-cc);
 }
 .theme-teal #panelNote {
@@ -675,7 +681,8 @@
 }
 .theme-violet #areaListLists input.active,
 .theme-violet #areaSettings.active,
-.theme-violet .modal-section button {
+.theme-violet .modal-section button,
+.theme-violet select {
   border-color: var(--violet-stroke-cc);
 }
 .theme-violet #panelNote {
@@ -751,7 +758,8 @@
 }
 .theme-purple #areaListLists input.active,
 .theme-purple #areaSettings.active,
-.theme-purple .modal-section button {
+.theme-purple .modal-section button,
+.theme-purple select {
   border-color: var(--purple-stroke-cc);
 }
 .theme-purple #panelNote {
@@ -813,8 +821,7 @@
 .theme-pink #areaPinNotes li:hover input[type='checkbox'],
 .theme-pink #areaListNotes li:hover input[type='checkbox'],
 .theme-pink #areaPinNotes li.edit > input[type='text'],
-.theme-pink #areaListNotes li.edit > input[type='text'],
-.theme-pink .modal-section button {
+.theme-pink #areaListNotes li.edit > input[type='text'] {
   border-color: var(--pink-cc);
 }
 .theme-pink .noteCollapse:hover,
@@ -828,7 +835,8 @@
 }
 .theme-pink #areaListLists input.active,
 .theme-pink #areaSettings.active,
-.theme-pink .modal-section button {
+.theme-pink .modal-section button,
+.theme-pink select {
   border-color: var(--pink-stroke-cc);
 }
 .theme-pink #panelNote {

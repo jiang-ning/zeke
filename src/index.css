@@ -188,6 +188,23 @@ input[type="checkbox"]:disabled {
   color: #ccc;
   cursor: not-allowed;
 }
+select {
+  appearance: none;
+  padding: 6px 20px;
+  background-color: #eeeeee99;
+  border: 1px solid #cccccc99;
+  border-radius: 30px;
+  color: #00000099;
+  cursor: pointer;
+  font-size: 12px;
+  height: 30px;
+  line-height: 16px;
+}
+select:hover {
+  background-color: #eeeeeeee;
+  border: 1px solid #ccccccee;
+  color: #000000ee;
+}
 
 .container *:not(.noteContent),
 #titlebar .appIcon {
