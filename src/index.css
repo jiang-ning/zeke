@@ -202,7 +202,9 @@ input[type="checkbox"]:disabled {
   border-radius: 8px;
   background: #eee;
 }
-
+.panelsContainer.toggling {
+  transition: grid-template-columns .3s ease-in-out;
+}
 .panelsContainer.viewFocused {
   grid-template-columns: 0px 10px 1fr !important;
 }
@@ -286,23 +288,27 @@ li.edit .noteSub {
   display: inline;
 }
 .noteCollapse {
-  background: url('./images/chevron-left.svg') center center no-repeat transparent;
   filter: opacity(0);
-  width: 30px;
-  height: 40px;
-  line-height: 40px;
+  border: solid #ccc;
+  border-width: 0 1px 1px 0;
+  transform: rotate(135deg);
+  width: 3px;
+  height: 3px;
+  padding: 3px;
+  margin: 16px 10px;
   z-index: 2;
   cursor: pointer;
   transition: linear .1s;
 }
 .noteCollapse.show {
-  filter: opacity(0.3);
+  filter: opacity(1);
+  transition: linear .1s;
 }
 .noteCollapse.show:hover {
-  filter: opacity(0.9);
+  border-color: #333;
 }
 .noteCollapse.show.active {
-  transform: rotate(-90deg);
+  transform: rotate(45deg);
   transition: linear .1s;
 }
 
@@ -455,6 +461,15 @@ li.edit .noteSub {
   grid-template-columns: 26px 1fr 90px auto auto auto auto auto;
   display: grid;
 }
+#areaListNotes li.parent,
+#areaPinNotes li.parent {
+  grid-template-rows: 42px 0fr;
+  transition: grid-template-rows .3s ease-in-out;
+}
+#areaListNotes li.parent.expand,
+#areaPinNotes li.parent.expand {
+  grid-template-rows: 42px 1fr;
+}
 #areaListNotes input[type='text'],
 #areaPinNotes input[type='text']  {
   border: none;
@@ -465,6 +480,7 @@ li.edit .noteSub {
   cursor: default;
   color: #666;
   text-overflow: ellipsis;
+  transition: color .3s ease;
 }
 #areaListNotes input[type='text'].active,
 #areaPinNotes input[type='text'].active {
@@ -550,11 +566,11 @@ li.edit .noteSub {
 
 #areaListNotes .noteSubList, 
 #areaPinNotes .noteSubList {
-  display: none;
+  display: grid;
   margin-left: 10px;
   margin-right: 20px;
   grid-column: 1 / -1;
-  height: 0%;
+  overflow: hidden;
 }
 #areaListNotes .noteSubList li, 
 #areaPinNotes .noteSubList li {

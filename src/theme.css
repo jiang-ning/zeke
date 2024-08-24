@@ -205,8 +205,13 @@
 .theme-blue #areaListNotes li.edit > input[type='text'] {
   border-color: var(--blue-cc);
 }
+.theme-blue .noteCollapse:hover,
+.theme-blue .noteCollapse.active {
+  border-color: var(--blue-stroke);
+}
 .theme-blue #titlebar,
-.theme-blue #areaPinNotes li:last-child {
+.theme-blue #areaPinNotes li:last-child,
+.theme-blue .noteCollapse {
   border-color: var(--blue-stroke-66);
 }
 .theme-blue #areaListLists input.active,
@@ -277,8 +282,13 @@
 .theme-red #areaListNotes li.edit > input[type='text'] {
   border-color: var(--red-cc);
 }
+.theme-red .noteCollapse:hover,
+.theme-red .noteCollapse.active {
+  border-color: var(--red-stroke);
+}
 .theme-red #titlebar,
-.theme-red #areaPinNotes li:last-child {
+.theme-red #areaPinNotes li:last-child,
+.theme-red .noteCollapse {
   border-color: var(--red-stroke-66);
 }
 .theme-red #areaListLists input.active,
@@ -348,8 +358,13 @@
 .theme-orange #areaListNotes li.edit > input[type='text'] {
   border-color: var(--orange-cc);
 }
+.theme-orange .noteCollapse:hover,
+.theme-orange .noteCollapse.active {
+  border-color: var(--orange-stroke);
+}
 .theme-orange #titlebar,
-.theme-orange #areaPinNotes li:last-child {
+.theme-orange #areaPinNotes li:last-child,
+.theme-orange .noteCollapse {
   border-color: var(--orange-stroke-66);
 }
 .theme-orange #areaListLists input.active,
@@ -421,8 +436,13 @@
 .theme-amber #areaListNotes li.edit > input[type='text'] {
   border-color: var(--amber-cc);
 }
+.theme-amber .noteCollapse:hover,
+.theme-amber .noteCollapse.active {
+  border-color: var(--amber-stroke);
+}
 .theme-amber #titlebar,
-.theme-amber #areaPinNotes li:last-child {
+.theme-amber #areaPinNotes li:last-child,
+.theme-amber .noteCollapse {
   border-color: var(--amber-stroke-66);
 }
 .theme-amber #areaListLists input.active,
@@ -492,8 +512,13 @@
 .theme-green #areaListNotes li.edit > input[type='text'] {
   border-color: var(--green-cc);
 }
+.theme-green .noteCollapse:hover,
+.theme-green .noteCollapse.active {
+  border-color: var(--green-stroke);
+}
 .theme-green #titlebar,
-.theme-green #areaPinNotes li:last-child {
+.theme-green #areaPinNotes li:last-child,
+.theme-green .noteCollapse {
   border-color: var(--green-stroke-66);
 }
 .theme-green #areaListLists input.active,
@@ -563,8 +588,13 @@
 .theme-teal #areaListNotes li.edit > input[type='text'] {
   border-color: var(--teal-cc);
 }
+.theme-teal .noteCollapse:hover,
+.theme-teal .noteCollapse.active {
+  border-color: var(--teal-stroke);
+}
 .theme-teal #titlebar,
-.theme-teal #areaPinNotes li:last-child {
+.theme-teal #areaPinNotes li:last-child,
+.theme-teal .noteCollapse {
   border-color: var(--teal-stroke-66);
 }
 .theme-teal #areaListLists input.active,
@@ -634,8 +664,13 @@
 .theme-violet #areaListNotes li.edit > input[type='text'] {
   border-color: var(--violet-cc);
 }
+.theme-violet .noteCollapse:hover,
+.theme-violet .noteCollapse.active {
+  border-color: var(--violet-stroke);
+}
 .theme-violet #titlebar,
-.theme-violet #areaPinNotes li:last-child {
+.theme-violet #areaPinNotes li:last-child,
+.theme-violet .noteCollapse {
   border-color: var(--violet-stroke-66);
 }
 .theme-violet #areaListLists input.active,
@@ -705,8 +740,13 @@
 .theme-purple #areaListNotes li.edit > input[type='text'] {
   border-color: var(--purple-cc);
 }
+.theme-purple .noteCollapse:hover,
+.theme-purple .noteCollapse.active {
+  border-color: var(--purple-stroke);
+}
 .theme-purple #titlebar,
-.theme-purple #areaPinNotes li:last-child {
+.theme-purple #areaPinNotes li:last-child,
+.theme-purple .noteCollapse {
   border-color: var(--purple-stroke-66);
 }
 .theme-purple #areaListLists input.active,
@@ -777,8 +817,13 @@
 .theme-pink .modal-section button {
   border-color: var(--pink-cc);
 }
+.theme-pink .noteCollapse:hover,
+.theme-pink .noteCollapse.active {
+  border-color: var(--pink-stroke);
+}
 .theme-pink #titlebar,
-.theme-pink #areaPinNotes li:last-child {
+.theme-pink #areaPinNotes li:last-child,
+.theme-pink .noteCollapse {
   border-color: var(--pink-stroke-66);
 }
 .theme-pink #areaListLists input.active,
