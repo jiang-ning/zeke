@@ -871,8 +871,8 @@ request.onsuccess = async function(event) {
         parentNote.classList.remove('completed');
         parentCompletionButton.checked = false;
       }
-      const currentThemeStrokeColor = getCurrentThemeColor();
-      const fillColor = currentThemeStrokeColor ? currentThemeStrokeColor + '99' : '#eeeeee';
+      const currentThemeStrokeColor = getCurrentThemeColor(true);
+      const fillColor = currentThemeStrokeColor ? currentThemeStrokeColor + '66' : '#cccccccc';
       parentCompletionButton.style.backgroundImage = `conic-gradient(transparent ${completionPercentage}%, ${fillColor} 0)`;
     }
   }

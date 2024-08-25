@@ -82,7 +82,7 @@
   --dark-66:  #33333366;
   --dark-cc:  #333333cc;
   --dark-ee:  #333333ee;
-  --dark:     #333;
+  --dark:     #333333;
 }
 .red {
   background-color: var(--red);
