@@ -249,13 +249,18 @@ request.onsuccess = async function(event) {
     
     request.onsuccess = function(event) {
       const lists = event.target.result;
+      const brand = document.getElementById('brand');
       console.log('Lists:', lists);
       
       if(lists == undefined || lists.length == 0) {
         addList({name:'~'});
+        brand.innerText = '~';
         localStorage.setItem('listActive', 1);
       } else {
+
         const orderedListIds = localStorage.getItem('listOrder');
+        const rememberedActiveList = localStorage.getItem('listActive');
+
         document.querySelector('#areaListLists ul').innerHTML = '';
         // if more than one list
         if(orderedListIds && orderedListIds.includes(',')) {
@@ -269,10 +274,18 @@ request.onsuccess = async function(event) {
             generateListItem(item.id, item.name, idx);
           });
         }
+
+        // show list name in brand title
+        if(rememberedActiveList) {
+          lists.forEach(item => {
+            if(rememberedActiveList == item.id) {
+              brand.innerText = item.name;
+            }
+          });
+        }
+
         initDnD('areaListLists', 'listOrder');
       }
-
-      document.getElementById('brand').innerText = document.querySelector('#areaListLists input.active').value;
     };
     
     request.onerror = function() {
