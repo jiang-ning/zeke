@@ -4,12 +4,12 @@
   <head>
     <meta charset="UTF-8" />
     <title>Microstone</title>
-    <script type="text/javascript" src="./src/vendor/Sortable.min.js"></script>
     <link rel="stylesheet" href="./src/index.css" />
     <link rel="stylesheet" href="./src/theme.css" />
+    <script type="text/javascript" src="./src/vendor/Sortable.min.js"></script>
+    <script type="text/javascript" src="./src/lang.js"></script>
   </head>
   <body id="web" class="">
-    <header id="titlebar"></header>
     <div class="container">
 
       <div id="panelsContainer" class="panelsContainer" style="grid-template-columns:200px 10px 1fr">
@@ -18,10 +18,13 @@
         <div id="panelList" class="panel">
           <div id="areaListLists">
             <ul></ul>
-            <div id="listAdd"><input id="listAddName" value=""></div>
+            <div id="listAdd">
+              <span type="button" id="btnNewList" title="New List" data-lang-title="__new_list__">+</span>
+              <input id="listAddName">
+            </div>
           </div>
           <div id="areaSettings" class="">
-            <div id="btnSettings">
+            <div id="btnSettings" title="Settings" data-lang-title="__settings__">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear-fill" viewBox="0 0 16 16">
                 <path d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 0 1 2.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 0 1 2.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 0 1 .872-2.105l.34-.1c1.4-.413 1.4-2.397 0-2.81l-.34-.1a1.464 1.464 0 0 1-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872l-.1-.34zM8 10.93a2.929 2.929 0 1 1 0-5.86 2.929 2.929 0 0 1 0 5.858z"/>
               </svg>
@@ -33,9 +36,13 @@
 
         <!-- panel note -->
         <div id="panelNote" class="panel">
+          <div id="titlebar">
+            <span class="appIcon appSidebar" title="Show / Hide List" data-lang-title="__show_hide_list__"></span>
+            <span id="brand"></span>
+          </div>
           <div id="areaNew">
             <input id="txtNew">
-            <span type="button" id="btnNew">+</span>
+            <span type="button" id="btnNew" title="Create" data-lang-title="__create__">+</span>
           </div>
           <div id="areaPinNotes">
             <ul></ul>
@@ -51,7 +58,28 @@
                 <div class="brand-version">v1.9.6</div>
               </div>
               <div class="modal-section">
-                <div class="modal-section-title">Theme</div>
+                <div class="modal-section-title" data-lang-innertext="__language__">Language</div>
+                <div class="sectionLanguageSelection">
+                  <select id="languageList">
+                    <option value="ar">العربية</option>
+                    <option value="de">Deutsch</option>
+                    <option value="en">English</option>
+                    <option value="es">Español</option>
+                    <option value="fr">Française</option>
+                    <option value="in">हिंदी</option>
+                    <option value="it">Italiana</option>
+                    <option value="jp">日本語</option>
+                    <option value="kr">한국어</option>
+                    <option value="pk">اردو</option>
+                    <option value="pt">Português</option>
+                    <option value="ru">Русский</option>
+                    <option value="zhCN">简体中文</option>
+                    <option value="zhTW">繁體中文</option>
+                  </select>
+                </div>
+              </div>
+              <div class="modal-section">
+                <div class="modal-section-title" data-lang-innertext="__theme__">Theme</div>
                 <div class="sectionMode">
                   <span class="modeSelection" id="mode-light" data-id="origin-theme-light"></span>
                   <span class="modeSelection" id="mode-dark" data-id="theme-dark"></span>
@@ -60,7 +88,6 @@
                   <span class="themeSelection red" data-id="theme-red"></span>
                   <span class="themeSelection orange" data-id="theme-orange"></span>
                   <span class="themeSelection amber" data-id="theme-amber"></span>
-                  <span class="themeSelection olive" data-id="theme-olive"></span>
                   <span class="themeSelection green" data-id="theme-green"></span>
                   <span class="themeSelection teal" data-id="theme-teal"></span>
                   <span class="themeSelection blue" data-id="theme-blue"></span>
@@ -70,20 +97,24 @@
                 </div>
               </div>
               <div class="modal-section">
-                <div class="modal-section-title">Opacity</div>
+                <div class="modal-section-title" data-lang-innertext="__opacity__">Opacity</div>
                 <div class="sectionOpacity">
                   <input id="opacitySelection" type="range" min="30" max="100" value="100" step="10" />
                 </div>
               </div>
               <div class="modal-section">
-                <div class="modal-section-title">Custom Settings</div>
-                <div class="modal-section-desc">Click button to restore sorts, pins and theme.</div>
-                <button id="restore">Restore</button>
+                <div class="modal-section-title" data-lang-innertext="__custom_settings__">Custom Settings</div>
+                <div class="modal-section-desc" data-lang-innertext="__custom_settings_desc__">Click button to restore sorts, pins and theme.</div>
+                <button id="restore" data-lang-innertext="__restore__">Restore</button>
               </div>
               <div class="modal-section">
-                <div class="modal-section-title">Data Storage</div>
-                <div class="modal-section-desc">Disk space usage:<span id="db-usage">0</span>KB, click button to remove all the data.</div>
-                <button id="clear">Clear all data</button>
+                <div class="modal-section-title" data-lang-innertext="__data_storage__">Data Storage</div>
+                <div class="modal-section-desc">
+                  <span data-lang-innertext="__disk_space_usage__">Disk space usage:</span>
+                  <span id="db-usage">0</span>
+                  <span data-lang-innertext="__click_to_remove__">KB, click button to remove all the data.</span>
+                </div>
+                <button id="clear" data-lang-innertext="__clear_all_data__">Clear all data</button>
               </div>
             </div>
           </div>

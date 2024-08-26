@@ -789,9 +789,6 @@ span.appIcon:hover {
 #web {
   border: none;
 }
-#web #titlebar {
-  display: none;
-}
 #web .panelsContainer {
   border-radius: 10px;
   box-shadow: 0 0 10px #00000066;

@@ -8,7 +8,7 @@
 
 ## Reporting a Vulnerability
 
-The author take security bugs in Neonote seriously. I appreciate your efforts to responsibly disclose your findings, and will make every effort to acknowledge your contributions.
+The author take security bugs in Microstone seriously. I appreciate your efforts to responsibly disclose your findings, and will make every effort to acknowledge your contributions.
 
 To report a security issue, please use the GitHub Security Advisory ["Report a Vulnerability"](https://github.com/jiang-ning/zeke/security/advisories/new) tab.
 

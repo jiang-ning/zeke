@@ -1,6 +1,6 @@
 {
-  "name": "neonote",
-  "productName": "neonote",
+  "name": "microstone",
+  "productName": "microstone",
   "version": "1.9.6",
   "description": "Effortless Note-Taking: Simplify, Secure, Succeed!",
   "main": "src/index.js",
