@@ -208,7 +208,7 @@ select:hover {
 
 .container *:not(.noteContent),
 #titlebar .appIcon {
-  transition: background-color .3s, border-color .3s, color .3s;
+  transition: background-color .3s, border-color .3s, color .1s;
 }
 .panelsContainer {
   display: grid;
@@ -424,26 +424,34 @@ li.edit .noteSub {
   border: none;
   width: calc(100% - 60px);
   height: 39px;
-  padding: 0 10px;
+  padding-left: 6px;
   outline: none;
 }
 #btnNew,
+#btnFilter,
 #btnNewList {
   display: inline-block;
-  border-radius: 11px;
+  border-radius: 20px;
   color: #ccc;
   cursor: pointer;
   width: 20px;
   height: 20px;
   text-align: center;
-  line-height: 18px;
-  margin: 10px 0;
+  vertical-align: middle;
+  line-height: 24px;
 }
 #btnNew:hover,
-#btnNewList:hover {
+#btnFilter:hover,
+#btnFilter.active {
   background-color: #eeeeee;
   color: #666;
 }
+#btnNewList:hover {
+  background-color: #dddddd;
+  color: #666;
+}
+#btnNew.hide,
+#btnFilter.hide,
 #btnNewList.hide {
   display: none;
 }
@@ -452,6 +460,7 @@ li.edit .noteSub {
   grid-column: 1;
   grid-row: 2;
   border-bottom: 1px solid #eee;
+  padding: 0 10px;
 }
 #areaPinNotes {
   grid-column: 1;
@@ -486,6 +495,10 @@ li.edit .noteSub {
 #areaListNotes li.parent.expand,
 #areaPinNotes li.parent.expand {
   grid-template-rows: 42px 1fr;
+}
+#areaListNotes li.hide,
+#areaPinNotes li.hide {
+  display: none;
 }
 #areaListNotes input[type='text'],
 #areaPinNotes input[type='text']  {

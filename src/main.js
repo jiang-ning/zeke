@@ -890,10 +890,44 @@ request.onsuccess = async function(event) {
     }
   }
 
+  function filterNote() {
+    const allNotes = document.querySelectorAll('#panelNote li');
+    let filterText = document.getElementById('txtNew').value;
+    allNotes.forEach(note => {
+      let noteContent = note.querySelector('input.noteContent').value;
+      if(!noteContent.includes(filterText)) {
+        note.classList.add('hide');
+      } else {
+        note.classList.remove('hide');
+      }
+    });
+  }
+
+  document.getElementById('btnFilter').addEventListener('click', (e) => {
+    const btnFilter = document.getElementById('btnFilter');
+    const btnNew = document.getElementById('btnNew');
+    const txtNew = document.getElementById('txtNew');
+    if(btnFilter.className === 'active') {
+      const allHiddenNotes = document.querySelectorAll('#panelNote li.hide');
+      allHiddenNotes.forEach(note => {
+        note.classList.remove('hide');
+      });
+      btnFilter.className = '';
+      btnNew.className = '';
+      txtNew.value = '';
+    } else {
+      btnFilter.className = 'active';
+      btnNew.className = 'hide';
+      txtNew.focus();
+      if(txtNew.value !== '') {
+        filterNote();
+      }
+    }
+  });
   document.getElementById('btnNew').addEventListener('click', () => {
     const noteContent = document.getElementById('txtNew').value.trim();
     const listId = document.querySelector('#areaListLists li input.active').dataset.id;
-    if(noteContent && listId) {
+    if(noteContent && listId && document.getElementById('btnFilter').className === '') {
       addNote({
         list: parseInt(listId), 
         content: noteContent,
@@ -906,9 +940,29 @@ request.onsuccess = async function(event) {
     document.getElementById('txtNew').value = '';
   });
   document.getElementById('txtNew').addEventListener('keypress', (e) => {
-    if (e.key == "Enter") {
+    if (e.key == "Enter" && document.getElementById('btnFilter').className !== 'active') {
       e.preventDefault();
       document.getElementById('btnNew').click();
+    }
+  });
+  document.getElementById('txtNew').addEventListener('input', (e) => {
+    e.preventDefault();
+    if(document.getElementById('btnFilter').className === 'active') {
+      filterNote();
+    }
+  });
+  document.getElementById('txtNew').addEventListener('focus', (e) => {
+    const btnFilter = document.getElementById('btnFilter');
+    if(btnFilter.className !== 'active' && btnFilter.className !== 'hide') {
+      btnFilter.className = 'hide';
+      e.target.style.width = 'calc(100% - 35.5px)';
+    }
+  });
+  document.getElementById('txtNew').addEventListener('focusout', (e) => {
+    const btnFilter = document.getElementById('btnFilter');
+    if(btnFilter.className !== 'active' && btnFilter.className === 'hide') {
+      btnFilter.className = '';
+      e.target.style = '';
     }
   });
   document.getElementById('btnNewList').addEventListener('click', () => {

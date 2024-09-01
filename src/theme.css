@@ -11,10 +11,6 @@
 [class^="theme"] .modal {
   background-color: transparent;
 }
-/* [class^="theme"] #areaListNotes li.completed input[type="checkbox"]::before,
-[class^="theme"] #areaPinNotes li.completed input[type="checkbox"]::before {
-  background-color: #eeeeeeee;
-} */
 [class^="theme"] #panelList li.sortable-fallback,
 [class^="theme"] #panelNote li.sortable-fallback,
 [class^="theme"] #areaPinNotes li.edit > .noteContent,
@@ -33,11 +29,6 @@
 [class^="theme"] ::-webkit-scrollbar-thumb:hover {
   background-color: #00000033;
 }
-/* [class^="theme"] #areaListLists input,
-[class^="theme"] #listAdd #listAddName,
-[class^="theme"] #areaListLists li span {
-  color: #ffffff99;
-} */
 [class^="theme"] #areaSettings #btnSettings {
   color: #ffffff99;
 }
@@ -52,19 +43,6 @@
 [class^="theme"] #listAdd #listAddName {
   color: #00000099;
 }
-/* [class^="theme"] #areaListLists input {
-  color: #00000099;
-} */
-/* [class^="theme"] #areaPinNotes input[type='text'],
-[class^="theme"] #areaListNotes input[type='text'],
-[class^="theme"] #areaPinNotes li span.noteMoment,
-[class^="theme"] #areaListNotes li span.noteMoment {
-  color: #00000099;
-} */
-/* [class^="theme"] #areaPinNotes li.completed input[type='text'],
-[class^="theme"] #areaListNotes li.completed input[type='text'] {
-  color: #00000033;
-} */
 
 /* mode-dark */
 /* .theme-dark #titlebar, */
@@ -87,7 +65,10 @@
   background-color: #00000066;
 }
 .theme-dark input[type="checkbox"]::before,
-.theme-dark .icon:hover {
+.theme-dark .icon:hover,
+.theme-dark #btnNew:hover,
+.theme-dark #btnFilter:hover,
+.theme-dark #btnFilter.active {
   background-color: #ffffffcc;
 }
 .theme-dark ::-webkit-scrollbar-thumb,
@@ -103,7 +84,9 @@
 .theme-dark #listAdd #listAddName:hover,
 .theme-dark .icon:hover,
 .theme-dark #areaPinNotes .notePin,
-.theme-dark #btnNew:hover {
+.theme-dark #btnNew:hover,
+.theme-dark #btnFilter:hover,
+.theme-dark #btnFilter.active {
   color: #000000ee;
 }
 .theme-dark #txtNew,
@@ -125,6 +108,8 @@
 .theme-dark #areaSettings #btnSettings:hover {
   color: #ffffff99;
 }
+.theme-dark #btnNew, 
+.theme-dark #btnFilter,
 .theme-dark #areaListLists input {
   color: #ffffff66;
 }
@@ -226,9 +211,11 @@
 .theme-blue #gutter:hover + #panelNote {
   box-shadow: -1px 0px 6px var(--blue-stroke);
 }
-.theme-blue #btnNew {
+.theme-blue #btnNew,
+.theme-blue #btnFilter {
   color: var(--blue-ee);
 }
+.theme-blue #btnFilter.active,
 .theme-blue #areaNew:hover #btnNew,
 .theme-blue #areaNew:has(#txtNew:focus) #btnNew,
 .theme-blue .icon,
@@ -304,9 +291,11 @@
 .theme-red #gutter:hover + #panelNote {
   box-shadow: -1px 0px 6px var(--red-stroke);
 }
-.theme-red #btnNew {
+.theme-red #btnNew,
+.theme-red #btnFilter {
   color: var(--red-ee);
 }
+.theme-red #btnFilter.active,
 .theme-red #areaNew:hover #btnNew,
 .theme-red #areaNew:has(#txtNew:focus) #btnNew,
 .theme-red .icon,
@@ -381,9 +370,11 @@
 .theme-orange #gutter:hover + #panelNote {
   box-shadow: -1px 0px 6px var(--orange-stroke);
 }
-.theme-orange #btnNew {
+.theme-orange #btnNew,
+.theme-orange #btnFilter {
   color: var(--orange-ee);
 }
+.theme-orange #btnFilter.active,
 .theme-orange #areaNew:hover #btnNew,
 .theme-orange #areaNew:has(#txtNew:focus) #btnNew,
 .theme-orange .icon,
@@ -460,9 +451,11 @@
 .theme-amber #gutter:hover + #panelNote {
   box-shadow: -1px 0px 6px var(--amber-stroke);
 }
-.theme-amber #btnNew {
+.theme-amber #btnNew,
+.theme-amber #btnFilter {
   color: var(--amber-ee);
 }
+.theme-amber #btnFilter.active,
 .theme-amber #areaNew:hover #btnNew,
 .theme-amber #areaNew:has(#txtNew:focus) #btnNew,
 .theme-amber .icon,
@@ -537,9 +530,11 @@
 .theme-green #gutter:hover + #panelNote {
   box-shadow: -1px 0px 6px var(--green-stroke);
 }
-.theme-green #btnNew {
+.theme-green #btnNew,
+.theme-green #btnFilter {
   color: var(--green-ee);
 }
+.theme-green #btnFilter.active,
 .theme-green #areaNew:hover #btnNew,
 .theme-green #areaNew:has(#txtNew:focus) #btnNew,
 .theme-green .icon,
@@ -614,9 +609,11 @@
 .theme-teal #gutter:hover + #panelNote {
   box-shadow: -1px 0px 6px var(--teal-stroke);
 }
-.theme-teal #btnNew {
+.theme-teal #btnNew,
+.theme-teal #btnFilter {
   color: var(--teal-ee);
 }
+.theme-teal #btnFilter.active,
 .theme-teal #areaNew:hover #btnNew,
 .theme-teal #areaNew:has(#txtNew:focus) #btnNew,
 .theme-teal .icon,
@@ -691,9 +688,11 @@
 .theme-violet #gutter:hover + #panelNote {
   box-shadow: -1px 0px 6px var(--violet-stroke);
 }
-.theme-violet #btnNew {
+.theme-violet #btnNew,
+.theme-violet #btnFilter {
   color: var(--violet-ee);
 }
+.theme-violet #btnFilter.active,
 .theme-violet #areaNew:hover #btnNew,
 .theme-violet #areaNew:has(#txtNew:focus) #btnNew,
 .theme-violet .icon,
@@ -768,9 +767,11 @@
 .theme-purple #gutter:hover + #panelNote {
   box-shadow: -1px 0px 6px var(--purple-stroke);
 }
-.theme-purple #btnNew {
+.theme-purple #btnNew,
+.theme-purple #btnFilter {
   color: var(--purple-ee);
 }
+.theme-purple #btnFilter.active,
 .theme-purple #areaNew:hover #btnNew,
 .theme-purple #areaNew:has(#txtNew:focus) #btnNew,
 .theme-purple .icon,
@@ -845,9 +846,11 @@
 .theme-pink #gutter:hover + #panelNote {
   box-shadow: -1px 0px 6px var(--pink-stroke);
 }
-.theme-pink #btnNew {
+.theme-pink #btnNew,
+.theme-pink #btnFilter {
   color: var(--pink-ee);
 }
+.theme-pink #btnFilter.active,
 .theme-pink #areaNew:hover #btnNew,
 .theme-pink #areaNew:has(#txtNew:focus) #btnNew,
 .theme-pink .icon,

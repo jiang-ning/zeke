@@ -1,5 +1,9 @@
 # Change Log
 
+### v1.10.0
+##### 2024-09-01
+- New Feature: Filter
+
 ### v1.9.3
 ##### 2024-08-26
 - New Feature: New layout

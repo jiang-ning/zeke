@@ -29,7 +29,8 @@ const Languages = {
         "__day__" : "أيام",
         "__week__" : "أسابيع",
         "__month__" : "أشهر",
-        "__year__" : "سنوات"
+        "__year__" : "سنوات",
+        "__filter__" : "راووق"
     },
     "de" : {
         "name" : "Deutsch",
@@ -61,7 +62,8 @@ const Languages = {
         "__day__" : "Tagen vor",
         "__week__" : "Wochen vor",
         "__month__" : "Monate vor",
-        "__year__" : "Jahr vor"
+        "__year__" : "Jahr vor",
+        "__filter__" : "Filter"
     },
     "en" : {
         "name" : "English",
@@ -93,7 +95,8 @@ const Languages = {
         "__day__" : "day",
         "__week__" : "week",
         "__month__" : "month",
-        "__year__" : "year"
+        "__year__" : "year",
+        "__filter__" : "Filter"
     },
     "es" : {
         "name" : "Español",
@@ -125,7 +128,8 @@ const Languages = {
         "__day__" : "días",
         "__week__" : "semanas",
         "__month__" : "meses",
-        "__year__" : "año"
+        "__year__" : "año",
+        "__filter__" : "Filtro"
     },
     "fr" : {
         "name" : "Française",
@@ -157,7 +161,8 @@ const Languages = {
         "__day__" : "jours",
         "__week__" : "semaines",
         "__month__" : "mois",
-        "__year__" : "an"
+        "__year__" : "an",
+        "__filter__" : "Filtre"
     },
     "in" : {
         "name" : "हिंदी",
@@ -189,7 +194,8 @@ const Languages = {
         "__day__" : "दिन",
         "__week__" : "कार्य-सप्‍ताह",
         "__month__" : "महीना",
-        "__year__" : "सालों"
+        "__year__" : "सालों",
+        "__filter__" : "छानना"
     },
     "it" : {
         "name" : "Italiana",
@@ -221,7 +227,8 @@ const Languages = {
         "__day__" : "giorno",
         "__week__" : "settimana",
         "__month__" : "mese",
-        "__year__" : "anno"
+        "__year__" : "anno",
+        "__filter__" : "Filtro"
     },
     "jp" : {
         "name" : "日本語",
@@ -253,7 +260,8 @@ const Languages = {
         "__day__" : "日前",
         "__week__" : "週間前",
         "__month__" : "ヶ月前",
-        "__year__" : "年前"
+        "__year__" : "年前",
+        "__filter__" : "フィルター"
     },
     "kr" : {
         "name" : "한국어",
@@ -285,7 +293,8 @@ const Languages = {
         "__day__" : "하루",
         "__week__" : "주",
         "__month__" : "달",
-        "__year__" : "년"
+        "__year__" : "년",
+        "__filter__" : "필터"
     },
     "pk" : {
         "name" : "اردو",
@@ -317,7 +326,8 @@ const Languages = {
         "__day__" : "دن",
         "__week__" : "ہفتہ",
         "__month__" : "مہینہ",
-        "__year__" : "سال"
+        "__year__" : "سال",
+        "__filter__" : "فلٹر"
     },
     "pt" : {
         "name" : "Português",
@@ -349,7 +359,8 @@ const Languages = {
         "__day__" : "dias",
         "__week__" : "semanas",
         "__month__" : "meses",
-        "__year__" : "ano"
+        "__year__" : "ano",
+        "__filter__" : "Filtrar"
     },
     "ru" : {
         "name" : "Русский",
@@ -381,7 +392,8 @@ const Languages = {
         "__day__" : "дня назад",
         "__week__" : "недели назад",
         "__month__" : "месяц назад",
-        "__year__" : "год назад"
+        "__year__" : "год назад",
+        "__filter__" : "Фильтр"
     },
     "zhCN" : {
         "name" : "简体中文",
@@ -413,7 +425,8 @@ const Languages = {
         "__day__" : "天前",
         "__week__" : "周前",
         "__month__" : "月前",
-        "__year__" : "年前"
+        "__year__" : "年前",
+        "__filter__" : "筛选"
     },
     "zhTW" : {
         "name" : "繁體中文",
@@ -445,6 +458,7 @@ const Languages = {
         "__day__" : "天前",
         "__week__" : "周前",
         "__month__" : "月前",
-        "__year__" : "年前"
+        "__year__" : "年前",
+        "__filter__" : "篩選"
     }
 }
