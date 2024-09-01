@@ -1,10 +1,11 @@
 # Change Log
 
-### v1.10.0
+### v1.10.1
 ##### 2024-09-01
 - New Feature: Filter
+- Bug Fix: Parent task in pin list does't show expand icon
 
-### v1.9.3
+### v1.9.6
 ##### 2024-08-26
 - New Feature: New layout
 - New Feature: New color themes

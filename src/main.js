@@ -100,14 +100,7 @@ request.onsuccess = async function(event) {
             // 1.1. render pinned parent notes
             pinNotes.forEach((item, idx) => {
               if(item && (item.parent == 0 || item.parent === true)) {
-                generateNoteItem({
-                  id: item.id, 
-                  list: item.list,
-                  content: item.content, 
-                  dateCreated: item.dateCreated,
-                  pin: item.pin,
-                  completed: item.completed
-                }, 'areaPinNotes', idx, orderedPinNoteIds && orderedPinNoteIds[listId]);
+                generateNoteItem(item, 'areaPinNotes', idx, orderedPinNoteIds && orderedPinNoteIds[listId]);
                 initDnD('areaPinNotes', 'pinNoteOrder');
               }
             });
@@ -662,6 +655,12 @@ request.onsuccess = async function(event) {
    * Generate subnote list<li>
    */
   function generateSubNoteItem(subNote, area, order = 0, byUserOrdered = false) {
+
+    let containerArea = document.querySelector(`#${area} li[data-id='${subNote.parent}'] ul`);
+    if(!containerArea) {
+      return;
+    }
+
     let subNoteItem = document.createElement('li');
     let subNoteCheckbox = document.createElement('input');
     let subNoteInput = document.createElement('input');
@@ -690,9 +689,9 @@ request.onsuccess = async function(event) {
     subNoteItem.append(subNoteRemove);
 
     if(byUserOrdered) {
-      document.querySelector(`#${area} li[data-id='${subNote.parent}'] ul`).append(subNoteItem);
+      containerArea.append(subNoteItem);
     } else {
-      document.querySelector(`#${area} li[data-id='${subNote.parent}'] ul`).prepend(subNoteItem);
+      containerArea.prepend(subNoteItem);
     }
 
     document.querySelector(`#${area} li[data-id='${subNote.parent}']`).classList.add('parent');
@@ -954,14 +953,15 @@ request.onsuccess = async function(event) {
   document.getElementById('txtNew').addEventListener('focus', (e) => {
     const btnFilter = document.getElementById('btnFilter');
     if(btnFilter.className !== 'active' && btnFilter.className !== 'hide') {
-      btnFilter.className = 'hide';
+      btnFilter.style.display = 'none';
       e.target.style.width = 'calc(100% - 35.5px)';
     }
   });
   document.getElementById('txtNew').addEventListener('focusout', (e) => {
     const btnFilter = document.getElementById('btnFilter');
-    if(btnFilter.className !== 'active' && btnFilter.className === 'hide') {
+    if(btnFilter.className !== 'active') {
       btnFilter.className = '';
+      btnFilter.style = '';
       e.target.style = '';
     }
   });
