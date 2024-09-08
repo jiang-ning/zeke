@@ -954,7 +954,7 @@ request.onsuccess = async function(event) {
     const btnFilter = document.getElementById('btnFilter');
     if(btnFilter.className !== 'active' && btnFilter.className !== 'hide') {
       btnFilter.style.display = 'none';
-      e.target.style.width = 'calc(100% - 35.5px)';
+      e.target.style.width = 'calc(100% - 33.5px)';
     }
   });
   document.getElementById('txtNew').addEventListener('focusout', (e) => {

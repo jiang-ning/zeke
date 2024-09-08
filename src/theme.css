@@ -32,6 +32,8 @@
 [class^="theme"] #areaSettings #btnSettings {
   color: #ffffff99;
 }
+[class^="theme"] #btnFilter.active,
+[class^="theme"] #txtNew:focus + #btnNew:hover,
 [class^="theme"] #areaSettings #btnSettings:hover,
 [class^="theme"] #areaSettings.active #btnSettings {
   color: #ffffffee;
@@ -86,6 +88,7 @@
 .theme-dark #areaPinNotes .notePin,
 .theme-dark #btnNew:hover,
 .theme-dark #btnFilter:hover,
+.theme-dark #txtNew:focus + #btnNew:hover,
 .theme-dark #btnFilter.active {
   color: #000000ee;
 }
@@ -173,6 +176,10 @@
 .theme-blue #areaPinNotes .notePin {
   background-color: var(--blue-33);
 }
+.theme-blue #btnFilter.active,
+.theme-blue #txtNew:focus + #btnNew:hover {
+  background-color: var(--blue-stroke-66);
+}
 .theme-blue,
 .theme-blue input[type='checkbox'] {
   border-color: var(--blue);
@@ -199,6 +206,9 @@
 .theme-blue .noteCollapse {
   border-color: var(--blue-stroke-66);
 }
+.theme-blue #btnNew:hover,
+.theme-blue #btnFilter:hover,
+.theme-blue #txtNew:focus + #btnNew,
 .theme-blue #areaListLists input.active,
 .theme-blue #areaSettings.active,
 .theme-blue .modal-section button,
@@ -215,9 +225,10 @@
 .theme-blue #btnFilter {
   color: var(--blue-ee);
 }
-.theme-blue #btnFilter.active,
+.theme-blue #btnFilter:hover,
 .theme-blue #areaNew:hover #btnNew,
-.theme-blue #areaNew:has(#txtNew:focus) #btnNew,
+.theme-blue #txtNew:focus + #btnNew,
+.theme-blue #txtNew:focus + #btnNew:hover,
 .theme-blue .icon,
 .theme-blue #areaListLists input,
 .theme-blue #areaListLists .listRemove:hover,
@@ -252,6 +263,10 @@
 .theme-red #areaPinNotes .notePin {
   background-color: var(--red-33);
 }
+.theme-red #btnFilter.active,
+.theme-red #txtNew:focus + #btnNew:hover {
+  background-color: var(--red-stroke-66);
+}
 .theme-red,
 .theme-red input[type='checkbox'] {
   border-color: var(--red);
@@ -279,6 +294,9 @@
 .theme-red .noteCollapse {
   border-color: var(--red-stroke-66);
 }
+.theme-red #btnNew:hover,
+.theme-red #btnFilter:hover,
+.theme-red #txtNew:focus + #btnNew,
 .theme-red #areaListLists input.active,
 .theme-red #areaSettings.active,
 .theme-red .modal-section button,
@@ -295,9 +313,10 @@
 .theme-red #btnFilter {
   color: var(--red-ee);
 }
-.theme-red #btnFilter.active,
+.theme-red #btnFilter:hover,
 .theme-red #areaNew:hover #btnNew,
-.theme-red #areaNew:has(#txtNew:focus) #btnNew,
+.theme-red #txtNew:focus + #btnNew,
+.theme-red #txtNew:focus + #btnNew:hover,
 .theme-red .icon,
 .theme-red #areaListLists .listRemove:hover,
 .theme-red #areaPinNotes input[type='text'],
@@ -331,6 +350,10 @@
 .theme-orange #areaPinNotes .notePin {
   background-color: var(--orange-33);
 }
+.theme-orange #btnFilter.active,
+.theme-orange #txtNew:focus + #btnNew:hover {
+  background-color: var(--orange-stroke-66);
+}
 .theme-orange,
 .theme-orange input[type='checkbox'] {
   border-color: var(--orange);
@@ -358,6 +381,9 @@
 .theme-orange .noteCollapse {
   border-color: var(--orange-stroke-66);
 }
+.theme-orange #btnNew:hover,
+.theme-orange #btnFilter:hover,
+.theme-orange #txtNew:focus + #btnNew,
 .theme-orange #areaListLists input.active,
 .theme-orange #areaSettings.active,
 .theme-orange .modal-section button,
@@ -374,9 +400,10 @@
 .theme-orange #btnFilter {
   color: var(--orange-ee);
 }
-.theme-orange #btnFilter.active,
+.theme-orange #btnFilter:hover,
 .theme-orange #areaNew:hover #btnNew,
-.theme-orange #areaNew:has(#txtNew:focus) #btnNew,
+.theme-orange #txtNew:focus + #btnNew,
+.theme-orange #txtNew:focus + #btnNew:hover,
 .theme-orange .icon,
 .theme-orange #areaListLists .listRemove:hover,
 .theme-orange #areaPinNotes input[type='text'],
@@ -407,6 +434,10 @@
 }
 .theme-amber #areaPinNotes .notePin {
   background-color: var(--amber-33);
+}
+.theme-amber #btnFilter.active,
+.theme-amber #txtNew:focus + #btnNew:hover {
+  background-color: var(--amber-stroke-66);
 }
 .theme-amber #areaListNotes li.completed input[type="checkbox"]::before,
 .theme-amber #areaPinNotes li.completed input[type="checkbox"]::before {
@@ -439,6 +470,9 @@
 .theme-amber .noteCollapse {
   border-color: var(--amber-stroke-66);
 }
+.theme-amber #btnNew:hover,
+.theme-amber #btnFilter:hover,
+.theme-amber #txtNew:focus + #btnNew,
 .theme-amber #areaListLists input.active,
 .theme-amber #areaSettings.active,
 .theme-amber .modal-section button,
@@ -455,9 +489,10 @@
 .theme-amber #btnFilter {
   color: var(--amber-ee);
 }
-.theme-amber #btnFilter.active,
+.theme-amber #btnFilter:hover,
 .theme-amber #areaNew:hover #btnNew,
-.theme-amber #areaNew:has(#txtNew:focus) #btnNew,
+.theme-amber #txtNew:focus + #btnNew,
+.theme-amber #txtNew:focus + #btnNew:hover,
 .theme-amber .icon,
 .theme-amber #areaListLists .listRemove:hover,
 .theme-amber #areaPinNotes input[type='text'],
@@ -491,6 +526,10 @@
 .theme-green #areaPinNotes .notePin {
   background-color: var(--green-33);
 }
+.theme-green #btnFilter.active,
+.theme-green #txtNew:focus + #btnNew:hover {
+  background-color: var(--green-stroke-66);
+}
 .theme-green,
 .theme-green input[type='checkbox'] {
   border-color: var(--green);
@@ -518,6 +557,9 @@
 .theme-green .noteCollapse {
   border-color: var(--green-stroke-66);
 }
+.theme-green #btnNew:hover,
+.theme-green #btnFilter:hover,
+.theme-green #txtNew:focus + #btnNew,
 .theme-green #areaListLists input.active,
 .theme-green #areaSettings.active,
 .theme-green .modal-section button,
@@ -534,9 +576,10 @@
 .theme-green #btnFilter {
   color: var(--green-ee);
 }
-.theme-green #btnFilter.active,
+.theme-green #btnFilter:hover,
 .theme-green #areaNew:hover #btnNew,
-.theme-green #areaNew:has(#txtNew:focus) #btnNew,
+.theme-green #txtNew:focus + #btnNew,
+.theme-green #txtNew:focus + #btnNew:hover,
 .theme-green .icon,
 .theme-green #areaListLists .listRemove:hover,
 .theme-green #areaPinNotes input[type='text'],
@@ -570,6 +613,10 @@
 .theme-teal #areaPinNotes .notePin {
   background-color: var(--teal-33);
 }
+.theme-teal #btnFilter.active,
+.theme-teal #txtNew:focus + #btnNew:hover {
+  background-color: var(--teal-stroke-66);
+}
 .theme-teal,
 .theme-teal input[type='checkbox'] {
   border-color: var(--teal);
@@ -597,6 +644,9 @@
 .theme-teal .noteCollapse {
   border-color: var(--teal-stroke-66);
 }
+.theme-teal #btnNew:hover,
+.theme-teal #btnFilter:hover,
+.theme-teal #txtNew:focus + #btnNew,
 .theme-teal #areaListLists input.active,
 .theme-teal #areaSettings.active,
 .theme-teal .modal-section button,
@@ -613,9 +663,10 @@
 .theme-teal #btnFilter {
   color: var(--teal-ee);
 }
-.theme-teal #btnFilter.active,
+.theme-teal #btnFilter:hover,
 .theme-teal #areaNew:hover #btnNew,
-.theme-teal #areaNew:has(#txtNew:focus) #btnNew,
+.theme-teal #txtNew:focus + #btnNew,
+.theme-teal #txtNew:focus + #btnNew:hover,
 .theme-teal .icon,
 .theme-teal #areaListLists .listRemove:hover,
 .theme-teal #areaPinNotes input[type='text'],
@@ -649,6 +700,10 @@
 .theme-violet #areaPinNotes .notePin {
   background-color: var(--violet-33);
 }
+.theme-violet #btnFilter.active,
+.theme-violet #txtNew:focus + #btnNew:hover {
+  background-color: var(--violet-stroke-66);
+}
 .theme-violet,
 .theme-violet input[type='checkbox'] {
   border-color: var(--violet);
@@ -676,6 +731,9 @@
 .theme-violet .noteCollapse {
   border-color: var(--violet-stroke-66);
 }
+.theme-violet #btnNew:hover,
+.theme-violet #btnFilter:hover,
+.theme-violet #txtNew:focus + #btnNew,
 .theme-violet #areaListLists input.active,
 .theme-violet #areaSettings.active,
 .theme-violet .modal-section button,
@@ -692,9 +750,10 @@
 .theme-violet #btnFilter {
   color: var(--violet-ee);
 }
-.theme-violet #btnFilter.active,
+.theme-violet #btnFilter:hover,
 .theme-violet #areaNew:hover #btnNew,
-.theme-violet #areaNew:has(#txtNew:focus) #btnNew,
+.theme-violet #txtNew:focus + #btnNew,
+.theme-violet #txtNew:focus + #btnNew:hover,
 .theme-violet .icon,
 .theme-violet #areaListLists .listRemove:hover,
 .theme-violet #areaPinNotes input[type='text'],
@@ -728,6 +787,10 @@
 .theme-purple #areaPinNotes .notePin {
   background-color: var(--purple-33);
 }
+.theme-purple #btnFilter.active,
+.theme-purple #txtNew:focus + #btnNew:hover {
+  background-color: var(--purple-stroke-66);
+}
 .theme-purple,
 .theme-purple input[type='checkbox'] {
   border-color: var(--purple);
@@ -755,6 +818,9 @@
 .theme-purple .noteCollapse {
   border-color: var(--purple-stroke-66);
 }
+.theme-purple #btnNew:hover,
+.theme-purple #btnFilter:hover,
+.theme-purple #txtNew:focus + #btnNew,
 .theme-purple #areaListLists input.active,
 .theme-purple #areaSettings.active,
 .theme-purple .modal-section button,
@@ -771,9 +837,10 @@
 .theme-purple #btnFilter {
   color: var(--purple-ee);
 }
-.theme-purple #btnFilter.active,
+.theme-purple #btnFilter:hover,
 .theme-purple #areaNew:hover #btnNew,
-.theme-purple #areaNew:has(#txtNew:focus) #btnNew,
+.theme-purple #txtNew:focus + #btnNew,
+.theme-purple #txtNew:focus + #btnNew:hover,
 .theme-purple .icon,
 .theme-purple #areaListLists .listRemove:hover,
 .theme-purple #areaPinNotes input[type='text'],
@@ -807,6 +874,10 @@
 .theme-pink #areaPinNotes .notePin {
   background-color: var(--pink-33);
 }
+.theme-pink #btnFilter.active,
+.theme-pink #txtNew:focus + #btnNew:hover {
+  background-color: var(--pink-stroke-66);
+}
 .theme-pink,
 .theme-pink input[type='checkbox'] {
   border-color: var(--pink);
@@ -834,6 +905,9 @@
 .theme-pink .noteCollapse {
   border-color: var(--pink-stroke-66);
 }
+.theme-pink #btnNew:hover,
+.theme-pink #btnFilter:hover,
+.theme-pink #txtNew:focus + #btnNew,
 .theme-pink #areaListLists input.active,
 .theme-pink #areaSettings.active,
 .theme-pink .modal-section button,
@@ -850,9 +924,10 @@
 .theme-pink #btnFilter {
   color: var(--pink-ee);
 }
-.theme-pink #btnFilter.active,
+.theme-pink #btnFilter:hover,
 .theme-pink #areaNew:hover #btnNew,
-.theme-pink #areaNew:has(#txtNew:focus) #btnNew,
+.theme-pink #txtNew:focus + #btnNew,
+.theme-pink #txtNew:focus + #btnNew:hover,
 .theme-pink .icon,
 .theme-pink #areaListLists .listRemove:hover,
 .theme-pink #areaPinNotes input[type='text'],

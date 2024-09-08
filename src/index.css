@@ -431,6 +431,7 @@ li.edit .noteSub {
 #btnFilter,
 #btnNewList {
   display: inline-block;
+  border: 1px solid transparent;
   border-radius: 20px;
   color: #ccc;
   cursor: pointer;
@@ -441,14 +442,17 @@ li.edit .noteSub {
   line-height: 24px;
 }
 #btnNew:hover,
-#btnFilter:hover,
-#btnFilter.active {
-  background-color: #eeeeee;
-  color: #666;
+#btnFilter:hover {
+  color: #ccc;
+  border-color: #ccc;
 }
 #btnNewList:hover {
   background-color: #dddddd;
   color: #666;
+}
+#btnFilter.active {
+  background-color: #ddd;
+  color: #fff;
 }
 #btnNew.hide,
 #btnFilter.hide,
@@ -474,6 +478,10 @@ li.edit .noteSub {
 
 #areaNew:hover,
 #areaNew:has(#txtNew:focus) {
+  border-color: #ccc;
+}
+#txtNew:focus + #btnNew {
+  color: #ccc;
   border-color: #ccc;
 }
 
