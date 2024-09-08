@@ -810,6 +810,12 @@ span.appIcon:hover {
 #web {
   border: none;
 }
+#web .appAlwaysOnTop,
+#web .appMinimize,
+#web .appQuit,
+#web .placeholder {
+  display: none;
+}
 #web .panelsContainer {
   border-radius: 10px;
   box-shadow: 0 0 10px #00000066;

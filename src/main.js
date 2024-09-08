@@ -1262,9 +1262,9 @@ function init() {
     window.electronAPI.setBounds(JSON.parse(bounds));
   }
 
-  if(document.body.id !== 'web') {
+  // if(document.body.id !== 'web') {
     initTitlebar();
-  }
+  // }
 
   initGrid();
   initModal();
