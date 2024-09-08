@@ -249,7 +249,7 @@
   background-image: radial-gradient(var(--blue-66), var(--blue));
 }
 #web.theme-blue .panelsContainer {
-  box-shadow: 0 0 10px var(--blue-cc);
+  box-shadow: 0 0 10px var(--blue-stroke);
 }
 
 /* red */
@@ -336,7 +336,7 @@
   background-image: radial-gradient(var(--red-66), var(--red));
 }
 #web.theme-red .panelsContainer {
-  box-shadow: 0 0 10px var(--red-cc);
+  box-shadow: 0 0 10px var(--red-stroke);
 }
 
 /* orange */
@@ -423,7 +423,7 @@
   background-image: radial-gradient(var(--orange-66), var(--orange));
 }
 #web.theme-orange .panelsContainer {
-  box-shadow: 0 0 10px var(--orange-cc);
+  box-shadow: 0 0 10px var(--orange-stroke);
 }
 
 /* amber */
@@ -512,7 +512,7 @@
   background-image: radial-gradient(var(--amber-66), var(--amber));
 }
 #web.theme-amber .panelsContainer {
-  box-shadow: 0 0 10px var(--amber-cc);
+  box-shadow: 0 0 10px var(--amber-stroke);
 }
 
 /* green */
@@ -599,7 +599,7 @@
   background-image: radial-gradient(var(--green-66), var(--green));
 }
 #web.theme-green .panelsContainer {
-  box-shadow: 0 0 10px var(--green-cc);
+  box-shadow: 0 0 10px var(--green-stroke);
 }
 
 /* teal */
@@ -686,7 +686,7 @@
   background-image: radial-gradient(var(--teal-66), var(--teal));
 }
 #web.theme-teal .panelsContainer {
-  box-shadow: 0 0 10px var(--teal-cc);
+  box-shadow: 0 0 10px var(--teal-stroke);
 }
 
 /* violet */
@@ -773,7 +773,7 @@
   background-image: radial-gradient(var(--violet-66), var(--violet));
 }
 #web.theme-violet .panelsContainer {
-  box-shadow: 0 0 10px var(--violet-cc);
+  box-shadow: 0 0 10px var(--violet-stroke);
 }
 
 /* purple */
@@ -860,7 +860,7 @@
   background-image: radial-gradient(var(--purple-66), var(--purple));
 }
 #web.theme-purple .panelsContainer {
-  box-shadow: 0 0 10px var(--purple-cc);
+  box-shadow: 0 0 10px var(--purple-stroke);
 }
 
 /* pink */
@@ -947,5 +947,5 @@
   background-image: radial-gradient(var(--pink-66), var(--pink));
 }
 #web.theme-pink .panelsContainer {
-  box-shadow: 0 0 10px var(--pink-cc);
+  box-shadow: 0 0 10px var(--pink-stroke);
 }
