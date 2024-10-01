@@ -2,9 +2,7 @@
 
 // Open the IndexedDB database
 const request = indexedDB.open('neonote', 1);
-
-// // the main container for note list
-// const areaListNotes = document.getElementById('areaListNotes');
+var Zeke = {orderedNoteIds:{}, orderedPinNoteIds:{}};
 
 // Create object store and define its structure
 request.onupgradeneeded = function(event) {
@@ -42,14 +40,7 @@ request.onsuccess = async function(event) {
         }, 'areaListNotes', newNote.target.result - 1);
       }
 
-      let orderedNoteIds = JSON.parse(localStorage.getItem('noteOrder')) || {};
-      if(orderedNoteIds && orderedNoteIds[note.list]) {
-        orderedNoteIds[note.list].push(newNote.target.result);
-      } else {
-        orderedNoteIds[note.list] = [newNote.target.result];
-      }
-      
-      localStorage.setItem('noteOrder', JSON.stringify(orderedNoteIds));
+      updateSortIndexes('areaListNotes');
       
       console.log('Note added successfully');
 
@@ -85,30 +76,28 @@ request.onsuccess = async function(event) {
       if(notes == undefined || notes.length == 0) {
         // areaListNotes.innerHTML = '';
       } else {
-        const orderedNoteIds = JSON.parse(localStorage.getItem('noteOrder'));
-        const orderedPinNoteIds = JSON.parse(localStorage.getItem('pinNoteOrder'));
         let listNotes = notes;
-        if(orderedNoteIds && orderedNoteIds[listId]) {
-          listNotes = orderedNoteIds[listId].map(id =>notes.find(obj => obj.id === parseInt(id)));
+        if(Zeke.orderedNoteIds[listId]) {
+          listNotes = Zeke.orderedNoteIds[listId].map(id =>notes.find(obj => obj.id === parseInt(id)));
           if(listNotes.length != notes.length) {
             listNotes = notes;
           }
         }
-        if(orderedPinNoteIds && orderedPinNoteIds[listId]) {
-          const pinNotes = orderedPinNoteIds[listId].map(id =>notes.find(obj => obj.id === parseInt(id)));
+        if(Zeke.orderedPinNoteIds[listId]) {
+          const pinNotes = Zeke.orderedPinNoteIds[listId].map(id =>notes.find(obj => obj.id === parseInt(id)));
           if(pinNotes.length > 0 && pinNotes[0] != undefined) {
             // 1.1. render pinned parent notes
             pinNotes.forEach((item, idx) => {
               if(item && (item.parent == 0 || item.parent === true)) {
-                generateNoteItem(item, 'areaPinNotes', idx, orderedPinNoteIds && orderedPinNoteIds[listId]);
-                initDnD('areaPinNotes', 'pinNoteOrder');
+                generateNoteItem(item, 'areaPinNotes', idx, Zeke.orderedPinNoteIds[listId]);
+                initDnD('areaPinNotes');
               }
             });
             // 1.2. render pinned subnotes
             pinNotes.forEach((item, idx) => {
               if(item && item.parent > 0 && item.parent !== true) {
-                generateSubNoteItem(item, 'areaPinNotes', idx, orderedPinNoteIds && orderedPinNoteIds[listId]);
-                initDnD('areaPinNotes', 'pinNoteOrder', true);
+                generateSubNoteItem(item, 'areaPinNotes', idx, Zeke.orderedPinNoteIds[listId]);
+                initDnD('areaPinNotes', true);
     
                 updateCompletionPercentage(item.parent);
               }
@@ -123,9 +112,9 @@ request.onsuccess = async function(event) {
               item,
               'areaListNotes',
               idx,
-              orderedNoteIds && orderedNoteIds[listId] && orderedNoteIds[listId].includes(item.id));
+              Zeke.orderedNoteIds[listId] && Zeke.orderedNoteIds[listId].includes(item.id));
           }
-          initDnD('areaListNotes', 'noteOrder');
+          initDnD('areaListNotes');
           
         });
 
@@ -135,8 +124,8 @@ request.onsuccess = async function(event) {
             generateSubNoteItem(item,
               'areaListNotes',
               idx,
-              orderedNoteIds && orderedNoteIds[listId] && orderedNoteIds[listId].includes(item.id));
-            initDnD('areaListNotes', 'noteOrder', true);
+              Zeke.orderedNoteIds[listId] && Zeke.orderedNoteIds[listId].includes(item.id));
+            initDnD('areaListNotes', true);
 
             updateCompletionPercentage(item.parent);
           }
@@ -153,9 +142,9 @@ request.onsuccess = async function(event) {
     };
   }
 
-  function updateNote(key, newValObj) {
-    const transaction = db.transaction(['note'], 'readwrite');
-    const objectStore = transaction.objectStore('note');
+  function dbUpdate(table, key, obj) {
+    const transaction = db.transaction([table], 'readwrite');
+    const objectStore = transaction.objectStore(table);
     const getRequest = objectStore.get(key);
 
     getRequest.onerror = () => {
@@ -166,14 +155,14 @@ request.onsuccess = async function(event) {
       const data = getRequest.result;
 
       if(data) {
-        const updatedData = { ...data, ...newValObj };
+        const updatedData = { ...data, ...obj };
         const updateRequest = objectStore.put(updatedData);
 
         updateRequest.onerror = () => {
-          console.error('Failed to update the value in DB');
+          console.error('Failed to update ' + table);
         }
         updateRequest.onsuccess = () => {
-          console.log('Note updated successfully');
+          console.log(table + ' updated successfully');
         }
       } else {
         console.warn('Object not found in DB');
@@ -207,12 +196,6 @@ request.onsuccess = async function(event) {
         deleteNote(note.id);
         console.log('Deleted note id ' + note.id + ' in list ' + listId);
       });
-      // remove ordered notes in localstorage as well
-      let orderedNotes = JSON.parse(localStorage.getItem('noteOrder'));
-      if(orderedNotes && orderedNotes[listId]) {
-        delete orderedNotes[listId];
-        localStorage.setItem('noteOrder',JSON.stringify(orderedNotes));
-      }
     }
   }
 
@@ -254,6 +237,11 @@ request.onsuccess = async function(event) {
         const orderedListIds = localStorage.getItem('listOrder');
         const rememberedActiveList = localStorage.getItem('listActive');
 
+        lists.forEach(item => {
+          Zeke.orderedNoteIds[item.id] = item.areaListNotes;
+          Zeke.orderedPinNoteIds[item.id] = item.areaPinNotes;
+        });
+
         document.querySelector('#areaListLists ul').innerHTML = '';
         // if more than one list
         if(orderedListIds && orderedListIds.includes(',')) {
@@ -277,26 +265,12 @@ request.onsuccess = async function(event) {
           });
         }
 
-        initDnD('areaListLists', 'listOrder');
+        initDnD('areaListLists');
       }
     };
     
     request.onerror = function() {
       console.error('Error getting lists');
-    };
-  }
-
-  function updateList(id, val) {
-    const transaction = db.transaction(['list'], 'readwrite');
-    const objectStore = transaction.objectStore('list');
-    const request = objectStore.put({id:id, name:val});
-    
-    request.onsuccess = function() {
-      console.log('List updated successfully');
-    };
-    
-    request.onerror = function() {
-      console.error('Error updating list');
     };
   }
 
@@ -365,7 +339,7 @@ request.onsuccess = async function(event) {
       let newVal = e.target.value.trim();
       let targetId = parseInt(e.target.dataset.id);
       if(newVal && newVal!=name) {
-        updateList(targetId, newVal);
+        dbUpdate('list', targetId, {name: newVal});
       }
       listInput.readOnly = true;
       setTimeout(()=>{
@@ -379,7 +353,7 @@ request.onsuccess = async function(event) {
         let newVal = e.target.value.trim();
         let targetId = parseInt(e.target.dataset.id);
         if(newVal && newVal!=name) {
-          updateList(targetId, newVal);
+          dbUpdate('list', targetId, {name: newVal});
         }
         listInput.readOnly = true;
         setTimeout(()=>{
@@ -483,7 +457,7 @@ request.onsuccess = async function(event) {
       const subnotesCompleted = subnotesList.querySelectorAll(`li.completed`);
       if(noteCheckbox.checked == true) {
         noteItem.classList.add('completed');
-        updateNote(noteId, {completed: true, dateCompleted: Date.now()});
+        dbUpdate('note', noteId, {completed: true, dateCompleted: Date.now()});
         if(subnotesIncomplete.length > 0) {
           subnotesIncomplete.forEach((subnote) => {
             subnote.querySelector('input[type="checkbox"]').click();
@@ -491,7 +465,7 @@ request.onsuccess = async function(event) {
         }
       } else {
         noteItem.classList.remove('completed');
-        updateNote(noteId, {completed: false, dateCompleted: null});
+        dbUpdate('note', noteId, {completed: false, dateCompleted: null});
         if(subnotesCompleted.length > 0) {
           subnotesCompleted.forEach((subnote) => {
             subnote.querySelector('input[type="checkbox"]').click();
@@ -523,7 +497,7 @@ request.onsuccess = async function(event) {
         let newVal = e.target.value.trim();
         let targetId = parseInt(e.target.parentNode.dataset.id);
         if(newVal && newVal != note.content) {
-          updateNote(targetId, {content: newVal});
+          dbUpdate('note', targetId, {content: newVal});
         }
         noteInput.readOnly = true;
         setTimeout(()=>{
@@ -570,7 +544,7 @@ request.onsuccess = async function(event) {
               dateCompleted: ''
             });
             // update parent note to indicate it's a parent task
-            updateNote(note.id, {
+            dbUpdate('note', note.id, {
               parent: true
             });
             noteCollapse.classList.add('show');
@@ -595,8 +569,6 @@ request.onsuccess = async function(event) {
       e.preventDefault();
       e.stopPropagation();
 
-      const listId = document.querySelector('#areaListLists input.active').dataset.id;
-
       if(note.pin) {
         document.querySelector('#areaListNotes ul').prepend(noteItem);
         note.title = 'Pin';
@@ -610,28 +582,18 @@ request.onsuccess = async function(event) {
       }
 
       note.pin = !note.pin;
-      updateNote(note.id, {pin: note.pin});
-      updateOrderNotes(listId);
+      dbUpdate('note', note.id, {pin: note.pin});
+      updateSortIndexes('areaListNotes');
+      updateSortIndexes('areaPinNotes');
     });
 
     noteRemove.addEventListener('click', (e) => {
       e.preventDefault();
-      const currentListId = parseInt(document.querySelector('#areaListLists li input.active').dataset.id);
-      let targetId = parseInt(e.target.parentNode.dataset.id);
-      let currentOrder = JSON.parse(localStorage.getItem('noteOrder')) || {};
-      let newOrder = [];
-      if(currentOrder && currentOrder[currentListId]) {
-        for(let i = 0; i < currentOrder[currentListId].length; i++) {
-          if(currentOrder[currentListId][i] != targetId) {
-            newOrder.push(currentOrder[currentListId][i]);
-          }
-        }
-        currentOrder[currentListId] = newOrder;
-        localStorage.setItem('noteOrder', JSON.stringify(currentOrder));
-      }
 
-      console.log(newOrder);
+      let targetId = parseInt(e.target.parentNode.dataset.id);
+
       noteItem.remove();
+      updateSortIndexes(area);
       deleteNote(targetId);
     });
 
@@ -700,10 +662,10 @@ request.onsuccess = async function(event) {
       const subNoteId = parseInt(e.target.parentNode.dataset.id);
       if(subNoteCheckbox.checked == true) {
         subNoteItem.classList.add('completed');
-        updateNote(subNoteId, {completed: true, dateCompleted: Date.now()});
+        dbUpdate('note', subNoteId, {completed: true, dateCompleted: Date.now()});
       } else {
         subNoteItem.classList.remove('completed');
-        updateNote(subNoteId, {completed: false, dateCompleted: null});
+        dbUpdate('note', subNoteId, {completed: false, dateCompleted: null});
       }
       updateCompletionPercentage(subNote.parent);
     });
@@ -714,7 +676,7 @@ request.onsuccess = async function(event) {
         let newVal = e.target.value.trim();
         let targetId = parseInt(e.target.parentNode.dataset.id);
         if(newVal && newVal != subNote.content) {
-          updateNote(targetId, {content: newVal});
+          dbUpdate('note', targetId, {content: newVal});
         }
         subNoteInput.readOnly = true;
         setTimeout(()=>{
@@ -725,21 +687,10 @@ request.onsuccess = async function(event) {
 
     subNoteRemove.addEventListener('click', (e) => {
       e.preventDefault();
-      const currentListId = parseInt(document.querySelector('#areaListLists li input.active').dataset.id);
       let targetId = parseInt(e.target.parentNode.dataset.id);
-      let currentOrder = JSON.parse(localStorage.getItem('noteOrder')) || {};
-      let newOrder = [];
-      if(currentOrder && currentOrder[currentListId]) {
-        for(let i = 0; i < currentOrder[currentListId].length; i++) {
-          if(currentOrder[currentListId][i] != targetId) {
-            newOrder.push(currentOrder[currentListId][i]);
-          }
-        }
-        currentOrder[currentListId] = newOrder;
-        localStorage.setItem('noteOrder', JSON.stringify(currentOrder));
-      }
 
       subNoteItem.remove();
+      updateSortIndexes(area);
       deleteNote(targetId);
     });
 
@@ -774,29 +725,7 @@ request.onsuccess = async function(event) {
     }
   }
 
-  function updateOrderNotes(notesListId) {
-    const pinNotes = document.querySelectorAll('#areaPinNotes li');
-    const unpinNotes = document.querySelectorAll('#areaListNotes li');
-    let storagePinNotes = JSON.parse(localStorage.getItem('pinNoteOrder')) || {};
-    let storageUnpinNotes = JSON.parse(localStorage.getItem('noteOrder')) || {};
-    let newPinNotes = [];
-    let newUnpinNotes = [];
-
-    pinNotes.forEach(pinNote => {
-      newPinNotes.push(parseInt(pinNote.dataset.id));
-    });
-    unpinNotes.forEach(unpinNote => {
-      newUnpinNotes.push(parseInt(unpinNote.dataset.id));
-    });
-
-    storagePinNotes[notesListId] = newPinNotes;
-    storageUnpinNotes[notesListId] = newUnpinNotes;
-
-    localStorage.setItem('pinNoteOrder', JSON.stringify(storagePinNotes));
-    localStorage.setItem('noteOrder', JSON.stringify(storageUnpinNotes));
-  }
-
-  function initDnD(listName, storageName, noteSubList = false) {
+  function initDnD(listName, noteSubList = false) {
     const list = document.querySelectorAll(`#${listName} ul${noteSubList?' ul':''}`);
     list.forEach((li, idx) => {
       Sortable.create(li, {
@@ -819,51 +748,54 @@ request.onsuccess = async function(event) {
           }
         },
         onEnd: function (evt) {
+          let currentListId = parseInt(document.querySelector('#areaListLists input.active').dataset.id);
+          let sourceTaskId = parseInt(evt.item.dataset.id);
+          let sourceParentTaskId = parseInt(evt.from.parentElement.dataset.id);
+          let targetTaskId = parseInt(evt.to.parentElement.dataset.id);
           // if subnote to parent note
           if(evt.from.classList.contains('noteSubList') && !evt.to.classList.contains('noteSubList')) {
-            updateNote(parseInt(evt.item.dataset.id), {
-              parent: 0
-            });
-            renderNotes(
-              parseInt(localStorage.getItem('listActive'))
-            );
+            if(evt.from.childElementCount == 0) {
+              // update leaving ex-parent, if the dragged task is the last subtask of the previous parent task, set the ex-parent task as a normal task
+              dbUpdate('note', sourceParentTaskId, { parent: 0 });
+            }
+            dbUpdate('note', sourceTaskId, { parent: 0 });
           };
           // if parent note to subnote
           if(evt.item.querySelector('span.noteSub') && 
             evt.to.classList.contains('noteSubList')) {
-              updateNote(parseInt(evt.item.dataset.id), {
-                parent: parseInt(evt.to.parentElement.dataset.id)
-              });
-              renderNotes(
-                parseInt(localStorage.getItem('listActive'))
-              );
+              // update dragged task to set its parent id that becomes to a subtask
+              dbUpdate('note', sourceTaskId, { parent: targetTaskId });
+              // update target task to set it becomes to a parent task
+              dbUpdate('note', targetTaskId, { parent: true });
           };
-          updateIndexes();
+          // if subnote to subnote
+          if(evt.from.classList.contains('noteSubList') && evt.to.classList.contains('noteSubList')) {
+            // if ex-parent has no subtask
+            if(evt.from.childElementCount == 0) {
+              dbUpdate('note', sourceParentTaskId, { parent: 0 });
+            }
+            dbUpdate('note', targetTaskId, { parent: true });
+            dbUpdate('note', sourceTaskId, { parent: targetTaskId });
+          };
+          
+          updateSortIndexes(listName);
+          renderNotes(currentListId);
         }
       });
-  
     });
-  
-    function updateIndexes() {
-      const items = document.querySelectorAll(`#${listName} ul li`);
-      let newOrder = [];
-      items.forEach((item, index) => {
-        item.dataset.index = index;
-        newOrder.push(parseInt(item.dataset.id));
-      });
-      if(storageName == 'noteOrder' || storageName == 'pinNoteOrder') {
-        /**
-         * noteOrder|PinOrder: {listId:[noteId,...],...}
-         */
-        let allNoteOrder = JSON.parse(localStorage.getItem(storageName)) || {};
-        const currentListId = parseInt(document.querySelector('#areaListLists li input.active').dataset.id);
-        allNoteOrder[currentListId] = newOrder;
-        localStorage.setItem(storageName, JSON.stringify(allNoteOrder));
-      } else {
-        // list order
-        localStorage.setItem(storageName, newOrder);
-      }
-    }
+  }
+
+  function updateSortIndexes(areaListName) {
+    const items = document.querySelectorAll(`#${areaListName} ul li`);
+    let areaListNameMap = {"areaListNotes":"orderedNoteIds", "areaPinNotes":"orderedPinNoteIds"};
+    let currentListId = parseInt(document.querySelector('#areaListLists input.active').dataset.id);
+    let newOrder = [];
+    items.forEach(item => {
+      // item.dataset.index = index;
+      newOrder.push(parseInt(item.dataset.id));
+    });
+    Zeke[areaListNameMap[areaListName]][currentListId] = newOrder;
+    dbUpdate('list', currentListId, {[areaListName] : newOrder});
   }
 
   function updateCompletionPercentage(parentId) {
@@ -1262,10 +1194,7 @@ function init() {
     window.electronAPI.setBounds(JSON.parse(bounds));
   }
 
-  // if(document.body.id !== 'web') {
-    initTitlebar();
-  // }
-
+  initTitlebar();
   initGrid();
   initModal();
   initLanguage();

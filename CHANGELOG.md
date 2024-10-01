@@ -1,5 +1,9 @@
 # Change Log
 
+### v1.10.2
+##### 2024-10-01
+- Bug Fix: Task missing caused by sorting issue
+
 ### v1.10.1
 ##### 2024-09-01
 - New Feature: Filter
