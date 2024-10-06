@@ -2,7 +2,7 @@
 
 // Open the IndexedDB database
 const request = indexedDB.open('neonote', 1);
-var Zeke = {orderedNoteIds:{}, orderedPinNoteIds:{}};
+var Zeke = {orderedNoteIds:{}, orderedPinNoteIds:{}, notesCompleted:{}, notesIncompleted:{}};
 
 // Create object store and define its structure
 request.onupgradeneeded = function(event) {
@@ -61,7 +61,9 @@ request.onsuccess = async function(event) {
       let notes = [];
 
       if(listId) {
-        notes = allNotes.filter(note =>note.list === parseInt(listId));
+        notes = allNotes.filter(note => note.list === parseInt(listId));
+        Zeke.notesCompleted[listId] = notes.filter(note => note.completed == true);
+        Zeke.notesIncompleted[listId] = notes.filter(note => note.completed == false);
       } else {
         notes = allNotes;
       }
@@ -416,7 +418,7 @@ request.onsuccess = async function(event) {
     noteInput.value = note.content;
     noteInput.readOnly = true;
     noteMoment.className = 'noteMoment';
-    noteMoment.innerText = convertTimetamp(note.dateCreated);
+    noteMoment.innerText = moment(note.dateCreated).fromNow();
     noteCollapse.className = 'noteCollapse';
     noteSub.className = 'icon noteSub';
     noteSub.innerText = '+';
@@ -639,7 +641,7 @@ request.onsuccess = async function(event) {
     subNoteInput.value = subNote.content;
     subNoteInput.readOnly = true;
     subNoteMoment.className = 'noteMoment';
-    subNoteMoment.innerText = convertTimetamp(subNote.dateCreated);
+    subNoteMoment.innerText = moment(subNote.dateCreated).fromNow();
     subNoteRemove.className = 'icon noteRemove';
     subNoteRemove.innerText = '-';
     subNoteRemove.dataset['langTitle'] = '__remove__';
@@ -714,10 +716,10 @@ request.onsuccess = async function(event) {
 
   function cleanModal() {
     const modal = document.querySelector('.modal');
-    const areaSettings = document.getElementById('areaSettings');
+    const btnSettings = document.getElementById('btnSettings');
     const panelNote = document.getElementById('panelNote');
     const hiddenActivedList =  document.querySelector('#areaListLists input.hidden');
-    areaSettings.classList.remove('active');
+    btnSettings.classList.remove('active');
     panelNote.classList.remove('showModal');
     modal.classList.remove('open');
     if(hiddenActivedList) {
@@ -933,12 +935,14 @@ function initGrid() {
   const panelList = document.getElementById('panelList');
   const panelNote = document.getElementById('panelNote');
   const panelsContainer = document.getElementById('panelsContainer');
-  const gridTemplateColumns = localStorage.getItem('grid-template-columns') || '100px 10px 1fr';
+  const rememberedGrid = localStorage.getItem('grid-template-columns') || '50px 100px 10px 1fr';
   const listOpened = JSON.parse(localStorage.getItem('listOpened'));
+  // const navOpened = JSON.parse(localStorage.getItem('navOpened'));
 
   let isResizing = false;
   let startX = 0;
   let startWidth = 0;
+  let arrayRememberedGrid = rememberedGrid.split(' ');
 
   panelsContainer.classList.add('toggling');
 
@@ -972,16 +976,22 @@ function initGrid() {
     panelsContainer.classList.add('toggling');
   });
 
-  panelsContainer.style.gridTemplateColumns = listOpened ? gridTemplateColumns : '0px 0px 1fr';
+  // panelsContainer.style.gridTemplateColumns = rememberedGrid;
+  panelsContainer.style.gridTemplateColumns = listOpened ? rememberedGrid : arrayRememberedGrid[0] + ' 0px 0px 1fr';
 
 }
 
-function initModal() {
-  const modal = document.querySelector('.modal');
+function initModalSettings() {
+  const modalSettings = document.querySelector('.modal.settings');
+  const modalReport = document.querySelector('.modal.report');
   const themes = document.querySelectorAll('.themeSelection');
   const modes = document.querySelectorAll('.modeSelection');
-  const areaSettings = document.getElementById('areaSettings');
+  const btnSettings = document.getElementById('btnSettings');
+  const btnReport = document.getElementById('btnReport');
+  const btnTask = document.getElementById('btnTask');
   const panelNote = document.getElementById('panelNote');
+  const panelsContainer = document.getElementById('panelsContainer');
+  const btnSwitchNavbar = document.getElementById('btnSwitchNavbar');
   const opacitySelection = document.getElementById('opacitySelection');
   const languageList = document.getElementById('languageList');
   const restore = document.getElementById('restore');
@@ -989,15 +999,42 @@ function initModal() {
   const opacity = localStorage.getItem('opacity') || '100';
   const rememberedLanguage = localStorage.getItem('language') || 'en';
 
-  document.getElementById('btnSettings').addEventListener('click', () => {
+  btnSettings.addEventListener('click', () => {
     const activedList = document.querySelector('#areaListLists input.active');
-    areaSettings.classList.toggle('active');
+    
     panelNote.classList.toggle('showModal');
-    modal.classList.toggle('open');
+    modalSettings.classList.toggle('open');
     activedList.classList.toggle('hidden');
-    if(!modal.classList.contains('open')) {
+
+    btnTask.classList.remove('active');
+    btnReport.classList.remove('active');
+    modalReport.classList.remove('open');
+
+    if(modalSettings.classList.contains('open')) {
+      btnSettings.classList.add('active');
+      panelsContainer.style.gridTemplateColumns = '50px 0 0 1fr';
+    } else {
+      if(!modalReport.classList.contains('open')) {
+        btnTask.classList.add('active');
+      }
+      btnSettings.classList.remove('active');
+      panelsContainer.style.gridTemplateColumns = localStorage.getItem('grid-template-columns') || '50px 100px 10px 1fr';
       activedList.click();
     }
+  });
+
+  btnSwitchNavbar.addEventListener('click', () => {
+    let panelsContainer = document.getElementById('panelsContainer');
+    const currentGrid = panelsContainer.style.gridTemplateColumns.split(' ');
+    const rememberedGrid = localStorage.getItem('grid-template-columns') || '50px 100px 10px 1fr';
+    let arrayRememberedGrid = rememberedGrid.split(' ');
+    let isNavOpened = currentGrid[0] == '50px';
+    
+    arrayRememberedGrid[0] = isNavOpened ? '0px' : '50px';
+    
+    let newGrid = arrayRememberedGrid.join(' ');
+    panelsContainer.style.gridTemplateColumns = newGrid;
+    localStorage.setItem('grid-template-columns', newGrid);
   });
 
   languageList.addEventListener('change', e => {
@@ -1049,6 +1086,64 @@ function initModal() {
   
 }
 
+function initModalReport() {
+  const modalSettings = document.querySelector('.modal.settings');
+  const modalReport = document.querySelector('.modal.report');
+  const btnSettings = document.getElementById('btnSettings');
+  const btnReport = document.getElementById('btnReport');
+  const btnTask = document.getElementById('btnTask');
+  const panelNote = document.getElementById('panelNote');
+  const panelsContainer = document.getElementById('panelsContainer');
+
+  btnReport.addEventListener('click', () => {
+    const activedList = document.querySelector('#areaListLists input.active');
+    
+    panelNote.classList.toggle('showModal');
+    modalReport.classList.toggle('open');
+    activedList.classList.toggle('hidden');
+
+    btnTask.classList.remove('active');
+    btnSettings.classList.remove('active');
+    modalSettings.classList.remove('open');
+
+    if(modalReport.classList.contains('open')) {
+      // panelsContainer.style.gridTemplateColumns = '50px 0 0 1fr';
+      btnReport.classList.add('active');
+    } else {
+      if(!modalReport.classList.contains('open')) {
+        btnTask.classList.add('active');
+      }
+      btnReport.classList.remove('active');
+      panelsContainer.style.gridTemplateColumns = localStorage.getItem('grid-template-columns') || '50px 100px 10px 1fr';
+      activedList.click();
+    }
+
+    generateTimelineChart();
+  });
+}
+
+function initModalTask() {
+  const modalSettings = document.querySelector('.modal.settings');
+  const modalReport = document.querySelector('.modal.report');
+  const btnSettings = document.getElementById('btnSettings');
+  const btnReport = document.getElementById('btnReport');
+  const btnTask = document.getElementById('btnTask');
+  const panelNote = document.getElementById('panelNote');
+  const panelsContainer = document.getElementById('panelsContainer');
+
+  btnTask.addEventListener('click', () => {
+    
+    btnTask.classList.add('active');
+    panelNote.classList.remove('showModal');
+    btnReport.classList.remove('active');
+    btnSettings.classList.remove('active');
+    modalReport.classList.remove('open');
+    modalSettings.classList.remove('open');
+
+    panelsContainer.style.gridTemplateColumns = localStorage.getItem('grid-template-columns') || '50px 100px 10px 1fr';
+  });
+}
+
 function initTitlebar() {
   const btnSidebar= document.querySelector('.appSidebar');
   const btnAlwaysOnTop = document.querySelector('.appAlwaysOnTop');
@@ -1080,14 +1175,14 @@ function initTitlebar() {
 
   btnSidebar.addEventListener('click', (e) => {
     let panelsContainer = document.getElementById('panelsContainer');
-    const currentGrid = panelsContainer.style.gridTemplateColumns;
-    const rememberedGrid = localStorage.getItem('grid-template-columns') || '100px 10px 1fr';
+    const currentGrid = panelsContainer.style.gridTemplateColumns.split(' ');
+    const rememberedGrid = localStorage.getItem('grid-template-columns') || '50px 100px 10px 1fr';
 
-    if(currentGrid == '0px 0px 1fr') {
+    if(currentGrid[1] == '0px') {
       panelsContainer.style.gridTemplateColumns = rememberedGrid;
       localStorage.setItem('listOpened', true);
     } else {
-      panelsContainer.style.gridTemplateColumns = '0px 0px 1fr';
+      panelsContainer.style.gridTemplateColumns = currentGrid[0] + ' 0px 0px 1fr';
       localStorage.setItem('grid-template-columns', rememberedGrid); // remember previouse size
       localStorage.setItem('listOpened', false);
     }
@@ -1107,29 +1202,29 @@ function initLanguage() {
   changeLanguage(rememberedLanguage);
 }
 
-function convertTimetamp(timestamp) {
-  const seconds = Math.floor((new Date() - timestamp) / 1000);
-  const language = localStorage.getItem('language') || 'en';
+// function convertTimetamp(timestamp) {
+//   const seconds = Math.floor((new Date() - timestamp) / 1000);
+//   const language = localStorage.getItem('language') || 'en';
 
-  const intervals = {
-    year: 31536000,
-    month: 2592000,
-    week: 604800,
-    day: 86400,
-    hr: 3600,
-    min: 60,
-    sec: 1
-  };
+//   const intervals = {
+//     year: 31536000,
+//     month: 2592000,
+//     week: 604800,
+//     day: 86400,
+//     hr: 3600,
+//     min: 60,
+//     sec: 1
+//   };
 
-  for (let interval in intervals) {
-    const value = Math.floor(seconds / intervals[interval]);
-    if (value >= 1) {
-      return value + " " + (translate(`__${interval}__`) || interval) + (value > 1 && language === 'en' ? "s ago" : "");
-    }
-  }
+//   for (let interval in intervals) {
+//     const value = Math.floor(seconds / intervals[interval]);
+//     if (value >= 1) {
+//       return value + " " + (translate(`__${interval}__`) || interval) + (value > 1 && language === 'en' ? "s ago" : "");
+//     }
+//   }
 
-  return language === 'en' ? "Just now" : translate(`__just_now__`) || "Just now";
-}
+//   return language === 'en' ? "Just now" : translate(`__just_now__`) || "Just now";
+// }
 
 function closeEditingNote() {
   const editingNote = document.querySelector('#panelNote li.edit');
@@ -1178,6 +1273,46 @@ function translate(wordsCode) {
   return Languages[currentLanguage][wordsCode] || false;
 }
 
+function generateTimelineChart() {
+  const ctx = document.getElementById('chart_timeline');
+  
+  let labels = data_incompleted = data_completed = [];
+
+  for(let i = 0; i < 7; i ++) {
+    labels.push(moment().day(i).format('MMM D'));
+    let compareDay = moment().day(i).format('YYYYMMDD');
+  }
+
+  const data = {
+    labels: labels,
+    datasets: [
+      {
+        label: 'Incompleted',
+        data: [65, 59, 80, 81, 56, 55, 40],
+        fill: true,
+        borderColor: '#cfd8dc',
+        fillColor: '#cfd8dc',
+        tension: 0.1
+      },
+      {
+        label: 'Completed',
+        data: [35, 29, 30, 21, 16, 35, 40],
+        fill: true,
+        fillColor: '#b0bec5',
+        borderColor: '#b0bec5',
+        tension: 0.1
+      },
+    ]
+  };
+
+  
+
+  const chart = new Chart(ctx, {
+    type: 'line',
+    data: data
+  });
+}
+
 function init() {
   const theme = localStorage.getItem('theme') || '';
   const opacity = localStorage.getItem('opacity') || '100';
@@ -1196,7 +1331,9 @@ function init() {
 
   initTitlebar();
   initGrid();
-  initModal();
+  initModalTask();
+  initModalReport();
+  initModalSettings();
   initLanguage();
 }
 

@@ -212,7 +212,7 @@ select:hover {
 }
 .panelsContainer {
   display: grid;
-  grid-template-columns: 100px 10px 1fr;
+  grid-template-columns: 50px 100px 10px 1fr;
   grid-template-rows: 1fr;
   height: calc(100vh - 3px);
   overflow: hidden;
@@ -226,8 +226,18 @@ select:hover {
   grid-template-columns: 0px 10px 1fr !important;
 }
 
-#panelList {
+#panelNav {
+  display: grid;
+  grid-template-rows: 40px 40px 1fr 40px;
   grid-column: 1;
+  grid-row: 1;
+  background-color: #eee;
+  border-right: 1px solid #ccc;
+  padding: 10px 0;
+}
+
+#panelList {
+  grid-column: 2;
   grid-row: 1;
   background-color: #eee;
   display: grid;
@@ -253,7 +263,7 @@ select:hover {
 }
 
 #gutter {
-  grid-column: 2;
+  grid-column: 3;
   grid-row: 1;
   width: 10px;
   cursor: col-resize;
@@ -492,7 +502,7 @@ li.edit .noteSub {
   line-height: 40px;
   border-bottom: 1px solid #eee;
   padding: 0 10px;
-  grid-template-columns: 26px 1fr 90px auto auto auto auto auto;
+  grid-template-columns: 26px 1fr 80px auto auto auto auto auto;
   display: grid;
 }
 #areaListNotes li.parent,
@@ -624,37 +634,40 @@ li.edit .noteSub {
   display: grid;
 }
 
-#areaSettings {
-  grid-column: 1;
-  grid-row: 2;
+/* Navbar */
+.areaNav {
   line-height: 40px;
-  padding: 0 8px;
-  border-left: 4px solid transparent;
-}
-#areaSettings.active {
-  z-index: 9;
-  border-left-color: #ccc;
-}
-#areaSettings #btnSettings {
-  width: 30px;
+  padding-top: 8px;
   text-align: center;
-  line-height: 40px;
-  cursor: pointer;
   color: #ccc;
 }
-#areaSettings.active #btnSettings,
-#areaSettings #btnSettings:hover {
+.areaNav:hover {
+  cursor: pointer;
+  color: #999;
+}
+.areaNav.active {
+  z-index: 9;
+  color: #999;
+}
+#btnSwitchNavbar {
+  padding-left: 10px;
+  cursor: pointer;
+  line-height: 36px;
+  color: #ccc;
+}
+#btnSwitchNavbar:hover {
   color: #999;
 }
 
+/* Modal */
 .modal {
   display: none;
   grid-column: 1;
   grid-row: 2 / span 3;
   background-color: #fff;
-  width: 100%;
-  /* height: calc(100% - 40px); */
-  padding-left: 10px;
+  /* width: 100%; */
+  /* height: calc(100% - 20px); */
+  padding: 10px;
   z-index: 1;
   overflow: hidden auto;
 }
