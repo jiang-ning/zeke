@@ -437,8 +437,8 @@ li.edit .noteSub {
   border-radius: 20px;
   color: #ccc;
   cursor: pointer;
-  width: 20px;
-  height: 20px;
+  width: 21px; /*for fucking windows only*/
+  height: 21px; /*for fucking windows only*/
   text-align: center;
   vertical-align: middle;
   line-height: 24px;
