@@ -824,8 +824,21 @@ request.onsuccess = async function(event) {
   }
 
   function filterNote() {
-    const allNotes = document.querySelectorAll('#panelNote li');
     let filterText = document.getElementById('txtNew').value;
+    let queryToHiding = '';
+
+    const filterCompleted = document.getElementById('filterCompleted');
+    const filterIncompleted = document.getElementById('filterIncompleted');
+
+    if(filterCompleted.className === 'active') {
+      queryToHiding = '.completed';
+    }
+    if(filterIncompleted.className === 'active') {
+      queryToHiding = ':not(.completed)';
+    }
+
+    const allNotes = document.querySelectorAll('#panelNote li' + queryToHiding);
+
     allNotes.forEach(note => {
       let noteContent = note.querySelector('input.noteContent').value;
       if(!noteContent.includes(filterText)) {
@@ -836,19 +849,54 @@ request.onsuccess = async function(event) {
     });
   }
 
+  function filterCompletion(filterButtonId) {
+    const filterButton = document.getElementById(filterButtonId);
+    const hiddenNotes = document.querySelectorAll('#panelNote li.hide');
+    let queryToHiding = '.completed';
+
+    if(filterButtonId === 'filterCompleted') {
+      queryToHiding = ':not(.completed)';
+    }
+
+    hiddenNotes.forEach(note => {
+      note.classList.remove('hide');
+    });
+
+    if(filterButton.className === 'active') {
+      filterButton.className = '';
+    } else {
+      const hiddenNotes = document.querySelectorAll('#panelNote li' + queryToHiding);
+      hiddenNotes.forEach(note => {
+        note.classList.add('hide');
+      });
+      filterButton.className = 'active';
+    }
+
+    filterNote();
+  }
+
   document.getElementById('btnFilter').addEventListener('click', (e) => {
     const btnFilter = document.getElementById('btnFilter');
     const btnNew = document.getElementById('btnNew');
     const txtNew = document.getElementById('txtNew');
+    const filterbar = document.getElementById('filterbar');
+    const filterCompleted = document.getElementById('filterCompleted');
+    const filterIncompleted = document.getElementById('filterIncompleted');
+
+    filterCompleted.className = '';
+    filterIncompleted.className = '';
+
     if(btnFilter.className === 'active') {
       const allHiddenNotes = document.querySelectorAll('#panelNote li.hide');
       allHiddenNotes.forEach(note => {
         note.classList.remove('hide');
       });
+      filterbar.className = '';
       btnFilter.className = '';
       btnNew.className = '';
       txtNew.value = '';
     } else {
+      filterbar.className = 'active';
       btnFilter.className = 'active';
       btnNew.className = 'hide';
       txtNew.focus();
@@ -856,6 +904,16 @@ request.onsuccess = async function(event) {
         filterNote();
       }
     }
+  });
+  document.getElementById('filterIncompleted').addEventListener('click', () => {
+    const filterCompleted = document.getElementById('filterCompleted');
+    filterCompleted.className = '';
+    filterCompletion('filterIncompleted');
+  });
+  document.getElementById('filterCompleted').addEventListener('click', () => {
+    const filterIncompleted = document.getElementById('filterIncompleted');
+    filterIncompleted.className = '';
+    filterCompletion('filterCompleted');
   });
   document.getElementById('btnNew').addEventListener('click', () => {
     const noteContent = document.getElementById('txtNew').value.trim();
@@ -886,17 +944,19 @@ request.onsuccess = async function(event) {
   });
   document.getElementById('txtNew').addEventListener('focus', (e) => {
     const btnFilter = document.getElementById('btnFilter');
+    const areaNew = document.getElementById('areaNew');
     if(btnFilter.className !== 'active' && btnFilter.className !== 'hide') {
+      areaNew.style.gridTemplateColumns = '0 1fr 30px';
       btnFilter.style.display = 'none';
-      e.target.style.width = 'calc(100% - 33.5px)';
     }
   });
   document.getElementById('txtNew').addEventListener('focusout', (e) => {
     const btnFilter = document.getElementById('btnFilter');
+    const areaNew = document.getElementById('areaNew');
     if(btnFilter.className !== 'active') {
       btnFilter.className = '';
+      areaNew.style.gridTemplateColumns = 'auto 1fr 30px';
       btnFilter.style = '';
-      e.target.style = '';
     }
   });
   document.getElementById('btnNewList').addEventListener('click', () => {

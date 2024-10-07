@@ -432,27 +432,31 @@ li.edit .noteSub {
 #txtNew {
   background: transparent;
   border: none;
-  width: calc(100% - 60px);
+  width: 100%;
   height: 39px;
-  padding-left: 6px;
+  padding-left: 10px;
   outline: none;
 }
 #btnNew,
 #btnFilter,
-#btnNewList {
+#btnNewList,
+#filterCompleted,
+#filterIncompleted {
   display: inline-block;
   border: 1px solid transparent;
   border-radius: 20px;
   color: #ccc;
   cursor: pointer;
-  width: 20px;
-  height: 20px;
+  width: 21px; /*for fucking windows only*/
+  height: 21px; /*for fucking windows only*/
   text-align: center;
   vertical-align: middle;
   line-height: 24px;
 }
 #btnNew:hover,
-#btnFilter:hover {
+#btnFilter:hover,
+#filterCompleted:hover,
+#filterIncompleted:hover {
   color: #ccc;
   border-color: #ccc;
 }
@@ -460,7 +464,9 @@ li.edit .noteSub {
   background-color: #dddddd;
   color: #666;
 }
-#btnFilter.active {
+#btnFilter.active,
+#filterCompleted.active,
+#filterIncompleted.active {
   background-color: #ddd;
   color: #fff;
 }
@@ -469,12 +475,42 @@ li.edit .noteSub {
 #btnNewList.hide {
   display: none;
 }
+#filterbar {
+  display: grid;
+  height: 26px;
+  margin: 6px 0 6px -4px;
+  grid-template-columns: auto 0 0;
+  border: 1px solid transparent;
+  border-radius: 20px;
+  align-items: center;
+  align-content: center;
+  padding: 0 2px;
+}
+#filterbar.active {
+  grid-template-columns: auto auto auto;
+  border-color: #eee;
+}
+#filterbar.active #filterIncompleted,
+#filterbar.active #filterCompleted {
+  display: inline-block;
+}
+#filterIncompleted {
+  display: none;
+  margin: 0 2px;
+}
+#filterCompleted {
+  display: none;
+}
 
 #areaNew {
   grid-column: 1;
   grid-row: 2;
   border-bottom: 1px solid #eee;
   padding: 0 10px;
+  display: grid;
+  grid-template-columns: auto 1fr 30px;
+  align-items: center;
+  justify-items: center;
 }
 #areaPinNotes {
   grid-column: 1;

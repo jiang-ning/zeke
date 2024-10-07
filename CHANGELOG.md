@@ -1,7 +1,8 @@
 # Change Log
 
 ### v1.10.2
-##### 2024-10-01
+##### 2024-10-06
+- Improvement: Filter by incompleted / completed tasks
 - Bug Fix: Task missing caused by sorting issue
 
 ### v1.10.1
