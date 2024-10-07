@@ -1,7 +1,7 @@
 {
   "name": "microstone",
   "productName": "microstone",
-  "version": "1.10.1",
+  "version": "1.10.2",
   "description": "Effortless Note-Taking: Simplify, Secure, Succeed!",
   "main": "src/index.js",
   "scripts": {

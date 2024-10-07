@@ -33,6 +33,8 @@
   color: #ffffff99;
 }
 [class^="theme"] #btnFilter.active,
+[class^="theme"] #filterCompleted.active,
+[class^="theme"] #filterIncompleted.active,
 [class^="theme"] #txtNew:focus + #btnNew:hover,
 [class^="theme"] #areaSettings #btnSettings:hover,
 [class^="theme"] #areaSettings.active #btnSettings {
@@ -56,7 +58,8 @@
 }
 .theme-dark #panelList .sortable-chosen,
 .theme-dark #panelNote .sortable-chosen,
-.theme-dark #listAdd #listAddName.active {
+.theme-dark #listAdd #listAddName.active,
+.theme-dark #filterbar.active {
   background-color: #00000099;
 }
 .theme-dark #panelNote,
@@ -89,7 +92,9 @@
 .theme-dark #btnNew:hover,
 .theme-dark #btnFilter:hover,
 .theme-dark #txtNew:focus + #btnNew:hover,
-.theme-dark #btnFilter.active {
+.theme-dark #btnFilter.active,
+.theme-dark #filterCompleted.active,
+.theme-dark #filterIncompleted.active {
   color: #000000ee;
 }
 .theme-dark #txtNew,
@@ -133,6 +138,7 @@
   border-color: #ffffff66;
 }
 .theme-dark #titlebar,
+.theme-dark #filterbar.active,
 .theme-dark input[type='checkbox'],
 .theme-dark #areaListNotes li.edit > input[type='text'], 
 .theme-dark #areaPinNotes li.edit > input[type='text'] {
@@ -176,7 +182,12 @@
 .theme-blue #areaPinNotes .notePin {
   background-color: var(--blue-33);
 }
+.theme-blue #filterbar.active {
+  background-color: var(--blue-66);
+}
 .theme-blue #btnFilter.active,
+.theme-blue #filterCompleted.active,
+.theme-blue #filterIncompleted.active,
 .theme-blue #txtNew:focus + #btnNew:hover {
   background-color: var(--blue-stroke-66);
 }
@@ -208,6 +219,9 @@
 }
 .theme-blue #btnNew:hover,
 .theme-blue #btnFilter:hover,
+.theme-blue #filterbar.active,
+.theme-blue #filterCompleted:hover, 
+.theme-blue #filterIncompleted:hover,
 .theme-blue #txtNew:focus + #btnNew,
 .theme-blue #areaListLists input.active,
 .theme-blue #areaSettings.active,
@@ -226,6 +240,8 @@
   color: var(--blue-ee);
 }
 .theme-blue #btnFilter:hover,
+.theme-blue #filterCompleted:hover, 
+.theme-blue #filterIncompleted:hover,
 .theme-blue #areaNew:hover #btnNew,
 .theme-blue #txtNew:focus + #btnNew,
 .theme-blue #txtNew:focus + #btnNew:hover,
@@ -238,6 +254,8 @@
 .theme-blue #areaListNotes li span.noteMoment {
   color: var(--blue-stroke);
 }
+.theme-blue #filterCompleted, 
+.theme-blue #filterIncompleted,
 .theme-blue #areaPinNotes li.completed input[type='text'],
 .theme-blue #areaListNotes li.completed input[type='text'] {
   color: var(--blue-stroke-66);
@@ -263,7 +281,12 @@
 .theme-red #areaPinNotes .notePin {
   background-color: var(--red-33);
 }
+.theme-red #filterbar.active {
+  background-color: var(--red-66);
+}
 .theme-red #btnFilter.active,
+.theme-red #filterCompleted.active,
+.theme-red #filterIncompleted.active,
 .theme-red #txtNew:focus + #btnNew:hover {
   background-color: var(--red-stroke-66);
 }
@@ -296,6 +319,9 @@
 }
 .theme-red #btnNew:hover,
 .theme-red #btnFilter:hover,
+.theme-red #filterbar.active,
+.theme-red #filterCompleted:hover, 
+.theme-red #filterIncompleted:hover,
 .theme-red #txtNew:focus + #btnNew,
 .theme-red #areaListLists input.active,
 .theme-red #areaSettings.active,
@@ -314,6 +340,8 @@
   color: var(--red-ee);
 }
 .theme-red #btnFilter:hover,
+.theme-red #filterCompleted:hover, 
+.theme-red #filterIncompleted:hover,
 .theme-red #areaNew:hover #btnNew,
 .theme-red #txtNew:focus + #btnNew,
 .theme-red #txtNew:focus + #btnNew:hover,
@@ -325,6 +353,8 @@
 .theme-red #areaListNotes li span.noteMoment {
   color: var(--red-stroke);
 }
+.theme-red #filterCompleted, 
+.theme-red #filterIncompleted,
 .theme-red #areaPinNotes li.completed input[type='text'],
 .theme-red #areaListNotes li.completed input[type='text'] {
   color: var(--red-stroke-66);
@@ -350,7 +380,12 @@
 .theme-orange #areaPinNotes .notePin {
   background-color: var(--orange-33);
 }
+.theme-orange #filterbar.active {
+  background-color: var(--orange-66);
+}
 .theme-orange #btnFilter.active,
+.theme-orange #filterCompleted.active,
+.theme-orange #filterIncompleted.active,
 .theme-orange #txtNew:focus + #btnNew:hover {
   background-color: var(--orange-stroke-66);
 }
@@ -383,6 +418,9 @@
 }
 .theme-orange #btnNew:hover,
 .theme-orange #btnFilter:hover,
+.theme-orange #filterbar.active,
+.theme-orange #filterCompleted:hover, 
+.theme-orange #filterIncompleted:hover,
 .theme-orange #txtNew:focus + #btnNew,
 .theme-orange #areaListLists input.active,
 .theme-orange #areaSettings.active,
@@ -401,6 +439,8 @@
   color: var(--orange-ee);
 }
 .theme-orange #btnFilter:hover,
+.theme-orange #filterCompleted:hover, 
+.theme-orange #filterIncompleted:hover,
 .theme-orange #areaNew:hover #btnNew,
 .theme-orange #txtNew:focus + #btnNew,
 .theme-orange #txtNew:focus + #btnNew:hover,
@@ -412,6 +452,8 @@
 .theme-orange #areaListNotes li span.noteMoment {
   color: var(--orange-stroke);
 }
+.theme-orange #filterCompleted, 
+.theme-orange #filterIncompleted,
 .theme-orange #areaPinNotes li.completed input[type='text'],
 .theme-orange #areaListNotes li.completed input[type='text'] {
   color: var(--orange-stroke-66);
@@ -435,7 +477,12 @@
 .theme-amber #areaPinNotes .notePin {
   background-color: var(--amber-33);
 }
+.theme-amber #filterbar.active {
+  background-color: var(--amber-66);
+}
 .theme-amber #btnFilter.active,
+.theme-amber #filterCompleted.active,
+.theme-amber #filterIncompleted.active,
 .theme-amber #txtNew:focus + #btnNew:hover {
   background-color: var(--amber-stroke-66);
 }
@@ -472,6 +519,9 @@
 }
 .theme-amber #btnNew:hover,
 .theme-amber #btnFilter:hover,
+.theme-amber #filterbar.active,
+.theme-amber #filterCompleted:hover, 
+.theme-amber #filterIncompleted:hover,
 .theme-amber #txtNew:focus + #btnNew,
 .theme-amber #areaListLists input.active,
 .theme-amber #areaSettings.active,
@@ -490,6 +540,8 @@
   color: var(--amber-ee);
 }
 .theme-amber #btnFilter:hover,
+.theme-amber #filterCompleted:hover, 
+.theme-amber #filterIncompleted:hover,
 .theme-amber #areaNew:hover #btnNew,
 .theme-amber #txtNew:focus + #btnNew,
 .theme-amber #txtNew:focus + #btnNew:hover,
@@ -501,6 +553,8 @@
 .theme-amber #areaListNotes li span.noteMoment {
   color: var(--amber-stroke);
 }
+.theme-amber #filterCompleted, 
+.theme-amber #filterIncompleted,
 .theme-amber #areaPinNotes li.completed input[type='text'],
 .theme-amber #areaListNotes li.completed input[type='text'] {
   color: var(--amber-stroke-66);
@@ -526,7 +580,12 @@
 .theme-green #areaPinNotes .notePin {
   background-color: var(--green-33);
 }
+.theme-green #filterbar.active {
+  background-color: var(--green-66);
+}
 .theme-green #btnFilter.active,
+.theme-green #filterCompleted.active,
+.theme-green #filterIncompleted.active,
 .theme-green #txtNew:focus + #btnNew:hover {
   background-color: var(--green-stroke-66);
 }
@@ -559,6 +618,9 @@
 }
 .theme-green #btnNew:hover,
 .theme-green #btnFilter:hover,
+.theme-green #filterbar.active,
+.theme-green #filterCompleted:hover, 
+.theme-green #filterIncompleted:hover,
 .theme-green #txtNew:focus + #btnNew,
 .theme-green #areaListLists input.active,
 .theme-green #areaSettings.active,
@@ -577,6 +639,8 @@
   color: var(--green-ee);
 }
 .theme-green #btnFilter:hover,
+.theme-green #filterCompleted:hover, 
+.theme-green #filterIncompleted:hover,
 .theme-green #areaNew:hover #btnNew,
 .theme-green #txtNew:focus + #btnNew,
 .theme-green #txtNew:focus + #btnNew:hover,
@@ -588,6 +652,8 @@
 .theme-green #areaListNotes li span.noteMoment {
   color: var(--green-stroke);
 }
+.theme-green #filterCompleted, 
+.theme-green #filterIncompleted,
 .theme-green #areaPinNotes li.completed input[type='text'],
 .theme-green #areaListNotes li.completed input[type='text'] {
   color: var(--green-stroke-66);
@@ -613,7 +679,12 @@
 .theme-teal #areaPinNotes .notePin {
   background-color: var(--teal-33);
 }
+.theme-teal #filterbar.active {
+  background-color: var(--teal-66);
+}
 .theme-teal #btnFilter.active,
+.theme-teal #filterCompleted.active,
+.theme-teal #filterIncompleted.active,
 .theme-teal #txtNew:focus + #btnNew:hover {
   background-color: var(--teal-stroke-66);
 }
@@ -646,6 +717,9 @@
 }
 .theme-teal #btnNew:hover,
 .theme-teal #btnFilter:hover,
+.theme-teal #filterbar.active,
+.theme-teal #filterCompleted:hover, 
+.theme-teal #filterIncompleted:hover,
 .theme-teal #txtNew:focus + #btnNew,
 .theme-teal #areaListLists input.active,
 .theme-teal #areaSettings.active,
@@ -664,6 +738,8 @@
   color: var(--teal-ee);
 }
 .theme-teal #btnFilter:hover,
+.theme-teal #filterCompleted:hover, 
+.theme-teal #filterIncompleted:hover,
 .theme-teal #areaNew:hover #btnNew,
 .theme-teal #txtNew:focus + #btnNew,
 .theme-teal #txtNew:focus + #btnNew:hover,
@@ -675,6 +751,8 @@
 .theme-teal #areaListNotes li span.noteMoment {
   color: var(--teal-stroke);
 }
+.theme-teal #filterCompleted, 
+.theme-teal #filterIncompleted,
 .theme-teal #areaPinNotes li.completed input[type='text'],
 .theme-teal #areaListNotes li.completed input[type='text'] {
   color: var(--teal-stroke-66);
@@ -700,7 +778,12 @@
 .theme-violet #areaPinNotes .notePin {
   background-color: var(--violet-33);
 }
+.theme-violet #filterbar.active {
+  background-color: var(--violet-66);
+}
 .theme-violet #btnFilter.active,
+.theme-violet #filterCompleted.active,
+.theme-violet #filterIncompleted.active,
 .theme-violet #txtNew:focus + #btnNew:hover {
   background-color: var(--violet-stroke-66);
 }
@@ -733,6 +816,9 @@
 }
 .theme-violet #btnNew:hover,
 .theme-violet #btnFilter:hover,
+.theme-violet #filterbar.active,
+.theme-violet #filterCompleted:hover, 
+.theme-violet #filterIncompleted:hover,
 .theme-violet #txtNew:focus + #btnNew,
 .theme-violet #areaListLists input.active,
 .theme-violet #areaSettings.active,
@@ -751,6 +837,8 @@
   color: var(--violet-ee);
 }
 .theme-violet #btnFilter:hover,
+.theme-violet #filterCompleted:hover, 
+.theme-violet #filterIncompleted:hover,
 .theme-violet #areaNew:hover #btnNew,
 .theme-violet #txtNew:focus + #btnNew,
 .theme-violet #txtNew:focus + #btnNew:hover,
@@ -762,6 +850,8 @@
 .theme-violet #areaListNotes li span.noteMoment {
   color: var(--violet-stroke);
 }
+.theme-violet #filterCompleted, 
+.theme-violet #filterIncompleted,
 .theme-violet #areaPinNotes li.completed input[type='text'],
 .theme-violet #areaListNotes li.completed input[type='text'] {
   color: var(--violet-stroke-66);
@@ -787,7 +877,12 @@
 .theme-purple #areaPinNotes .notePin {
   background-color: var(--purple-33);
 }
+.theme-purple #filterbar.active {
+  background-color: var(--purple-66);
+}
 .theme-purple #btnFilter.active,
+.theme-purple #filterCompleted.active,
+.theme-purple #filterIncompleted.active,
 .theme-purple #txtNew:focus + #btnNew:hover {
   background-color: var(--purple-stroke-66);
 }
@@ -820,6 +915,9 @@
 }
 .theme-purple #btnNew:hover,
 .theme-purple #btnFilter:hover,
+.theme-purple #filterbar.active,
+.theme-purple #filterCompleted:hover, 
+.theme-purple #filterIncompleted:hover,
 .theme-purple #txtNew:focus + #btnNew,
 .theme-purple #areaListLists input.active,
 .theme-purple #areaSettings.active,
@@ -838,6 +936,8 @@
   color: var(--purple-ee);
 }
 .theme-purple #btnFilter:hover,
+.theme-purple #filterCompleted:hover, 
+.theme-purple #filterIncompleted:hover,
 .theme-purple #areaNew:hover #btnNew,
 .theme-purple #txtNew:focus + #btnNew,
 .theme-purple #txtNew:focus + #btnNew:hover,
@@ -849,6 +949,8 @@
 .theme-purple #areaListNotes li span.noteMoment {
   color: var(--purple-stroke);
 }
+.theme-purple #filterCompleted, 
+.theme-purple #filterIncompleted,
 .theme-purple #areaPinNotes li.completed input[type='text'],
 .theme-purple #areaListNotes li.completed input[type='text'] {
   color: var(--purple-stroke-66);
@@ -874,7 +976,12 @@
 .theme-pink #areaPinNotes .notePin {
   background-color: var(--pink-33);
 }
+.theme-pink #filterbar.active {
+  background-color: var(--pink-66);
+}
 .theme-pink #btnFilter.active,
+.theme-pink #filterCompleted.active,
+.theme-pink #filterIncompleted.active,
 .theme-pink #txtNew:focus + #btnNew:hover {
   background-color: var(--pink-stroke-66);
 }
@@ -907,6 +1014,9 @@
 }
 .theme-pink #btnNew:hover,
 .theme-pink #btnFilter:hover,
+.theme-pink #filterbar.active,
+.theme-pink #filterCompleted:hover, 
+.theme-pink #filterIncompleted:hover,
 .theme-pink #txtNew:focus + #btnNew,
 .theme-pink #areaListLists input.active,
 .theme-pink #areaSettings.active,
@@ -925,6 +1035,8 @@
   color: var(--pink-ee);
 }
 .theme-pink #btnFilter:hover,
+.theme-pink #filterCompleted:hover, 
+.theme-pink #filterIncompleted:hover,
 .theme-pink #areaNew:hover #btnNew,
 .theme-pink #txtNew:focus + #btnNew,
 .theme-pink #txtNew:focus + #btnNew:hover,
@@ -936,6 +1048,8 @@
 .theme-pink #areaListNotes li span.noteMoment {
   color: var(--pink-stroke);
 }
+.theme-pink #filterCompleted, 
+.theme-pink #filterIncompleted,
 .theme-pink #areaPinNotes li.completed input[type='text'],
 .theme-pink #areaListNotes li.completed input[type='text'] {
   color: var(--pink-stroke-66);

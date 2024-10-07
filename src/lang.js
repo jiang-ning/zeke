@@ -30,7 +30,9 @@ const Languages = {
         "__week__" : "أسابيع",
         "__month__" : "أشهر",
         "__year__" : "سنوات",
-        "__filter__" : "راووق"
+        "__filter__" : "راووق",
+        "__show_incomplete_tasks_only__" : "إظهار المهام غير المكتملة فقط",
+        "__show_completed_tasks_only__" : "إظهار المهام المكتملة فقط"
     },
     "de" : {
         "name" : "Deutsch",
@@ -63,7 +65,9 @@ const Languages = {
         "__week__" : "Wochen vor",
         "__month__" : "Monate vor",
         "__year__" : "Jahr vor",
-        "__filter__" : "Filter"
+        "__filter__" : "Filter",
+        "__show_incomplete_tasks_only__" : "Nur unerledigte Aufgaben anzeigen",
+        "__show_completed_tasks_only__" : "Nur erledigte Aufgaben anzeigen"
     },
     "en" : {
         "name" : "English",
@@ -96,7 +100,9 @@ const Languages = {
         "__week__" : "week",
         "__month__" : "month",
         "__year__" : "year",
-        "__filter__" : "Filter"
+        "__filter__" : "Filter",
+        "__show_incomplete_tasks_only__" : "Show incomplete tasks only",
+        "__show_completed_tasks_only__" : "Show completed tasks only"
     },
     "es" : {
         "name" : "Español",
@@ -129,7 +135,9 @@ const Languages = {
         "__week__" : "semanas",
         "__month__" : "meses",
         "__year__" : "año",
-        "__filter__" : "Filtro"
+        "__filter__" : "Filtro",
+        "__show_incomplete_tasks_only__" : "Mostrar solo tareas incompletas",
+        "__show_completed_tasks_only__" : "Mostrar solo tareas completadas"
     },
     "fr" : {
         "name" : "Française",
@@ -162,7 +170,9 @@ const Languages = {
         "__week__" : "semaines",
         "__month__" : "mois",
         "__year__" : "an",
-        "__filter__" : "Filtre"
+        "__filter__" : "Filtre",
+        "__show_incomplete_tasks_only__" : "Afficher uniquement les tâches incomplètes",
+        "__show_completed_tasks_only__" : "Afficher uniquement les tâches terminées"
     },
     "in" : {
         "name" : "हिंदी",
@@ -195,7 +205,9 @@ const Languages = {
         "__week__" : "कार्य-सप्‍ताह",
         "__month__" : "महीना",
         "__year__" : "सालों",
-        "__filter__" : "छानना"
+        "__filter__" : "छानना",
+        "__show_incomplete_tasks_only__" : "केवल अधूरे कार्य दिखाएँ",
+        "__show_completed_tasks_only__" : "केवल पूर्ण किए गए कार्य दिखाएँ"
     },
     "it" : {
         "name" : "Italiana",
@@ -228,7 +240,9 @@ const Languages = {
         "__week__" : "settimana",
         "__month__" : "mese",
         "__year__" : "anno",
-        "__filter__" : "Filtro"
+        "__filter__" : "Filtro",
+        "__show_incomplete_tasks_only__" : "Mostra solo le attività incomplete",
+        "__show_completed_tasks_only__" : "Mostra solo le attività completate"
     },
     "jp" : {
         "name" : "日本語",
@@ -261,7 +275,9 @@ const Languages = {
         "__week__" : "週間前",
         "__month__" : "ヶ月前",
         "__year__" : "年前",
-        "__filter__" : "フィルター"
+        "__filter__" : "フィルター",
+        "__show_incomplete_tasks_only__" : "未完了のタスクのみを表示",
+        "__show_completed_tasks_only__" : "完了したタスクのみを表示"
     },
     "kr" : {
         "name" : "한국어",
@@ -294,7 +310,9 @@ const Languages = {
         "__week__" : "주",
         "__month__" : "달",
         "__year__" : "년",
-        "__filter__" : "필터"
+        "__filter__" : "필터",
+        "__show_incomplete_tasks_only__" : "완료되지 않은 작업만 표시",
+        "__show_completed_tasks_only__" : "완료된 작업만 표시"
     },
     "pk" : {
         "name" : "اردو",
@@ -327,7 +345,9 @@ const Languages = {
         "__week__" : "ہفتہ",
         "__month__" : "مہینہ",
         "__year__" : "سال",
-        "__filter__" : "فلٹر"
+        "__filter__" : "فلٹر",
+        "__show_incomplete_tasks_only__" : "صرف نامکمل کام دکھائیں",
+        "__show_completed_tasks_only__" : "صرف مکمل شدہ کام دکھائیں"
     },
     "pt" : {
         "name" : "Português",
@@ -360,7 +380,9 @@ const Languages = {
         "__week__" : "semanas",
         "__month__" : "meses",
         "__year__" : "ano",
-        "__filter__" : "Filtrar"
+        "__filter__" : "Filtrar",
+        "__show_incomplete_tasks_only__" : "Mostrar apenas tarefas incompletas",
+        "__show_completed_tasks_only__" : "Mostrar apenas tarefas concluídas"
     },
     "ru" : {
         "name" : "Русский",
@@ -393,7 +415,9 @@ const Languages = {
         "__week__" : "недели назад",
         "__month__" : "месяц назад",
         "__year__" : "год назад",
-        "__filter__" : "Фильтр"
+        "__filter__" : "Фильтр",
+        "__show_incomplete_tasks_only__" : "Показывать только незавершенные задачи",
+        "__show_completed_tasks_only__" : "Показывать только выполненные задачи"
     },
     "zhCN" : {
         "name" : "简体中文",
@@ -426,7 +450,9 @@ const Languages = {
         "__week__" : "周前",
         "__month__" : "月前",
         "__year__" : "年前",
-        "__filter__" : "筛选"
+        "__filter__" : "筛选",
+        "__show_incomplete_tasks_only__" : "仅显示未完成的任务",
+        "__show_completed_tasks_only__" : "仅显示已完成的任务"
     },
     "zhTW" : {
         "name" : "繁體中文",
@@ -459,6 +485,8 @@ const Languages = {
         "__week__" : "周前",
         "__month__" : "月前",
         "__year__" : "年前",
-        "__filter__" : "篩選"
+        "__filter__" : "篩選",
+        "__show_incomplete_tasks_only__" : "僅顯示未完成的任務",
+        "__show_completed_tasks_only__" : "僅顯示已完成的任務"
     }
 }
