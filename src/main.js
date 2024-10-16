@@ -2,7 +2,12 @@
 
 // Open the IndexedDB database
 const request = indexedDB.open('neonote', 1);
-var Zeke = {orderedNoteIds:{}, orderedPinNoteIds:{}, notesCompleted:{}, notesIncompleted:{}};
+var Zeke = {
+  orderedNoteIds:{}, orderedPinNoteIds:{}, 
+  notesCompleted:{}, notesIncompleted:{}, 
+  notes:{}, lists:{}
+};
+var Zeke_ChartTimeline;
 
 // Create object store and define its structure
 request.onupgradeneeded = function(event) {
@@ -59,6 +64,8 @@ request.onsuccess = async function(event) {
     request.onsuccess = function(event) {
       const allNotes = event.target.result;
       let notes = [];
+
+      Zeke.notes = allNotes;
 
       if(listId) {
         notes = allNotes.filter(note => note.list === parseInt(listId));
@@ -229,6 +236,7 @@ request.onsuccess = async function(event) {
       const lists = event.target.result;
       const brand = document.getElementById('brand');
       console.log('Lists:', lists);
+      Zeke.lists = lists;
       
       if(lists == undefined || lists.length == 0) {
         addList({name:'~'});
@@ -1091,6 +1099,7 @@ function initModalSettings() {
     let isNavOpened = currentGrid[0] == '50px';
     
     arrayRememberedGrid[0] = isNavOpened ? '0px' : '50px';
+    document.querySelector('.switcherIcon').classList.toggle('open');
     
     let newGrid = arrayRememberedGrid.join(' ');
     panelsContainer.style.gridTemplateColumns = newGrid;
@@ -1155,6 +1164,22 @@ function initModalReport() {
   const panelNote = document.getElementById('panelNote');
   const panelsContainer = document.getElementById('panelsContainer');
 
+  const btnDateRangeByYear = document.getElementById('dateRangeByYear');
+  const btnDateRangeByMonth = document.getElementById('dateRangeByMonth');
+  const btnDateRangeByWeek = document.getElementById('dateRangeByWeek');
+
+  const btnPrevRange = document.getElementById('prevRange');
+  const btnNextRange = document.getElementById('nextRange');
+  const txtCurrentRange = document.getElementById('currentRange');
+
+  const btnDataCalculateByActivity = document.getElementById('dataCalculateByActivity');
+  const btnDataCalculateByQuantity = document.getElementById('dataCalculateByQuantity');
+
+  btnDateRangeByYear.dataset['range'] = moment().year(); // 2024
+  btnDateRangeByMonth.dataset['range'] = moment().month(); // 0-11
+  btnDateRangeByWeek.dataset['range'] = moment().week(); // 0-53+
+  txtCurrentRange.dataset['range'] = moment().week(); // set current week as default
+
   btnReport.addEventListener('click', () => {
     const activedList = document.querySelector('#areaListLists input.active');
     
@@ -1167,7 +1192,7 @@ function initModalReport() {
     modalSettings.classList.remove('open');
 
     if(modalReport.classList.contains('open')) {
-      // panelsContainer.style.gridTemplateColumns = '50px 0 0 1fr';
+      panelsContainer.style.gridTemplateColumns = '50px 0 0 1fr';
       btnReport.classList.add('active');
     } else {
       if(!modalReport.classList.contains('open')) {
@@ -1178,8 +1203,84 @@ function initModalReport() {
       activedList.click();
     }
 
-    generateTimelineChart();
+    updateTimelineChart(
+      'Week',
+      txtCurrentRange.dataset['range'],
+      document.querySelector('#dataCalculateBy .filterButton.active').dataset.id
+    );
+    // generateBarChart();
   });
+
+  btnDateRangeByYear.addEventListener('click', () => {
+    document.querySelector('#dateRangeBy .filterButton.active').classList.remove('active');
+    btnDateRangeByYear.classList.add('active');
+    txtCurrentRange.dataset['range'] = btnDateRangeByYear.dataset['range'];
+    updateTimelineChart(
+      'Year',
+      btnDateRangeByYear.dataset['range'],
+      document.querySelector('#dataCalculateBy .filterButton.active').dataset.id
+    );
+  });
+  btnDateRangeByMonth.addEventListener('click', () => {
+    document.querySelector('#dateRangeBy .filterButton.active').classList.remove('active');
+    btnDateRangeByMonth.classList.add('active');
+    txtCurrentRange.dataset['range'] = btnDateRangeByMonth.dataset['range'];
+    updateTimelineChart(
+      'Month',
+      btnDateRangeByMonth.dataset['range'],
+      document.querySelector('#dataCalculateBy .filterButton.active').dataset.id
+    );
+  });
+  btnDateRangeByWeek.addEventListener('click', () => {
+    document.querySelector('#dateRangeBy .filterButton.active').classList.remove('active');
+    btnDateRangeByWeek.classList.add('active');
+    txtCurrentRange.dataset['range'] = btnDateRangeByWeek.dataset['range'];
+    updateTimelineChart(
+      'Week',
+      btnDateRangeByWeek.dataset['range'],
+      document.querySelector('#dataCalculateBy .filterButton.active').dataset.id
+    );
+  });
+
+  btnPrevRange.addEventListener('click', () => {
+    let currentRange = parseInt(txtCurrentRange.dataset['range']) - 1;
+    updateTimelineChart(
+      document.querySelector('#dateRangeBy .filterButton.active').dataset.id, 
+      currentRange,
+      document.querySelector('#dataCalculateBy .filterButton.active').dataset.id
+    );
+    txtCurrentRange.dataset['range'] = currentRange;
+  });
+  btnNextRange.addEventListener('click', () => {
+    let currentRange = parseInt(txtCurrentRange.dataset['range']) + 1;
+    updateTimelineChart(
+      document.querySelector('#dateRangeBy .filterButton.active').dataset.id, 
+      currentRange,
+      document.querySelector('#dataCalculateBy .filterButton.active').dataset.id
+    );
+    txtCurrentRange.dataset['range'] = currentRange;
+  });
+
+  btnDataCalculateByActivity.addEventListener('click', () => {
+    document.querySelector('#dataCalculateBy .filterButton.active').classList.remove('active');
+    btnDataCalculateByActivity.classList.add('active');
+    updateTimelineChart(
+      document.querySelector('#dateRangeBy .filterButton.active').dataset.id, 
+      document.querySelector('#dateRangeBy .filterButton.active').dataset['range'],
+      btnDataCalculateByActivity.dataset.id
+    );
+  });
+  btnDataCalculateByQuantity.addEventListener('click', () => {
+    document.querySelector('#dataCalculateBy .filterButton.active').classList.remove('active');
+    btnDataCalculateByQuantity.classList.add('active');
+    updateTimelineChart(
+      document.querySelector('#dateRangeBy .filterButton.active').dataset.id, 
+      document.querySelector('#dateRangeBy .filterButton.active').dataset['range'],
+      btnDataCalculateByQuantity.dataset.id
+    );
+  });
+
+  initTimelineChart();
 }
 
 function initModalTask() {
@@ -1333,43 +1434,177 @@ function translate(wordsCode) {
   return Languages[currentLanguage][wordsCode] || false;
 }
 
-function generateTimelineChart() {
+function initTimelineChart() {
   const ctx = document.getElementById('chart_timeline');
-  
-  let labels = data_incompleted = data_completed = [];
+  const data = {
+    labels: [],
+    datasets: [
+      {
+        label: 'Completed',
+        data: [],
+        backgroundColor: '#90caf933',
+        borderColor: '#90caf9',
+        tension: 0,
+        fill: true
+      },
+      {
+        label: 'Incompleted',
+        data: [],
+        backgroundColor: '#9fa8da33',
+        borderColor: '#9fa8da',
+        tension: 0,
+        fill: true
+      }
+    ]
+  };
 
-  for(let i = 0; i < 7; i ++) {
-    labels.push(moment().day(i).format('MMM D'));
-    let compareDay = moment().day(i).format('YYYYMMDD');
+  Zeke_ChartTimeline = new Chart(ctx, {
+    type: 'line',
+    data: data,
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: {
+            stepSize: 1
+          }
+        }
+      }
+    }
+  });
+
+}
+
+function updateTimelineChart(filterBy, dateRange, type) {
+  let labels = [];
+  let labels_standard = [];
+  let data_incompleted = [];
+  let data_completed = [];
+  let countDays = 0;
+  let tableBody = '';
+  let currentRangeText = '';
+
+  let compareDay = '';
+  let compareDatetime = 0;
+
+  let countIncomplete = [];
+  let countComplete = [];
+
+  if(filterBy === 'Week') {
+    countDays = 7;
+    currentRangeText = 'W'+ moment().week(dateRange).format('W');
+  }
+  if(filterBy === 'Month') {
+    countDays = moment().month(dateRange).daysInMonth();
+    currentRangeText = moment().month(dateRange).format('MMM');
+  }
+  if(filterBy === 'Year') {
+    countDays = 12;
+    currentRangeText = moment().year(dateRange).format('YYYY');
   }
 
+  for(let i = 0; i < countDays; i ++) {
+    if(filterBy === 'Week') {
+      compareDay = moment().week(dateRange).day(i).format('YYYY-MM-DD');
+      labels.push(moment(compareDay).format('MMM.D'));
+      labels_standard.push(compareDay);
+    }
+    if(filterBy === 'Month') {
+      compareDay = moment().month(dateRange).date(i + 1).format('YYYY-MM-DD');
+      labels.push(moment(compareDay).format('MMM.D'));
+      labels_standard.push(compareDay);
+    }
+    if(filterBy === 'Year') {
+      compareDay = moment().year(dateRange).month(i).endOf('month').format('YYYY-MM-DD');
+      labels.push(moment(compareDay).format('MMM'));
+      labels_standard.push(moment().year(dateRange).month(i).format('YYYY-MM'));
+    }
+
+    compareDatetime = Date.parse(compareDay + ' 23:59:59');
+
+    if(type === 'Activity') {
+      countIncomplete = Zeke.notes.filter(note => moment(note.dateCreated).format('YYYY-MM-DD') == compareDay);
+      countComplete = Zeke.notes.filter(note => moment(note.dateCompleted).format('YYYY-MM-DD') == compareDay);
+    } else {
+      countIncomplete = Zeke.notes.filter(note => note.dateCreated < compareDatetime && (note.dateCompleted == '' || note.dateCompleted > compareDatetime));
+      countComplete = Zeke.notes.filter(note => note.dateCompleted < compareDatetime);
+    }
+    
+    data_incompleted.push(countIncomplete.length);
+    data_completed.push(countComplete.length);
+
+    // update table
+    tableBody += `
+      <tr>
+        <td>${labels_standard[i]}</td>
+        <td>${countComplete.length}</td>
+        <td>${countIncomplete.length}</td>
+        <td>${countComplete.length + countIncomplete.length}</td>
+      </tr>
+    `;
+  }
+
+  Zeke_ChartTimeline.data.labels = labels;
+  Zeke_ChartTimeline.data.datasets[0].data = data_completed;
+  Zeke_ChartTimeline.data.datasets[1].data = data_incompleted;
+
+  Zeke_ChartTimeline.update();
+
+  document.getElementById('currentRange').innerHTML = currentRangeText;
+  document.getElementById('rangeIndicator').innerHTML = labels_standard[0] + ' ~ ' + labels_standard[labels_standard.length - 1];
+  document.querySelector('#chart_datasheet tbody').innerHTML = tableBody;
+}
+
+function generateBarChart() {
+
+  //TODO: if cavas already in use, update chart only
+
+  const ctx = document.getElementById('chart_bar');
+  const labels = Zeke.lists.map(list => list.name);
+
+  let data_incomplete = [];
+  let data_complete = [];
+
+  Zeke.lists.forEach(list => {
+    let countIncomplete = Zeke.notes.filter(note => note.list == list.id && note.completed == false).length;
+    let countComplete = Zeke.notes.filter(note => note.list == list.id && note.completed == true).length;
+    data_incomplete.push(countIncomplete);
+    data_complete.push(countComplete);
+  });
+
   const data = {
+    axis: 'y',
     labels: labels,
     datasets: [
       {
-        label: 'Incompleted',
-        data: [65, 59, 80, 81, 56, 55, 40],
-        fill: true,
-        borderColor: '#cfd8dc',
-        fillColor: '#cfd8dc',
-        tension: 0.1
+        label: 'Completed',
+        data: data_complete,
+        fill: false,
+        backgroundColor: '#cccccccc',
+        borderColor: '#cccccc',
+        borderWidth: 1
       },
       {
-        label: 'Completed',
-        data: [35, 29, 30, 21, 16, 35, 40],
-        fill: true,
-        fillColor: '#b0bec5',
-        borderColor: '#b0bec5',
-        tension: 0.1
+        label: 'Incompleted',
+        data: data_incomplete,
+        fill: false,
+        backgroundColor: '#eee',
+        borderColor: '#eee',
+        borderWidth: 1
       },
     ]
   };
 
-  
-
   const chart = new Chart(ctx, {
-    type: 'line',
-    data: data
+    type: 'bar',
+    data: data,
+    options: {
+      indexAxis: 'y',
+      scales: {
+        x: { stacked: true, display: false },
+        y: { stacked: true }
+      }
+    }
   });
 }
 

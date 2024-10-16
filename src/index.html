@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="theme.css" />
     <script type="text/javascript" src="./vendor/Sortable.min.js"></script>
     <script type="text/javascript" src="./vendor/moment-with-locales.js"></script>
-    <script type="text/javascript" src="./vendor/chart.umd.js"></script>
+    <script type="text/javascript" src="./vendor/chart.js"></script>
     <script type="text/javascript" src="./lang.js"></script>
   </head>
   <body class="">
@@ -54,8 +54,8 @@
             </div>
           </div>
           <div id="btnSwitchNavbar" class="" title="Switch sider bar" data-lang-title="__settings__">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
-              <path d="M0 3a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm5-1v12h9a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1zM4 2H2a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h2z"/>
+            <svg xmlns="http://www.w3.org/2000/svg" class="switcherIcon" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+              <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
             </svg>
           </div>
         </div>
@@ -174,11 +174,54 @@
           </div>
 
           <div class="modal report">
-            <canvas id="chart_timeline"></canvas>
+
+            <!-- <div>
+              <span>Overall</span>
+              <span>Categories</span>
+            </div> -->
+
+            <div class="modal-section">
+              <div class="filterButtonGroups">
+                <div id="dateRangeBy" class="filterButtonGroup">
+                  <span id="dateRangeByWeek" class="filterButton active" data-id="Week">Week</span>
+                  <span id="dateRangeByMonth" class="filterButton" data-id="Month">Month</span>
+                  <span id="dateRangeByYear" class="filterButton" data-id="Year">Year</span>
+                </div>
+                <span class="spaceHolder"></span>
+                <div id="dataCalculateBy" class="filterButtonGroup">
+                  <span id="dataCalculateByActivity" class="filterButton active" data-id="Activity">Activity</span>
+                  <span id="dataCalculateByQuantity" class="filterButton" data-id="Quantity">Quantity</span>
+                </div>
+              </div>
+              <span class="filterDateRange">
+                <span id="prevRange" class="rangeButton"><</span>
+                <span id="currentRange" class="rangeSelected" data-range=""></span>
+                <span id="nextRange" class="rangeButton">></span>
+                <span id="rangeIndicator" class=""></span>
+              </span>
+              <canvas id="chart_timeline"></canvas>
+            </div>
+            
+            <div class="modal-section">
+              <table id="chart_datasheet">
+                <thead>
+                  <tr>
+                    <th>Time Period</th>
+                    <th>Completed</th>
+                    <th>Incompleted</th>
+                    <th>Total</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+
+            <!-- <div class="modal-section">
+              <canvas id="chart_bar"></canvas>
+            </div> -->
+
           </div>
-
         </div>
-
       </div>
       <!-- end of panelsContainer -->
 
