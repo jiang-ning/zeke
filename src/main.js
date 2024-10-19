@@ -129,7 +129,8 @@ request.onsuccess = async function(event) {
 
         // 2.2 fetch subtasks
         listNotes.forEach((item, idx) => {
-          if(item && item.parent > 0 && item.parent !== true) {
+          let expactedParentNote = notes.filter(note => note.id == item.parent);
+          if(item && item.parent > 0 && item.parent !== true && expactedParentNote.length > 0) {
             generateSubNoteItem(item,
               'areaListNotes',
               idx,
@@ -723,13 +724,17 @@ request.onsuccess = async function(event) {
   }
 
   function cleanModal() {
-    const modal = document.querySelector('.modal');
+    const modals = document.querySelectorAll('.modal');
     const btnSettings = document.getElementById('btnSettings');
+    const btnReport = document.getElementById('btnReport');
     const panelNote = document.getElementById('panelNote');
     const hiddenActivedList =  document.querySelector('#areaListLists input.hidden');
     btnSettings.classList.remove('active');
+    btnReport.classList.remove('active');
     panelNote.classList.remove('showModal');
-    modal.classList.remove('open');
+    modals.forEach(modal => {
+      modal.classList.remove('open');
+    });
     if(hiddenActivedList) {
       hiddenActivedList.classList.remove('hidden');
     }
@@ -1070,24 +1075,26 @@ function initModalSettings() {
   btnSettings.addEventListener('click', () => {
     const activedList = document.querySelector('#areaListLists input.active');
     
-    panelNote.classList.toggle('showModal');
-    modalSettings.classList.toggle('open');
-    activedList.classList.toggle('hidden');
-
-    btnTask.classList.remove('active');
     btnReport.classList.remove('active');
     modalReport.classList.remove('open');
 
     if(modalSettings.classList.contains('open')) {
-      btnSettings.classList.add('active');
-      panelsContainer.style.gridTemplateColumns = '50px 0 0 1fr';
+      panelNote.classList.remove('showModal');
+      modalSettings.classList.remove('open');
+      activedList.classList.remove('hidden');
+      btnSettings.classList.remove('active');
+      btnTask.classList.add('active');
+      panelsContainer.style.gridTemplateColumns = localStorage.getItem('grid-template-columns') || '50px 100px 10px 1fr';
+      activedList.click();
     } else {
       if(!modalReport.classList.contains('open')) {
         btnTask.classList.add('active');
       }
-      btnSettings.classList.remove('active');
-      panelsContainer.style.gridTemplateColumns = localStorage.getItem('grid-template-columns') || '50px 100px 10px 1fr';
-      activedList.click();
+      panelNote.classList.add('showModal');
+      modalSettings.classList.add('open');
+      activedList.classList.add('hidden');
+      btnSettings.classList.add('active');
+      panelsContainer.style.gridTemplateColumns = '50px 0 0 1fr';
     }
   });
 
@@ -1117,6 +1124,10 @@ function initModalSettings() {
     theme.addEventListener('click', (e) => {
       document.body.className = e.target.dataset.id;
       localStorage.setItem('theme', e.target.dataset.id);
+      Zeke_ChartTimeline.data.datasets[0].borderColor = getCurrentThemeColor();
+      Zeke_ChartTimeline.data.datasets[0].backgroundColor = getCurrentThemeColor() + '33';
+      Zeke_ChartTimeline.data.datasets[1].borderColor = getCurrentThemeColor(true);
+      Zeke_ChartTimeline.data.datasets[1].backgroundColor = getCurrentThemeColor(true) + '33';
     });
   });
 
@@ -1183,24 +1194,26 @@ function initModalReport() {
   btnReport.addEventListener('click', () => {
     const activedList = document.querySelector('#areaListLists input.active');
     
-    panelNote.classList.toggle('showModal');
-    modalReport.classList.toggle('open');
-    activedList.classList.toggle('hidden');
-
-    btnTask.classList.remove('active');
     btnSettings.classList.remove('active');
     modalSettings.classList.remove('open');
 
     if(modalReport.classList.contains('open')) {
-      panelsContainer.style.gridTemplateColumns = '50px 0 0 1fr';
-      btnReport.classList.add('active');
-    } else {
-      if(!modalReport.classList.contains('open')) {
-        btnTask.classList.add('active');
-      }
+      panelNote.classList.remove('showModal');
+      modalReport.classList.remove('open');
+      activedList.classList.remove('hidden');
       btnReport.classList.remove('active');
+      btnTask.classList.add('active');
       panelsContainer.style.gridTemplateColumns = localStorage.getItem('grid-template-columns') || '50px 100px 10px 1fr';
       activedList.click();
+    } else {
+      if(!modalSettings.classList.contains('open')) {
+        btnTask.classList.add('active');
+      }
+      panelNote.classList.add('showModal');
+      modalReport.classList.add('open');
+      activedList.classList.add('hidden');
+      btnReport.classList.add('active');
+      panelsContainer.style.gridTemplateColumns = '50px 0 0 1fr';
     }
 
     updateTimelineChart(
@@ -1435,23 +1448,29 @@ function translate(wordsCode) {
 }
 
 function initTimelineChart() {
+  let themeColor_Incompleted = getCurrentThemeColor() || '#cfd8dc';
+  let themeColor_Completed = getCurrentThemeColor() || '#90a4ae';
+  if(document.querySelector('.theme-dark')) {
+    themeColor_Incompleted = '#607d8b';
+    themeColor_Completed = '#cfd8dc';
+  }
   const ctx = document.getElementById('chart_timeline');
   const data = {
     labels: [],
     datasets: [
       {
-        label: 'Completed',
+        label: 'Incompleted',
         data: [],
-        backgroundColor: '#90caf933',
-        borderColor: '#90caf9',
+        backgroundColor: themeColor_Incompleted + '33',
+        borderColor: themeColor_Incompleted,
         tension: 0,
         fill: true
       },
       {
-        label: 'Incompleted',
+        label: 'Completed',
         data: [],
-        backgroundColor: '#9fa8da33',
-        borderColor: '#9fa8da',
+        backgroundColor: themeColor_Completed + '33',
+        borderColor: themeColor_Completed,
         tension: 0,
         fill: true
       }
@@ -1537,17 +1556,16 @@ function updateTimelineChart(filterBy, dateRange, type) {
     tableBody += `
       <tr>
         <td>${labels_standard[i]}</td>
-        <td>${countComplete.length}</td>
         <td>${countIncomplete.length}</td>
+        <td>${countComplete.length}</td>
         <td>${countComplete.length + countIncomplete.length}</td>
       </tr>
     `;
   }
 
   Zeke_ChartTimeline.data.labels = labels;
-  Zeke_ChartTimeline.data.datasets[0].data = data_completed;
-  Zeke_ChartTimeline.data.datasets[1].data = data_incompleted;
-
+  Zeke_ChartTimeline.data.datasets[0].data = data_incompleted;
+  Zeke_ChartTimeline.data.datasets[1].data = data_completed;
   Zeke_ChartTimeline.update();
 
   document.getElementById('currentRange').innerHTML = currentRangeText;

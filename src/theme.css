@@ -20,6 +20,8 @@
   background-color: #ffffff99;
 }
 [class^="theme"] #panelNote,
+[class^="theme"] #panelList,
+[class^="theme"] #gutter,
 [class^="theme"] #areaListLists .listRemove:hover,
 [class^="theme"] span.appIcon:hover {
   background-color: #ffffff66;
@@ -44,16 +46,26 @@
 [class^="theme"] #listAdd #listAddName.active {
   color: #000;
 }
+[class^="theme"] .areaNav:hover,
+[class^="theme"] .areaNav.active,
+[class^="theme"] .report table,
 [class^="theme"] #listAdd #listAddName {
   color: #00000099;
+}
+[class^="theme"] .areaNav {
+  color: #00000033;
 }
 
 /* mode-dark */
 /* .theme-dark #titlebar, */
 .theme-dark .panelsContainer,
+.theme-dark #panelNav,
 .theme-dark #panelList,
 .theme-dark #panelList li.sortable-fallback,
-.theme-dark #panelNote li.sortable-fallback {
+.theme-dark #panelNote li.sortable-fallback,
+.theme-dark .report tr:nth-child(even),
+.theme-dark .report .filterButton.active,
+.theme-dark .report .filterButton:hover {
   background-color: var(--dark);
 }
 .theme-dark #panelList .sortable-chosen,
@@ -63,6 +75,8 @@
   background-color: #00000099;
 }
 .theme-dark #panelNote,
+.theme-dark #panelList,
+.theme-dark #gutter,
 .theme-dark #areaPinNotes li.edit > .noteContent,
 .theme-dark #areaListNotes li.edit > .noteContent,
 .theme-dark #areaListLists li.edit input,
@@ -76,6 +90,7 @@
 .theme-dark #btnFilter.active {
   background-color: #ffffffcc;
 }
+.theme-dark .report .filterButton,
 .theme-dark ::-webkit-scrollbar-thumb,
 .theme-dark ::-webkit-scrollbar-thumb:hover {
   background-color: #ffffff33;
@@ -113,7 +128,10 @@
 .theme-dark .modal-section,
 .theme-dark .modal-section-title,
 .theme-dark #areaSettings.active #btnSettings,
-.theme-dark #areaSettings #btnSettings:hover {
+.theme-dark #areaSettings #btnSettings:hover,
+.theme-dark #btnSwitchNavbar:hover,
+.theme-dark .report .filterDateRange .rangeButton:hover,
+.theme-dark .report table {
   color: #ffffff99;
 }
 .theme-dark #btnNew, 
@@ -121,6 +139,7 @@
 .theme-dark #areaListLists input {
   color: #ffffff66;
 }
+.theme-dark #btnSwitchNavbar,
 .theme-dark #areaSettings #btnSettings,
 .theme-dark #areaPinNotes li.completed input[type='text'],
 .theme-dark #areaListNotes li.completed input[type='text'] {
@@ -128,6 +147,7 @@
 }
 .theme-dark,
 .theme-dark #areaNew,
+.theme-dark #panelNav,
 .theme-dark #areaPinNotes li,
 .theme-dark #areaListNotes li {
   border-color: var(--dark-cc);
@@ -148,6 +168,9 @@
 .theme-dark #areaListNotes li:hover input[type='checkbox'] {
   border-color: #999;
 }
+.theme-dark #areaListLists input.active {
+  border-left-color: #66666699;
+}
 .theme-dark input[type="range"] {
   accent-color: var(--dark);
 }
@@ -158,8 +181,9 @@
 .theme-dark .noteCollapse.show:hover {
   filter: invert(.9);
 }
-.theme-dark #panelNote {
-  box-shadow: -1px 0px 6px #000000cc;
+.theme-dark #panelNote,
+.theme-dark #gutter + #panelNote {
+  box-shadow: -1px 0px 0px #000000cc;
 }
 .theme-dark #gutter:hover + #panelNote {
   box-shadow: -1px 0px 6px #000000;
@@ -173,7 +197,8 @@
 
 /* blue */
 .theme-blue .panelsContainer,
-.theme-blue #panelList,
+.theme-blue .report .filterButton:hover,
+.theme-blue #panelNav,
 .theme-blue #panelNote .sortable-chosen,
 .theme-blue #areaListNotes li.completed input[type="checkbox"]::before,
 .theme-blue #areaPinNotes li.completed input[type="checkbox"]::before {
@@ -182,9 +207,11 @@
 .theme-blue #areaPinNotes .notePin {
   background-color: var(--blue-33);
 }
+.theme-blue .report tr:nth-child(even),
 .theme-blue #filterbar.active {
   background-color: var(--blue-66);
 }
+.theme-blue .report .filterButton.active,
 .theme-blue #btnFilter.active,
 .theme-blue #filterCompleted.active,
 .theme-blue #filterIncompleted.active,
@@ -212,8 +239,10 @@
 .theme-blue .noteCollapse.active {
   border-color: var(--blue-stroke);
 }
+.theme-blue #panelNav,
 .theme-blue #titlebar,
 .theme-blue #areaPinNotes li:last-child,
+.theme-blue .report thead,
 .theme-blue .noteCollapse {
   border-color: var(--blue-stroke-66);
 }
@@ -223,14 +252,17 @@
 .theme-blue #filterCompleted:hover, 
 .theme-blue #filterIncompleted:hover,
 .theme-blue #txtNew:focus + #btnNew,
-.theme-blue #areaListLists input.active,
+.theme-blue #areaListLists .edit input.active,
 .theme-blue #areaSettings.active,
 .theme-blue .modal-section button,
 .theme-blue select {
   border-color: var(--blue-stroke-cc);
 }
-.theme-blue #panelNote {
-  box-shadow: -1px 0px 6px var(--blue-stroke-66);
+.theme-blue #areaListLists input.active {
+  border-left-color: var(--blue-stroke-cc);
+}
+.theme-blue #gutter + #panelNote {
+  box-shadow: -1px 0px 0px var(--blue-stroke-66);
 }
 .theme-blue #gutter:hover + #panelNote {
   box-shadow: -1px 0px 6px var(--blue-stroke);
@@ -239,6 +271,7 @@
 .theme-blue #btnFilter {
   color: var(--blue-ee);
 }
+.theme-blue #btnSwitchNavbar:hover,
 .theme-blue #btnFilter:hover,
 .theme-blue #filterCompleted:hover, 
 .theme-blue #filterIncompleted:hover,
@@ -254,6 +287,7 @@
 .theme-blue #areaListNotes li span.noteMoment {
   color: var(--blue-stroke);
 }
+.theme-blue #btnSwitchNavbar,
 .theme-blue #filterCompleted, 
 .theme-blue #filterIncompleted,
 .theme-blue #areaPinNotes li.completed input[type='text'],
@@ -272,7 +306,8 @@
 
 /* red */
 .theme-red .panelsContainer,
-.theme-red #panelList,
+.theme-red .report .filterButton:hover,
+.theme-red #panelNav,
 .theme-red #panelNote .sortable-chosen,
 .theme-red #areaListNotes li.completed input[type="checkbox"]::before,
 .theme-red #areaPinNotes li.completed input[type="checkbox"]::before {
@@ -281,9 +316,11 @@
 .theme-red #areaPinNotes .notePin {
   background-color: var(--red-33);
 }
+.theme-red .report tr:nth-child(even),
 .theme-red #filterbar.active {
   background-color: var(--red-66);
 }
+.theme-red .report .filterButton.active,
 .theme-red #btnFilter.active,
 .theme-red #filterCompleted.active,
 .theme-red #filterIncompleted.active,
@@ -312,8 +349,10 @@
 .theme-red .noteCollapse.active {
   border-color: var(--red-stroke);
 }
+.theme-red #panelNav,
 .theme-red #titlebar,
 .theme-red #areaPinNotes li:last-child,
+.theme-red .report thead,
 .theme-red .noteCollapse {
   border-color: var(--red-stroke-66);
 }
@@ -323,14 +362,17 @@
 .theme-red #filterCompleted:hover, 
 .theme-red #filterIncompleted:hover,
 .theme-red #txtNew:focus + #btnNew,
-.theme-red #areaListLists input.active,
+.theme-red #areaListLists .edit input.active,
 .theme-red #areaSettings.active,
 .theme-red .modal-section button,
 .theme-red select {
   border-color: var(--red-stroke-cc);
 }
-.theme-red #panelNote {
-  box-shadow: -1px 0px 6px var(--red-stroke-66);
+.theme-red #areaListLists input.active {
+  border-left-color: var(--red-stroke-cc);
+}
+.theme-red #gutter + #panelNote {
+  box-shadow: -1px 0px 0px var(--red-stroke-66);
 }
 .theme-red #gutter:hover + #panelNote {
   box-shadow: -1px 0px 6px var(--red-stroke);
@@ -339,6 +381,7 @@
 .theme-red #btnFilter {
   color: var(--red-ee);
 }
+.theme-red #btnSwitchNavbar:hover,
 .theme-red #btnFilter:hover,
 .theme-red #filterCompleted:hover, 
 .theme-red #filterIncompleted:hover,
@@ -353,6 +396,7 @@
 .theme-red #areaListNotes li span.noteMoment {
   color: var(--red-stroke);
 }
+.theme-red #btnSwitchNavbar,
 .theme-red #filterCompleted, 
 .theme-red #filterIncompleted,
 .theme-red #areaPinNotes li.completed input[type='text'],
@@ -371,7 +415,8 @@
 
 /* orange */
 .theme-orange .panelsContainer,
-.theme-orange #panelList,
+.theme-orange .report .filterButton:hover,
+.theme-orange #panelNav,
 .theme-orange #panelNote .sortable-chosen,
 .theme-orange #areaListNotes li.completed input[type="checkbox"]::before,
 .theme-orange #areaPinNotes li.completed input[type="checkbox"]::before {
@@ -380,9 +425,11 @@
 .theme-orange #areaPinNotes .notePin {
   background-color: var(--orange-33);
 }
+.theme-orange .report tr:nth-child(even),
 .theme-orange #filterbar.active {
   background-color: var(--orange-66);
 }
+.theme-orange .report .filterButton.active,
 .theme-orange #btnFilter.active,
 .theme-orange #filterCompleted.active,
 .theme-orange #filterIncompleted.active,
@@ -411,8 +458,10 @@
 .theme-orange .noteCollapse.active {
   border-color: var(--orange-stroke);
 }
+.theme-orange #panelNav,
 .theme-orange #titlebar,
 .theme-orange #areaPinNotes li:last-child,
+.theme-orange .report thead,
 .theme-orange .noteCollapse {
   border-color: var(--orange-stroke-66);
 }
@@ -422,14 +471,17 @@
 .theme-orange #filterCompleted:hover, 
 .theme-orange #filterIncompleted:hover,
 .theme-orange #txtNew:focus + #btnNew,
-.theme-orange #areaListLists input.active,
+.theme-orange #areaListLists .edit input.active,
 .theme-orange #areaSettings.active,
 .theme-orange .modal-section button,
 .theme-orange select {
   border-color: var(--orange-stroke-cc);
 }
-.theme-orange #panelNote {
-  box-shadow: -1px 0px 6px var(--orange-stroke-66);
+.theme-orange #areaListLists input.active {
+  border-left-color: var(--orange-stroke-cc);
+}
+.theme-orange #gutter + #panelNote {
+  box-shadow: -1px 0px 0px var(--orange-stroke-66);
 }
 .theme-orange #gutter:hover + #panelNote {
   box-shadow: -1px 0px 6px var(--orange-stroke);
@@ -438,6 +490,7 @@
 .theme-orange #btnFilter {
   color: var(--orange-ee);
 }
+.theme-orange #btnSwitchNavbar:hover,
 .theme-orange #btnFilter:hover,
 .theme-orange #filterCompleted:hover, 
 .theme-orange #filterIncompleted:hover,
@@ -452,6 +505,7 @@
 .theme-orange #areaListNotes li span.noteMoment {
   color: var(--orange-stroke);
 }
+.theme-orange #btnSwitchNavbar,
 .theme-orange #filterCompleted, 
 .theme-orange #filterIncompleted,
 .theme-orange #areaPinNotes li.completed input[type='text'],
@@ -470,16 +524,19 @@
 
 /* amber */
 .theme-amber .panelsContainer,
-.theme-amber #panelList,
+.theme-amber .report .filterButton:hover,
+.theme-amber #panelNav,
 .theme-amber #panelNote .sortable-chosen {
   background-color: var(--amber);
 }
 .theme-amber #areaPinNotes .notePin {
   background-color: var(--amber-33);
 }
+.theme-amber .report tr:nth-child(even),
 .theme-amber #filterbar.active {
   background-color: var(--amber-66);
 }
+.theme-amber .report .filterButton.active,
 .theme-amber #btnFilter.active,
 .theme-amber #filterCompleted.active,
 .theme-amber #filterIncompleted.active,
@@ -512,8 +569,10 @@
 .theme-amber .noteCollapse.active {
   border-color: var(--amber-stroke);
 }
+.theme-amber #panelNav,
 .theme-amber #titlebar,
 .theme-amber #areaPinNotes li:last-child,
+.theme-amber .report thead,
 .theme-amber .noteCollapse {
   border-color: var(--amber-stroke-66);
 }
@@ -523,14 +582,17 @@
 .theme-amber #filterCompleted:hover, 
 .theme-amber #filterIncompleted:hover,
 .theme-amber #txtNew:focus + #btnNew,
-.theme-amber #areaListLists input.active,
+.theme-amber #areaListLists .edit input.active,
 .theme-amber #areaSettings.active,
 .theme-amber .modal-section button,
 .theme-amber select {
   border-color: var(--amber-stroke-cc);
 }
-.theme-amber #panelNote {
-  box-shadow: -1px 0px 6px var(--amber-stroke-66);
+.theme-amber #areaListLists input.active {
+  border-left-color: var(--amber-stroke-cc);
+}
+.theme-amber #gutter + #panelNote {
+  box-shadow: -1px 0px 0px var(--amber-stroke-66);
 }
 .theme-amber #gutter:hover + #panelNote {
   box-shadow: -1px 0px 6px var(--amber-stroke);
@@ -539,6 +601,7 @@
 .theme-amber #btnFilter {
   color: var(--amber-ee);
 }
+.theme-amber #btnSwitchNavbar:hover,
 .theme-amber #btnFilter:hover,
 .theme-amber #filterCompleted:hover, 
 .theme-amber #filterIncompleted:hover,
@@ -553,6 +616,7 @@
 .theme-amber #areaListNotes li span.noteMoment {
   color: var(--amber-stroke);
 }
+.theme-amber #btnSwitchNavbar,
 .theme-amber #filterCompleted, 
 .theme-amber #filterIncompleted,
 .theme-amber #areaPinNotes li.completed input[type='text'],
@@ -571,7 +635,8 @@
 
 /* green */
 .theme-green .panelsContainer,
-.theme-green #panelList,
+.theme-green .report .filterButton:hover,
+.theme-green #panelNav,
 .theme-green #panelNote .sortable-chosen,
 .theme-green #areaListNotes li.completed input[type="checkbox"]::before,
 .theme-green #areaPinNotes li.completed input[type="checkbox"]::before {
@@ -580,9 +645,11 @@
 .theme-green #areaPinNotes .notePin {
   background-color: var(--green-33);
 }
+.theme-green .report tr:nth-child(even),
 .theme-green #filterbar.active {
   background-color: var(--green-66);
 }
+.theme-green .report .filterButton.active,
 .theme-green #btnFilter.active,
 .theme-green #filterCompleted.active,
 .theme-green #filterIncompleted.active,
@@ -611,8 +678,10 @@
 .theme-green .noteCollapse.active {
   border-color: var(--green-stroke);
 }
+.theme-green #panelNav,
 .theme-green #titlebar,
 .theme-green #areaPinNotes li:last-child,
+.theme-green .report thead,
 .theme-green .noteCollapse {
   border-color: var(--green-stroke-66);
 }
@@ -622,14 +691,17 @@
 .theme-green #filterCompleted:hover, 
 .theme-green #filterIncompleted:hover,
 .theme-green #txtNew:focus + #btnNew,
-.theme-green #areaListLists input.active,
+.theme-green #areaListLists .edit input.active,
 .theme-green #areaSettings.active,
 .theme-green .modal-section button,
 .theme-green select {
   border-color: var(--green-stroke-cc);
 }
-.theme-green #panelNote {
-  box-shadow: -1px 0px 6px var(--green-stroke-66);
+.theme-green #areaListLists input.active {
+  border-left-color: var(--green-stroke-cc);
+}
+.theme-green #gutter + #panelNote {
+  box-shadow: -1px 0px 0px var(--green-stroke-66);
 }
 .theme-green #gutter:hover + #panelNote {
   box-shadow: -1px 0px 6px var(--green-stroke);
@@ -638,6 +710,7 @@
 .theme-green #btnFilter {
   color: var(--green-ee);
 }
+.theme-green #btnSwitchNavbar:hover,
 .theme-green #btnFilter:hover,
 .theme-green #filterCompleted:hover, 
 .theme-green #filterIncompleted:hover,
@@ -652,6 +725,7 @@
 .theme-green #areaListNotes li span.noteMoment {
   color: var(--green-stroke);
 }
+.theme-green #btnSwitchNavbar,
 .theme-green #filterCompleted, 
 .theme-green #filterIncompleted,
 .theme-green #areaPinNotes li.completed input[type='text'],
@@ -670,7 +744,8 @@
 
 /* teal */
 .theme-teal .panelsContainer,
-.theme-teal #panelList,
+.theme-teal .report .filterButton:hover,
+.theme-teal #panelNav,
 .theme-teal #panelNote .sortable-chosen,
 .theme-teal #areaListNotes li.completed input[type="checkbox"]::before,
 .theme-teal #areaPinNotes li.completed input[type="checkbox"]::before {
@@ -679,9 +754,11 @@
 .theme-teal #areaPinNotes .notePin {
   background-color: var(--teal-33);
 }
+.theme-teal .report tr:nth-child(even),
 .theme-teal #filterbar.active {
   background-color: var(--teal-66);
 }
+.theme-teal .report .filterButton.active,
 .theme-teal #btnFilter.active,
 .theme-teal #filterCompleted.active,
 .theme-teal #filterIncompleted.active,
@@ -710,8 +787,10 @@
 .theme-teal .noteCollapse.active {
   border-color: var(--teal-stroke);
 }
+.theme-teal #panelNav,
 .theme-teal #titlebar,
 .theme-teal #areaPinNotes li:last-child,
+.theme-teal .report thead,
 .theme-teal .noteCollapse {
   border-color: var(--teal-stroke-66);
 }
@@ -721,14 +800,17 @@
 .theme-teal #filterCompleted:hover, 
 .theme-teal #filterIncompleted:hover,
 .theme-teal #txtNew:focus + #btnNew,
-.theme-teal #areaListLists input.active,
+.theme-teal #areaListLists .edit input.active,
 .theme-teal #areaSettings.active,
 .theme-teal .modal-section button,
 .theme-teal select {
   border-color: var(--teal-stroke-cc);
 }
-.theme-teal #panelNote {
-  box-shadow: -1px 0px 6px var(--teal-stroke-66);
+.theme-teal #areaListLists input.active {
+  border-left-color: var(--teal-stroke-cc);
+}
+.theme-teal #gutter + #panelNote {
+  box-shadow: -1px 0px 0px var(--teal-stroke-66);
 }
 .theme-teal #gutter:hover + #panelNote {
   box-shadow: -1px 0px 6px var(--teal-stroke);
@@ -737,6 +819,7 @@
 .theme-teal #btnFilter {
   color: var(--teal-ee);
 }
+.theme-teal #btnSwitchNavbar:hover,
 .theme-teal #btnFilter:hover,
 .theme-teal #filterCompleted:hover, 
 .theme-teal #filterIncompleted:hover,
@@ -751,6 +834,7 @@
 .theme-teal #areaListNotes li span.noteMoment {
   color: var(--teal-stroke);
 }
+.theme-teal #btnSwitchNavbar,
 .theme-teal #filterCompleted, 
 .theme-teal #filterIncompleted,
 .theme-teal #areaPinNotes li.completed input[type='text'],
@@ -769,7 +853,8 @@
 
 /* violet */
 .theme-violet .panelsContainer,
-.theme-violet #panelList,
+.theme-violet .report .filterButton:hover,
+.theme-violet #panelNav,
 .theme-violet #panelNote .sortable-chosen,
 .theme-violet #areaListNotes li.completed input[type="checkbox"]::before,
 .theme-violet #areaPinNotes li.completed input[type="checkbox"]::before {
@@ -778,9 +863,11 @@
 .theme-violet #areaPinNotes .notePin {
   background-color: var(--violet-33);
 }
+.theme-violet .report tr:nth-child(even),
 .theme-violet #filterbar.active {
   background-color: var(--violet-66);
 }
+.theme-violet .report .filterButton.active,
 .theme-violet #btnFilter.active,
 .theme-violet #filterCompleted.active,
 .theme-violet #filterIncompleted.active,
@@ -809,8 +896,10 @@
 .theme-violet .noteCollapse.active {
   border-color: var(--violet-stroke);
 }
+.theme-violet #panelNav,
 .theme-violet #titlebar,
 .theme-violet #areaPinNotes li:last-child,
+.theme-violet .report thead,
 .theme-violet .noteCollapse {
   border-color: var(--violet-stroke-66);
 }
@@ -820,14 +909,17 @@
 .theme-violet #filterCompleted:hover, 
 .theme-violet #filterIncompleted:hover,
 .theme-violet #txtNew:focus + #btnNew,
-.theme-violet #areaListLists input.active,
+.theme-violet #areaListLists .edit input.active,
 .theme-violet #areaSettings.active,
 .theme-violet .modal-section button,
 .theme-violet select {
   border-color: var(--violet-stroke-cc);
 }
-.theme-violet #panelNote {
-  box-shadow: -1px 0px 6px var(--violet-stroke-66);
+.theme-violet #areaListLists input.active {
+  border-left-color: var(--violet-stroke-cc);
+}
+.theme-violet #gutter + #panelNote {
+  box-shadow: -1px 0px 0px var(--violet-stroke-66);
 }
 .theme-violet #gutter:hover + #panelNote {
   box-shadow: -1px 0px 6px var(--violet-stroke);
@@ -836,6 +928,7 @@
 .theme-violet #btnFilter {
   color: var(--violet-ee);
 }
+.theme-violet #btnSwitchNavbar:hover,
 .theme-violet #btnFilter:hover,
 .theme-violet #filterCompleted:hover, 
 .theme-violet #filterIncompleted:hover,
@@ -850,6 +943,7 @@
 .theme-violet #areaListNotes li span.noteMoment {
   color: var(--violet-stroke);
 }
+.theme-violet #btnSwitchNavbar,
 .theme-violet #filterCompleted, 
 .theme-violet #filterIncompleted,
 .theme-violet #areaPinNotes li.completed input[type='text'],
@@ -868,7 +962,8 @@
 
 /* purple */
 .theme-purple .panelsContainer,
-.theme-purple #panelList,
+.theme-purple .report .filterButton:hover,
+.theme-purple #panelNav,
 .theme-purple #panelNote .sortable-chosen,
 .theme-purple #areaListNotes li.completed input[type="checkbox"]::before,
 .theme-purple #areaPinNotes li.completed input[type="checkbox"]::before {
@@ -877,9 +972,11 @@
 .theme-purple #areaPinNotes .notePin {
   background-color: var(--purple-33);
 }
+.theme-purple .report tr:nth-child(even),
 .theme-purple #filterbar.active {
   background-color: var(--purple-66);
 }
+.theme-purple .report .filterButton.active,
 .theme-purple #btnFilter.active,
 .theme-purple #filterCompleted.active,
 .theme-purple #filterIncompleted.active,
@@ -908,8 +1005,10 @@
 .theme-purple .noteCollapse.active {
   border-color: var(--purple-stroke);
 }
+.theme-purple #panelNav,
 .theme-purple #titlebar,
 .theme-purple #areaPinNotes li:last-child,
+.theme-purple .report thead,
 .theme-purple .noteCollapse {
   border-color: var(--purple-stroke-66);
 }
@@ -919,14 +1018,17 @@
 .theme-purple #filterCompleted:hover, 
 .theme-purple #filterIncompleted:hover,
 .theme-purple #txtNew:focus + #btnNew,
-.theme-purple #areaListLists input.active,
+.theme-purple #areaListLists .edit input.active,
 .theme-purple #areaSettings.active,
 .theme-purple .modal-section button,
 .theme-purple select {
   border-color: var(--purple-stroke-cc);
 }
-.theme-purple #panelNote {
-  box-shadow: -1px 0px 6px var(--purple-stroke-66);
+.theme-purple #areaListLists input.active {
+  border-left-color: var(--purple-stroke-cc);
+}
+.theme-purple #gutter + #panelNote {
+  box-shadow: -1px 0px 0px var(--purple-stroke-66);
 }
 .theme-purple #gutter:hover + #panelNote {
   box-shadow: -1px 0px 6px var(--purple-stroke);
@@ -935,6 +1037,7 @@
 .theme-purple #btnFilter {
   color: var(--purple-ee);
 }
+.theme-purple #btnSwitchNavbar:hover,
 .theme-purple #btnFilter:hover,
 .theme-purple #filterCompleted:hover, 
 .theme-purple #filterIncompleted:hover,
@@ -949,6 +1052,7 @@
 .theme-purple #areaListNotes li span.noteMoment {
   color: var(--purple-stroke);
 }
+.theme-purple #btnSwitchNavbar,
 .theme-purple #filterCompleted, 
 .theme-purple #filterIncompleted,
 .theme-purple #areaPinNotes li.completed input[type='text'],
@@ -967,7 +1071,8 @@
 
 /* pink */
 .theme-pink .panelsContainer,
-.theme-pink #panelList,
+.theme-pink .report .filterButton:hover,
+.theme-pink #panelNav,
 .theme-pink #panelNote .sortable-chosen,
 .theme-pink #areaListNotes li.completed input[type="checkbox"]::before,
 .theme-pink #areaPinNotes li.completed input[type="checkbox"]::before {
@@ -976,9 +1081,11 @@
 .theme-pink #areaPinNotes .notePin {
   background-color: var(--pink-33);
 }
+.theme-pink .report tr:nth-child(even),
 .theme-pink #filterbar.active {
   background-color: var(--pink-66);
 }
+.theme-pink .report .filterButton.active,
 .theme-pink #btnFilter.active,
 .theme-pink #filterCompleted.active,
 .theme-pink #filterIncompleted.active,
@@ -1007,8 +1114,10 @@
 .theme-pink .noteCollapse.active {
   border-color: var(--pink-stroke);
 }
+.theme-pink #panelNav,
 .theme-pink #titlebar,
 .theme-pink #areaPinNotes li:last-child,
+.theme-pink .report thead,
 .theme-pink .noteCollapse {
   border-color: var(--pink-stroke-66);
 }
@@ -1018,14 +1127,17 @@
 .theme-pink #filterCompleted:hover, 
 .theme-pink #filterIncompleted:hover,
 .theme-pink #txtNew:focus + #btnNew,
-.theme-pink #areaListLists input.active,
+.theme-pink #areaListLists .edit input.active,
 .theme-pink #areaSettings.active,
 .theme-pink .modal-section button,
 .theme-pink select {
   border-color: var(--pink-stroke-cc);
 }
-.theme-pink #panelNote {
-  box-shadow: -1px 0px 6px var(--pink-stroke-66);
+.theme-pink #areaListLists input.active {
+  border-left-color: var(--pink-stroke-cc);
+}
+.theme-pink #gutter + #panelNote {
+  box-shadow: -1px 0px 0px var(--pink-stroke-66);
 }
 .theme-pink #gutter:hover + #panelNote {
   box-shadow: -1px 0px 6px var(--pink-stroke);
@@ -1034,6 +1146,7 @@
 .theme-pink #btnFilter {
   color: var(--pink-ee);
 }
+.theme-pink #btnSwitchNavbar:hover,
 .theme-pink #btnFilter:hover,
 .theme-pink #filterCompleted:hover, 
 .theme-pink #filterIncompleted:hover,
@@ -1048,6 +1161,7 @@
 .theme-pink #areaListNotes li span.noteMoment {
   color: var(--pink-stroke);
 }
+.theme-pink #btnSwitchNavbar,
 .theme-pink #filterCompleted, 
 .theme-pink #filterIncompleted,
 .theme-pink #areaPinNotes li.completed input[type='text'],

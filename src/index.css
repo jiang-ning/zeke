@@ -239,7 +239,7 @@ select:hover {
 #panelList {
   grid-column: 2;
   grid-row: 1;
-  background-color: #eee;
+  background-color: #fff;
   display: grid;
   grid-template-rows: 1fr 40px;
 }
@@ -265,8 +265,11 @@ select:hover {
 #gutter {
   grid-column: 3;
   grid-row: 1;
-  width: 10px;
   cursor: col-resize;
+  background-color: #fff;
+}
+#gutter + #panelNote {
+  box-shadow: -1px 0px 0px #cccccccc;
 }
 #gutter:hover + #panelNote {
   box-shadow: -1px 0px 6px #ccccccff;
@@ -358,13 +361,14 @@ li.edit .noteSub {
   cursor: text;
   width: calc(100% - 20px);
   border-radius: 0 40px 40px 0;
+  border-color: #ccc;
 }
 #areaListLists li.active {
   cursor: default;
 }
 #areaListLists input {
-  background-color: #eee;
-  border: none;
+  background-color: #fff;
+  border: 1px solid transparent;
   border-left: 3px solid transparent;
   width: calc(100% + 7px);
   outline: none;
@@ -373,9 +377,6 @@ li.edit .noteSub {
   cursor: default;
   color: #666;
   text-overflow: ellipsis;
-}
-#areaListLists input:hover {
-  background-color: #eee;
 }
 #areaListLists input.active {
   position: relative;
@@ -672,9 +673,10 @@ li.edit .noteSub {
 
 /* Navbar */
 .areaNav {
+  display: grid;
+  align-content: center;
+  justify-content: center;
   line-height: 40px;
-  padding-top: 8px;
-  text-align: center;
   color: #ccc;
 }
 .areaNav:hover {
@@ -688,7 +690,7 @@ li.edit .noteSub {
 #btnSwitchNavbar {
   padding-left: 10px;
   cursor: pointer;
-  line-height: 36px;
+  line-height: 26px;
   color: #ccc;
 }
 #btnSwitchNavbar:hover {
@@ -867,7 +869,8 @@ span.appIcon:hover {
 }
 .report .filterButton {
   display: table-cell;
-  background-color: #eee;
+  background-color: #eeeeee99;
+  box-shadow: 0px 0px 1px #000000cc;
   height: 20px;
   line-height: 20px;
   font-size: 10px;
@@ -890,7 +893,9 @@ span.appIcon:hover {
   background-color: #cccccccc;
 }
 .report .filterDateRange {
-  display: inline-block;
+  display: grid;
+  grid-template-columns: 20px auto 20px auto 1fr;
+  justify-items: center;
   height: 20px;
   line-height: 20px;
   font-size: 10px;
@@ -899,9 +904,11 @@ span.appIcon:hover {
   cursor: pointer;
 }
 .report .filterDateRange .rangeButton {
-  color: #999;
+  color: #666;
   width: 16px;
-  display: inline-block;
+  display: grid;
+  align-content: center;
+  justify-content: center;
 }
 .report .filterDateRange .rangeButton:hover {
   color: #000;
@@ -920,10 +927,6 @@ span.appIcon:hover {
   padding: 6px 0;
   border: none;
   width: 25%;
-}
-.report th:first-child,
-.report td:first-child {
-  border-right: 1px solid #eee;
 }
 .report tr:nth-child(even) {
   background-color: #eeeeee99;

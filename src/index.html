@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="UTF-8" />
-    <title>Microstone</title>
+    <title>Microstone Pro</title>
     <link rel="stylesheet" href="index.css" />
     <link rel="stylesheet" href="theme.css" />
     <script type="text/javascript" src="./vendor/Sortable.min.js"></script>
@@ -194,9 +194,17 @@
                 </div>
               </div>
               <span class="filterDateRange">
-                <span id="prevRange" class="rangeButton"><</span>
+                <span id="prevRange" class="rangeButton">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor"  viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0"/>
+                  </svg>
+                </span>
                 <span id="currentRange" class="rangeSelected" data-range=""></span>
-                <span id="nextRange" class="rangeButton">></span>
+                <span id="nextRange" class="rangeButton">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor"  viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+                  </svg>
+                </span>
                 <span id="rangeIndicator" class=""></span>
               </span>
               <canvas id="chart_timeline"></canvas>
@@ -207,8 +215,8 @@
                 <thead>
                   <tr>
                     <th>Time Period</th>
-                    <th>Completed</th>
                     <th>Incompleted</th>
+                    <th>Completed</th>
                     <th>Total</th>
                   </tr>
                 </thead>
