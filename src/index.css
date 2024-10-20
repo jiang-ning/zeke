@@ -222,6 +222,9 @@ select:hover {
 .panelsContainer.toggling {
   transition: grid-template-columns .3s ease-in-out;
 }
+.panelsContainer.resizing {
+  user-select: none;
+}
 .panelsContainer.viewFocused {
   grid-template-columns: 0px 10px 1fr !important;
 }

@@ -1006,11 +1006,9 @@ function initGrid() {
 
   const gutter = document.getElementById('gutter');
   const panelList = document.getElementById('panelList');
-  const panelNote = document.getElementById('panelNote');
   const panelsContainer = document.getElementById('panelsContainer');
   const rememberedGrid = localStorage.getItem('grid-template-columns') || '50px 100px 10px 1fr';
   const listOpened = JSON.parse(localStorage.getItem('listOpened'));
-  // const navOpened = JSON.parse(localStorage.getItem('navOpened'));
 
   let isResizing = false;
   let startX = 0;
@@ -1023,11 +1021,12 @@ function initGrid() {
     isResizing = true;
     startX = e.clientX;
     startWidth = parseFloat(getComputedStyle(panelList).width);
-    panelsContainer.classList.remove('toggling');
+    panelsContainer.classList.remove('toggling'); // disable animation for toggle nav and list when resizing
   });
 
   gutter.addEventListener('mousemove', (e) => {
     if (isResizing) {
+      panelsContainer.classList.add('resizing');
       const diffX = e.clientX - startX;
       let widthList = parseInt(startWidth + diffX);
       let widthGutter = 10;
@@ -1038,18 +1037,23 @@ function initGrid() {
       }
       if(widthList > currentWidth / 2) {
         widthList = currentWidth / 2;
+        isResizing = false;
       }
-      panelsContainer.setAttribute('style',`grid-template-columns:${widthList}px ${widthGutter}px 1fr;`);
-    };
+      panelsContainer.setAttribute('style',`grid-template-columns: ${arrayRememberedGrid[0]} ${widthList}px ${widthGutter}px 1fr;`);
+    }
   });
 
   gutter.addEventListener('mouseup', () => {
     isResizing = false;
     localStorage.setItem('grid-template-columns', panelsContainer.style['grid-template-columns']);
+    panelsContainer.classList.remove('resizing');
     panelsContainer.classList.add('toggling');
   });
 
-  // panelsContainer.style.gridTemplateColumns = rememberedGrid;
+  panelsContainer.addEventListener('mouseup', () => {
+    isResizing = false;
+  });
+
   panelsContainer.style.gridTemplateColumns = listOpened ? rememberedGrid : arrayRememberedGrid[0] + ' 0px 0px 1fr';
 
 }
