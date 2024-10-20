@@ -1449,7 +1449,7 @@ function translate(wordsCode) {
 
 function initTimelineChart() {
   let themeColor_Incompleted = getCurrentThemeColor() || '#cfd8dc';
-  let themeColor_Completed = getCurrentThemeColor() || '#90a4ae';
+  let themeColor_Completed = getCurrentThemeColor(true) || '#90a4ae';
   if(document.querySelector('.theme-dark')) {
     themeColor_Incompleted = '#607d8b';
     themeColor_Completed = '#cfd8dc';
@@ -1503,8 +1503,9 @@ function updateTimelineChart(filterBy, dateRange, type) {
   let tableBody = '';
   let currentRangeText = '';
 
-  let compareDay = '';
+  let compareDate = '';
   let compareDatetime = 0;
+  let compareFormat = 'YYYY-MM-DD';
 
   let countIncomplete = [];
   let countComplete = [];
@@ -1524,26 +1525,32 @@ function updateTimelineChart(filterBy, dateRange, type) {
 
   for(let i = 0; i < countDays; i ++) {
     if(filterBy === 'Week') {
-      compareDay = moment().week(dateRange).day(i).format('YYYY-MM-DD');
-      labels.push(moment(compareDay).format('MMM.D'));
-      labels_standard.push(compareDay);
+      compareDate = moment().week(dateRange).day(i).format('YYYY-MM-DD');
+      labels.push(moment(compareDate).format('D, ddd'));
+      labels_standard.push(compareDate);
     }
     if(filterBy === 'Month') {
-      compareDay = moment().month(dateRange).date(i + 1).format('YYYY-MM-DD');
-      labels.push(moment(compareDay).format('MMM.D'));
-      labels_standard.push(compareDay);
+      compareDate = moment().month(dateRange).date(i + 1).format('YYYY-MM-DD');
+      labels.push(moment(compareDate).format('MMM D'));
+      labels_standard.push(compareDate);
     }
     if(filterBy === 'Year') {
-      compareDay = moment().year(dateRange).month(i).endOf('month').format('YYYY-MM-DD');
-      labels.push(moment(compareDay).format('MMM'));
+      if(type === 'Activity') {
+        compareDate = moment().year(dateRange).month(i).format('YYYY-MM');
+        compareFormat = 'YYYY-MM';
+      }
+      if(type === 'Quantity') {
+        compareDate = moment().year(dateRange).month(i).endOf('month').format('YYYY-MM-DD');
+      }
+      labels.push(moment(compareDate).format('MMM'));
       labels_standard.push(moment().year(dateRange).month(i).format('YYYY-MM'));
     }
 
-    compareDatetime = Date.parse(compareDay + ' 23:59:59');
+    compareDatetime = Date.parse(compareDate + ' 23:59:59');
 
     if(type === 'Activity') {
-      countIncomplete = Zeke.notes.filter(note => moment(note.dateCreated).format('YYYY-MM-DD') == compareDay);
-      countComplete = Zeke.notes.filter(note => moment(note.dateCompleted).format('YYYY-MM-DD') == compareDay);
+      countIncomplete = Zeke.notes.filter(note => moment(note.dateCreated).format(compareFormat) == compareDate);
+      countComplete = Zeke.notes.filter(note => moment(note.dateCompleted).format(compareFormat) == compareDate);
     } else {
       countIncomplete = Zeke.notes.filter(note => note.dateCreated < compareDatetime && (note.dateCompleted == '' || note.dateCompleted > compareDatetime));
       countComplete = Zeke.notes.filter(note => note.dateCompleted < compareDatetime);

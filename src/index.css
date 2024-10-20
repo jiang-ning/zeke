@@ -776,9 +776,7 @@ span.appIcon:hover {
   grid-column: 1;
   grid-row: 2 / span 3;
   background-color: #fff;
-  /* width: 100%; */
-  /* height: calc(100% - 20px); */
-  padding: 10px;
+  padding: 10px 10px 10px 20px;
   z-index: 1;
   overflow: hidden auto;
 }
@@ -786,9 +784,7 @@ span.appIcon:hover {
   display: block;
 }
 .modal .modal-contents {
-  height: 100%;
-  padding: 10px;
-  overflow: auto;
+  /* height: 100%; */
 }
 .modal .brand {
   font-size: 24px;
