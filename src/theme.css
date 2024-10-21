@@ -42,18 +42,18 @@
 [class^="theme"] #areaSettings.active #btnSettings {
   color: #ffffffee;
 }
-[class^="theme"] .areaNav:hover,
-[class^="theme"] .areaNav.active,
 [class^="theme"] #areaListLists input.active,
 [class^="theme"] #listAdd #listAddName.active {
   color: #000;
 }
+[class^="theme"] .areaNav:hover,
+[class^="theme"] .areaNav.active,
 [class^="theme"] .report table,
 [class^="theme"] #listAdd #listAddName {
   color: #00000099;
 }
 [class^="theme"] .areaNav {
-  color: #00000066;
+  color: #00000033;
 }
 
 /* mode-dark */
@@ -98,9 +98,14 @@
 .theme-dark #txtNew:focus {
   background-color: transparent;
 }
+.theme-dark .areaNav {
+  color: #00000066;
+}
 .theme-dark #listAdd #listAddName {
   color: #00000099;
 }
+.theme-dark .areaNav:hover,
+.theme-dark .areaNav.active,
 .theme-dark #listAdd #listAddName:hover,
 .theme-dark .icon:hover,
 .theme-dark #areaPinNotes .notePin,
