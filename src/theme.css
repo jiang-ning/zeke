@@ -42,18 +42,18 @@
 [class^="theme"] #areaSettings.active #btnSettings {
   color: #ffffffee;
 }
+[class^="theme"] .areaNav:hover,
+[class^="theme"] .areaNav.active,
 [class^="theme"] #areaListLists input.active,
 [class^="theme"] #listAdd #listAddName.active {
   color: #000;
 }
-[class^="theme"] .areaNav:hover,
-[class^="theme"] .areaNav.active,
 [class^="theme"] .report table,
 [class^="theme"] #listAdd #listAddName {
   color: #00000099;
 }
 [class^="theme"] .areaNav {
-  color: #00000033;
+  color: #00000066;
 }
 
 /* mode-dark */

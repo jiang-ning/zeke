@@ -542,7 +542,7 @@ li.edit .noteSub {
   line-height: 40px;
   border-bottom: 1px solid #eee;
   padding: 0 10px;
-  grid-template-columns: 26px 1fr 80px auto auto auto auto auto;
+  grid-template-columns: 26px 1fr auto auto auto auto auto auto;
   display: grid;
 }
 #areaListNotes li.parent,
@@ -619,8 +619,8 @@ li.edit .noteSub {
   text-align: right;
   color: #666;
   padding-right: 10px;
-  text-overflow: ellipsis;
   height: 40px;
+  overflow: hidden;
 }
 #areaListNotes li.completed input[type='text'],
 #areaPinNotes li.completed input[type='text'] {
