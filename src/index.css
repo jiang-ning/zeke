@@ -225,6 +225,9 @@ select:hover {
 .panelsContainer.viewFocused {
   grid-template-columns: 0px 10px 1fr !important;
 }
+.panelsContainer.resizing {
+  user-select: none;
+}
 
 #panelList {
   grid-column: 1;

@@ -1,5 +1,9 @@
 # Change Log
 
+### v1.10.3
+##### 2024-10-21
+- Bug Fix: List resizing dragging issue
+
 ### v1.10.2
 ##### 2024-10-06
 - Improvement: Filter by incompleted / completed tasks

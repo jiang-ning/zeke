@@ -120,7 +120,8 @@ request.onsuccess = async function(event) {
 
         // 2.2 fetch subtasks
         listNotes.forEach((item, idx) => {
-          if(item && item.parent > 0 && item.parent !== true) {
+          let expactedParentNote = notes.filter(note => note.id == item.parent);
+          if(item && item.parent > 0 && item.parent !== true && expactedParentNote.length > 0) {
             generateSubNoteItem(item,
               'areaListNotes',
               idx,
@@ -991,7 +992,6 @@ function initGrid() {
 
   const gutter = document.getElementById('gutter');
   const panelList = document.getElementById('panelList');
-  const panelNote = document.getElementById('panelNote');
   const panelsContainer = document.getElementById('panelsContainer');
   const gridTemplateColumns = localStorage.getItem('grid-template-columns') || '100px 10px 1fr';
   const listOpened = JSON.parse(localStorage.getItem('listOpened'));
@@ -1029,7 +1029,12 @@ function initGrid() {
   gutter.addEventListener('mouseup', () => {
     isResizing = false;
     localStorage.setItem('grid-template-columns', panelsContainer.style['grid-template-columns']);
+    panelsContainer.classList.remove('resizing');
     panelsContainer.classList.add('toggling');
+  });
+
+  panelsContainer.addEventListener('mouseup', () => {
+    isResizing = false;
   });
 
   panelsContainer.style.gridTemplateColumns = listOpened ? gridTemplateColumns : '0px 0px 1fr';
