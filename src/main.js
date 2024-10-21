@@ -1377,6 +1377,8 @@ function initLanguage() {
   if(rememberedLanguage === 'ar' || rememberedLanguage === 'pk') {
     document.body.classList.add('ar');
   }
+
+  moment.locale(Languages[rememberedLanguage].locale);
   changeLanguage(rememberedLanguage);
 }
 
@@ -1458,12 +1460,17 @@ function initTimelineChart() {
     themeColor_Incompleted = '#607d8b';
     themeColor_Completed = '#cfd8dc';
   }
+
+  const langCode = localStorage.getItem('language') || 'en';
+  const label_incomplete = Languages[langCode]['__incompleted__'] || 'Incomplete';
+  const label_completed = Languages[langCode]['__completed__'] || 'Completed';
+
   const ctx = document.getElementById('chart_timeline');
   const data = {
     labels: [],
     datasets: [
       {
-        label: 'Incompleted',
+        label: label_incomplete,
         data: [],
         backgroundColor: themeColor_Incompleted + '33',
         borderColor: themeColor_Incompleted,
@@ -1471,7 +1478,7 @@ function initTimelineChart() {
         fill: true
       },
       {
-        label: 'Completed',
+        label: label_completed,
         data: [],
         backgroundColor: themeColor_Completed + '33',
         borderColor: themeColor_Completed,
@@ -1614,7 +1621,7 @@ function generateBarChart() {
         borderWidth: 1
       },
       {
-        label: 'Incompleted',
+        label: 'Incomplete',
         data: data_incomplete,
         fill: false,
         backgroundColor: '#eee',

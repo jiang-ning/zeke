@@ -53,7 +53,7 @@
               <input id="listAddName">
             </div>
           </div>
-          <div id="btnSwitchNavbar" class="" title="Switch sider bar" data-lang-title="__settings__">
+          <div id="btnSwitchNavbar" class="" title="Show / Hide Side Navigation" data-lang-title="__show_hide_side_nav__">
             <svg xmlns="http://www.w3.org/2000/svg" class="switcherIcon" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
               <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
             </svg>
@@ -183,14 +183,14 @@
             <div class="modal-section">
               <div class="filterButtonGroups">
                 <div id="dateRangeBy" class="filterButtonGroup">
-                  <span id="dateRangeByWeek" class="filterButton active" data-id="Week">Week</span>
-                  <span id="dateRangeByMonth" class="filterButton" data-id="Month">Month</span>
-                  <span id="dateRangeByYear" class="filterButton" data-id="Year">Year</span>
+                  <span id="dateRangeByWeek" class="filterButton active" data-id="Week" data-lang-innertext="__btn_week__">Week</span>
+                  <span id="dateRangeByMonth" class="filterButton" data-id="Month" data-lang-innertext="__btn_month__">Month</span>
+                  <span id="dateRangeByYear" class="filterButton" data-id="Year" data-lang-innertext="__btn_year__">Year</span>
                 </div>
                 <span class="spaceHolder"></span>
                 <div id="dataCalculateBy" class="filterButtonGroup">
-                  <span id="dataCalculateByActivity" class="filterButton active" data-id="Activity">Activity</span>
-                  <span id="dataCalculateByQuantity" class="filterButton" data-id="Quantity">Quantity</span>
+                  <span id="dataCalculateByActivity" class="filterButton active" data-id="Activity" data-lang-innertext="__btn_activity__">Activity</span>
+                  <span id="dataCalculateByQuantity" class="filterButton" data-id="Quantity" data-lang-innertext="__btn_quantity__">Quantity</span>
                 </div>
               </div>
               <span class="filterDateRange">
@@ -214,10 +214,10 @@
               <table id="chart_datasheet">
                 <thead>
                   <tr>
-                    <th>Time Period</th>
-                    <th>Incompleted</th>
-                    <th>Completed</th>
-                    <th>Total</th>
+                    <th data-lang-innertext="__time_period__">Time Period</th>
+                    <th data-lang-innertext="__incompleted__">Incomplete</th>
+                    <th data-lang-innertext="__completed__">Completed</th>
+                    <th data-lang-innertext="__total__">Total</th>
                   </tr>
                 </thead>
                 <tbody></tbody>
