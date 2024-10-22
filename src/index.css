@@ -667,7 +667,7 @@ li.edit .noteSub {
   grid-column: 1;
   grid-row: 2;
   line-height: 40px;
-  padding: 0 8px;
+  padding: 0 3px;
   border-left: 4px solid transparent;
 }
 #areaSettings.active {
