@@ -465,7 +465,7 @@ li.edit .noteSub {
   border-color: #ccc;
 }
 #btnNewList:hover {
-  background-color: #dddddd;
+  border: 1px solid #666;
   color: #666;
 }
 #btnFilter.active,

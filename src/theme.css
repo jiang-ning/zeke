@@ -202,21 +202,21 @@
 
 /* blue */
 .theme-blue .panelsContainer,
-.theme-blue .report .filterButton:hover,
 .theme-blue #panelNav,
 .theme-blue #panelNote .sortable-chosen,
 .theme-blue #areaListNotes li.completed input[type="checkbox"]::before,
 .theme-blue #areaPinNotes li.completed input[type="checkbox"]::before {
   background-color: var(--blue);
 }
+.theme-blue .report .filterButton:hover,
 .theme-blue #areaPinNotes .notePin {
   background-color: var(--blue-33);
 }
+.theme-blue .report .filterButton.active,
 .theme-blue .report tr:nth-child(even),
 .theme-blue #filterbar.active {
   background-color: var(--blue-66);
 }
-.theme-blue .report .filterButton.active,
 .theme-blue #btnFilter.active,
 .theme-blue #filterCompleted.active,
 .theme-blue #filterIncompleted.active,
@@ -251,6 +251,7 @@
 .theme-blue .noteCollapse {
   border-color: var(--blue-stroke-66);
 }
+.theme-blue #btnNewList:hover,
 .theme-blue #btnNew:hover,
 .theme-blue #btnFilter:hover,
 .theme-blue #filterbar.active,
@@ -272,10 +273,14 @@
 .theme-blue #gutter:hover + #panelNote {
   box-shadow: -1px 0px 6px var(--blue-stroke);
 }
+.theme-blue .report .filterButton {
+  box-shadow: 0px 0px 1px var(--blue-stroke);
+}
 .theme-blue #btnNew,
 .theme-blue #btnFilter {
   color: var(--blue-ee);
 }
+.theme-blue #btnNewList,
 .theme-blue #btnSwitchNavbar:hover,
 .theme-blue #btnFilter:hover,
 .theme-blue #filterCompleted:hover, 
@@ -311,21 +316,21 @@
 
 /* red */
 .theme-red .panelsContainer,
-.theme-red .report .filterButton:hover,
 .theme-red #panelNav,
 .theme-red #panelNote .sortable-chosen,
 .theme-red #areaListNotes li.completed input[type="checkbox"]::before,
 .theme-red #areaPinNotes li.completed input[type="checkbox"]::before {
   background-color: var(--red);
 }
+.theme-red .report .filterButton:hover,
 .theme-red #areaPinNotes .notePin {
   background-color: var(--red-33);
 }
+.theme-red .report .filterButton.active,
 .theme-red .report tr:nth-child(even),
 .theme-red #filterbar.active {
   background-color: var(--red-66);
 }
-.theme-red .report .filterButton.active,
 .theme-red #btnFilter.active,
 .theme-red #filterCompleted.active,
 .theme-red #filterIncompleted.active,
@@ -361,6 +366,7 @@
 .theme-red .noteCollapse {
   border-color: var(--red-stroke-66);
 }
+.theme-red #btnNewList:hover,
 .theme-red #btnNew:hover,
 .theme-red #btnFilter:hover,
 .theme-red #filterbar.active,
@@ -382,10 +388,14 @@
 .theme-red #gutter:hover + #panelNote {
   box-shadow: -1px 0px 6px var(--red-stroke);
 }
+.theme-red .report .filterButton {
+  box-shadow: 0px 0px 1px var(--red-stroke);
+}
 .theme-red #btnNew,
 .theme-red #btnFilter {
   color: var(--red-ee);
 }
+.theme-red #btnNewList,
 .theme-red #btnSwitchNavbar:hover,
 .theme-red #btnFilter:hover,
 .theme-red #filterCompleted:hover, 
@@ -420,21 +430,21 @@
 
 /* orange */
 .theme-orange .panelsContainer,
-.theme-orange .report .filterButton:hover,
 .theme-orange #panelNav,
 .theme-orange #panelNote .sortable-chosen,
 .theme-orange #areaListNotes li.completed input[type="checkbox"]::before,
 .theme-orange #areaPinNotes li.completed input[type="checkbox"]::before {
   background-color: var(--orange);
 }
+.theme-orange .report .filterButton:hover,
 .theme-orange #areaPinNotes .notePin {
   background-color: var(--orange-33);
 }
+.theme-orange .report .filterButton.active,
 .theme-orange .report tr:nth-child(even),
 .theme-orange #filterbar.active {
   background-color: var(--orange-66);
 }
-.theme-orange .report .filterButton.active,
 .theme-orange #btnFilter.active,
 .theme-orange #filterCompleted.active,
 .theme-orange #filterIncompleted.active,
@@ -470,6 +480,7 @@
 .theme-orange .noteCollapse {
   border-color: var(--orange-stroke-66);
 }
+.theme-orange #btnNewList:hover,
 .theme-orange #btnNew:hover,
 .theme-orange #btnFilter:hover,
 .theme-orange #filterbar.active,
@@ -491,10 +502,14 @@
 .theme-orange #gutter:hover + #panelNote {
   box-shadow: -1px 0px 6px var(--orange-stroke);
 }
+.theme-orange .report .filterButton {
+  box-shadow: 0px 0px 1px var(--orange-stroke);
+}
 .theme-orange #btnNew,
 .theme-orange #btnFilter {
   color: var(--orange-ee);
 }
+.theme-orange #btnNewList,
 .theme-orange #btnSwitchNavbar:hover,
 .theme-orange #btnFilter:hover,
 .theme-orange #filterCompleted:hover, 
@@ -529,19 +544,19 @@
 
 /* amber */
 .theme-amber .panelsContainer,
-.theme-amber .report .filterButton:hover,
 .theme-amber #panelNav,
 .theme-amber #panelNote .sortable-chosen {
   background-color: var(--amber);
 }
+.theme-amber .report .filterButton:hover,
 .theme-amber #areaPinNotes .notePin {
   background-color: var(--amber-33);
 }
+.theme-amber .report .filterButton.active,
 .theme-amber .report tr:nth-child(even),
 .theme-amber #filterbar.active {
   background-color: var(--amber-66);
 }
-.theme-amber .report .filterButton.active,
 .theme-amber #btnFilter.active,
 .theme-amber #filterCompleted.active,
 .theme-amber #filterIncompleted.active,
@@ -581,6 +596,7 @@
 .theme-amber .noteCollapse {
   border-color: var(--amber-stroke-66);
 }
+.theme-amber #btnNewList:hover,
 .theme-amber #btnNew:hover,
 .theme-amber #btnFilter:hover,
 .theme-amber #filterbar.active,
@@ -602,10 +618,14 @@
 .theme-amber #gutter:hover + #panelNote {
   box-shadow: -1px 0px 6px var(--amber-stroke);
 }
+.theme-amber .report .filterButton {
+  box-shadow: 0px 0px 1px var(--amber-stroke);
+}
 .theme-amber #btnNew,
 .theme-amber #btnFilter {
   color: var(--amber-ee);
 }
+.theme-amber #btnNewList,
 .theme-amber #btnSwitchNavbar:hover,
 .theme-amber #btnFilter:hover,
 .theme-amber #filterCompleted:hover, 
@@ -640,21 +660,21 @@
 
 /* green */
 .theme-green .panelsContainer,
-.theme-green .report .filterButton:hover,
 .theme-green #panelNav,
 .theme-green #panelNote .sortable-chosen,
 .theme-green #areaListNotes li.completed input[type="checkbox"]::before,
 .theme-green #areaPinNotes li.completed input[type="checkbox"]::before {
   background-color: var(--green);
 }
+.theme-green .report .filterButton:hover,
 .theme-green #areaPinNotes .notePin {
   background-color: var(--green-33);
 }
+.theme-green .report .filterButton.active,
 .theme-green .report tr:nth-child(even),
 .theme-green #filterbar.active {
   background-color: var(--green-66);
 }
-.theme-green .report .filterButton.active,
 .theme-green #btnFilter.active,
 .theme-green #filterCompleted.active,
 .theme-green #filterIncompleted.active,
@@ -690,6 +710,7 @@
 .theme-green .noteCollapse {
   border-color: var(--green-stroke-66);
 }
+.theme-green #btnNewList:hover,
 .theme-green #btnNew:hover,
 .theme-green #btnFilter:hover,
 .theme-green #filterbar.active,
@@ -711,10 +732,14 @@
 .theme-green #gutter:hover + #panelNote {
   box-shadow: -1px 0px 6px var(--green-stroke);
 }
+.theme-green .report .filterButton {
+  box-shadow: 0px 0px 1px var(--green-stroke);
+}
 .theme-green #btnNew,
 .theme-green #btnFilter {
   color: var(--green-ee);
 }
+.theme-green #btnNewList,
 .theme-green #btnSwitchNavbar:hover,
 .theme-green #btnFilter:hover,
 .theme-green #filterCompleted:hover, 
@@ -749,21 +774,21 @@
 
 /* teal */
 .theme-teal .panelsContainer,
-.theme-teal .report .filterButton:hover,
 .theme-teal #panelNav,
 .theme-teal #panelNote .sortable-chosen,
 .theme-teal #areaListNotes li.completed input[type="checkbox"]::before,
 .theme-teal #areaPinNotes li.completed input[type="checkbox"]::before {
   background-color: var(--teal);
 }
+.theme-teal .report .filterButton:hover,
 .theme-teal #areaPinNotes .notePin {
   background-color: var(--teal-33);
 }
+.theme-teal .report .filterButton.active,
 .theme-teal .report tr:nth-child(even),
 .theme-teal #filterbar.active {
   background-color: var(--teal-66);
 }
-.theme-teal .report .filterButton.active,
 .theme-teal #btnFilter.active,
 .theme-teal #filterCompleted.active,
 .theme-teal #filterIncompleted.active,
@@ -799,6 +824,7 @@
 .theme-teal .noteCollapse {
   border-color: var(--teal-stroke-66);
 }
+.theme-teal #btnNewList:hover,
 .theme-teal #btnNew:hover,
 .theme-teal #btnFilter:hover,
 .theme-teal #filterbar.active,
@@ -820,10 +846,14 @@
 .theme-teal #gutter:hover + #panelNote {
   box-shadow: -1px 0px 6px var(--teal-stroke);
 }
+.theme-teal .report .filterButton {
+  box-shadow: 0px 0px 1px var(--teal-stroke);
+}
 .theme-teal #btnNew,
 .theme-teal #btnFilter {
   color: var(--teal-ee);
 }
+.theme-teal #btnNewList,
 .theme-teal #btnSwitchNavbar:hover,
 .theme-teal #btnFilter:hover,
 .theme-teal #filterCompleted:hover, 
@@ -858,21 +888,21 @@
 
 /* violet */
 .theme-violet .panelsContainer,
-.theme-violet .report .filterButton:hover,
 .theme-violet #panelNav,
 .theme-violet #panelNote .sortable-chosen,
 .theme-violet #areaListNotes li.completed input[type="checkbox"]::before,
 .theme-violet #areaPinNotes li.completed input[type="checkbox"]::before {
   background-color: var(--violet);
 }
+.theme-violet .report .filterButton:hover,
 .theme-violet #areaPinNotes .notePin {
   background-color: var(--violet-33);
 }
+.theme-violet .report .filterButton.active,
 .theme-violet .report tr:nth-child(even),
 .theme-violet #filterbar.active {
   background-color: var(--violet-66);
 }
-.theme-violet .report .filterButton.active,
 .theme-violet #btnFilter.active,
 .theme-violet #filterCompleted.active,
 .theme-violet #filterIncompleted.active,
@@ -908,6 +938,7 @@
 .theme-violet .noteCollapse {
   border-color: var(--violet-stroke-66);
 }
+.theme-violet #btnNewList:hover,
 .theme-violet #btnNew:hover,
 .theme-violet #btnFilter:hover,
 .theme-violet #filterbar.active,
@@ -929,10 +960,14 @@
 .theme-violet #gutter:hover + #panelNote {
   box-shadow: -1px 0px 6px var(--violet-stroke);
 }
+.theme-violet .report .filterButton {
+  box-shadow: 0px 0px 1px var(--violet-stroke);
+}
 .theme-violet #btnNew,
 .theme-violet #btnFilter {
   color: var(--violet-ee);
 }
+.theme-violet #btnNewList,
 .theme-violet #btnSwitchNavbar:hover,
 .theme-violet #btnFilter:hover,
 .theme-violet #filterCompleted:hover, 
@@ -967,21 +1002,21 @@
 
 /* purple */
 .theme-purple .panelsContainer,
-.theme-purple .report .filterButton:hover,
 .theme-purple #panelNav,
 .theme-purple #panelNote .sortable-chosen,
 .theme-purple #areaListNotes li.completed input[type="checkbox"]::before,
 .theme-purple #areaPinNotes li.completed input[type="checkbox"]::before {
   background-color: var(--purple);
 }
+.theme-purple .report .filterButton:hover,
 .theme-purple #areaPinNotes .notePin {
   background-color: var(--purple-33);
 }
+.theme-purple .report .filterButton.active,
 .theme-purple .report tr:nth-child(even),
 .theme-purple #filterbar.active {
   background-color: var(--purple-66);
 }
-.theme-purple .report .filterButton.active,
 .theme-purple #btnFilter.active,
 .theme-purple #filterCompleted.active,
 .theme-purple #filterIncompleted.active,
@@ -1017,6 +1052,7 @@
 .theme-purple .noteCollapse {
   border-color: var(--purple-stroke-66);
 }
+.theme-purple #btnNewList:hover,
 .theme-purple #btnNew:hover,
 .theme-purple #btnFilter:hover,
 .theme-purple #filterbar.active,
@@ -1038,10 +1074,14 @@
 .theme-purple #gutter:hover + #panelNote {
   box-shadow: -1px 0px 6px var(--purple-stroke);
 }
+.theme-purple .report .filterButton {
+  box-shadow: 0px 0px 1px var(--purple-stroke);
+}
 .theme-purple #btnNew,
 .theme-purple #btnFilter {
   color: var(--purple-ee);
 }
+.theme-purple #btnNewList,
 .theme-purple #btnSwitchNavbar:hover,
 .theme-purple #btnFilter:hover,
 .theme-purple #filterCompleted:hover, 
@@ -1076,21 +1116,21 @@
 
 /* pink */
 .theme-pink .panelsContainer,
-.theme-pink .report .filterButton:hover,
 .theme-pink #panelNav,
 .theme-pink #panelNote .sortable-chosen,
 .theme-pink #areaListNotes li.completed input[type="checkbox"]::before,
 .theme-pink #areaPinNotes li.completed input[type="checkbox"]::before {
   background-color: var(--pink);
 }
+.theme-pink .report .filterButton:hover,
 .theme-pink #areaPinNotes .notePin {
   background-color: var(--pink-33);
 }
+.theme-pink .report .filterButton.active,
 .theme-pink .report tr:nth-child(even),
 .theme-pink #filterbar.active {
   background-color: var(--pink-66);
 }
-.theme-pink .report .filterButton.active,
 .theme-pink #btnFilter.active,
 .theme-pink #filterCompleted.active,
 .theme-pink #filterIncompleted.active,
@@ -1126,6 +1166,7 @@
 .theme-pink .noteCollapse {
   border-color: var(--pink-stroke-66);
 }
+.theme-pink #btnNewList:hover,
 .theme-pink #btnNew:hover,
 .theme-pink #btnFilter:hover,
 .theme-pink #filterbar.active,
@@ -1147,10 +1188,14 @@
 .theme-pink #gutter:hover + #panelNote {
   box-shadow: -1px 0px 6px var(--pink-stroke);
 }
+.theme-pink .report .filterButton {
+  box-shadow: 0px 0px 1px var(--pink-stroke);
+}
 .theme-pink #btnNew,
 .theme-pink #btnFilter {
   color: var(--pink-ee);
 }
+.theme-pink #btnNewList,
 .theme-pink #btnSwitchNavbar:hover,
 .theme-pink #btnFilter:hover,
 .theme-pink #filterCompleted:hover, 
