@@ -1,10 +1,10 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
-const { updateElectronApp } = require('update-electron-app');
+// const { updateElectronApp } = require('update-electron-app'); // temporary disabled for pro
 const path = require('path');
 
-updateElectronApp({
-  notifyUser: true
-});
+// updateElectronApp({  // temporary disabled for pro
+//   notifyUser: true   // temporary disabled for pro
+// });                  // temporary disabled for pro
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -32,6 +32,7 @@ const createWindow = () => {
         contextIsolation: true
       },
       titleBarStyle: 'hidden',
+      // titleBarStyle: 'customButtonsOnHover', // for mac screenshot
       transparent: true,
       frame: false
     });

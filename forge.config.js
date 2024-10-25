@@ -29,12 +29,12 @@ module.exports = {
     {
       name: '@electron-forge/publisher-github',
       config: {
-        repository: {
-          owner: "jiang-ning",
-          name: 'zeke'
-        },
-        prerelease: false,
-        draft: true
+        // repository: {
+        //   owner: "jiang-ning",
+        //   name: 'zeke'
+        // },
+        // prerelease: false,
+        // draft: true
       }
     }
   ],
