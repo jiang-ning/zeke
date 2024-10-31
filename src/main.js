@@ -1587,7 +1587,7 @@ function updateTimelineChart(filterBy, dateRange, type) {
   Zeke_ChartTimeline.update();
 
   document.getElementById('currentRange').innerHTML = currentRangeText;
-  document.getElementById('rangeIndicator').innerHTML = labels_standard[0] + ' ~ ' + labels_standard[labels_standard.length - 1];
+  // document.getElementById('rangeIndicator').innerHTML = labels_standard[0] + ' ~ ' + labels_standard[labels_standard.length - 1];
   document.querySelector('#chart_datasheet tbody').innerHTML = tableBody;
 }
 

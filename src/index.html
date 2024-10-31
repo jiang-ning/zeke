@@ -187,26 +187,27 @@
                   <span id="dateRangeByMonth" class="filterButton" data-id="Month" data-lang-innertext="__btn_month__">Month</span>
                   <span id="dateRangeByYear" class="filterButton" data-id="Year" data-lang-innertext="__btn_year__">Year</span>
                 </div>
+                <span class="filterDateRange">
+                  <span id="prevRange" class="rangeButton">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor"  viewBox="0 0 16 16">
+                      <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0"/>
+                    </svg>
+                  </span>
+                  <span id="currentRange" class="rangeSelected" data-range=""></span>
+                  <span id="nextRange" class="rangeButton">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor"  viewBox="0 0 16 16">
+                      <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+                    </svg>
+                  </span>
+                  <!-- <span id="rangeIndicator" class=""></span> -->
+                </span>
                 <span class="spaceHolder"></span>
                 <div id="dataCalculateBy" class="filterButtonGroup">
                   <span id="dataCalculateByActivity" class="filterButton active" data-id="Activity" data-lang-innertext="__btn_activity__">Activity</span>
                   <span id="dataCalculateByQuantity" class="filterButton" data-id="Quantity" data-lang-innertext="__btn_quantity__">Quantity</span>
                 </div>
               </div>
-              <span class="filterDateRange">
-                <span id="prevRange" class="rangeButton">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor"  viewBox="0 0 16 16">
-                    <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0"/>
-                  </svg>
-                </span>
-                <span id="currentRange" class="rangeSelected" data-range=""></span>
-                <span id="nextRange" class="rangeButton">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor"  viewBox="0 0 16 16">
-                    <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
-                  </svg>
-                </span>
-                <span id="rangeIndicator" class=""></span>
-              </span>
+              
               <canvas id="chart_timeline"></canvas>
             </div>
             
