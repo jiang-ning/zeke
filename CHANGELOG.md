@@ -1,6 +1,10 @@
 # Change Log
 
 ### v1.10.3
+##### 2026-06-25
+- Bug Fix: List sorting issue
+
+### v1.10.3
 ##### 2024-10-21
 - Bug Fix: List resizing dragging issue
 

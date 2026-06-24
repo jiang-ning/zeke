@@ -3,6 +3,7 @@
 // Open the IndexedDB database
 const request = indexedDB.open('neonote', 1);
 var Zeke = {orderedNoteIds:{}, orderedPinNoteIds:{}};
+var sortableInstances = [];
 
 // Create object store and define its structure
 request.onupgradeneeded = function(event) {
@@ -78,30 +79,37 @@ request.onsuccess = async function(event) {
       } else {
         let listNotes = notes;
         if(Zeke.orderedNoteIds[listId]) {
-          listNotes = Zeke.orderedNoteIds[listId].map(id =>notes.find(obj => obj.id === parseInt(id)));
-          if(listNotes.length != notes.length) {
-            listNotes = notes;
+          const savedOrder = Zeke.orderedNoteIds[listId];
+          const savedIdSet = new Set(savedOrder.map(id => parseInt(id)));
+          // Map saved order to note objects, filtering out deleted/stale entries
+          const orderedNotes = savedOrder
+            .map(id => notes.find(obj => obj.id === parseInt(id)))
+            .filter(Boolean);
+          // Notes not in saved order (newly added, just unpinned, pinned in other area)
+          const unorderedNotes = notes.filter(n => !savedIdSet.has(n.id));
+          if (orderedNotes.length > 0) {
+            listNotes = [...unorderedNotes, ...orderedNotes];
           }
         }
         if(Zeke.orderedPinNoteIds[listId]) {
-          const pinNotes = Zeke.orderedPinNoteIds[listId].map(id =>notes.find(obj => obj.id === parseInt(id)));
-          if(pinNotes.length > 0 && pinNotes[0] != undefined) {
+          const pinNotes = Zeke.orderedPinNoteIds[listId]
+            .map(id => notes.find(obj => obj.id === parseInt(id)))
+            .filter(Boolean);
+          if(pinNotes.length > 0) {
             // 1.1. render pinned parent notes
             pinNotes.forEach((item, idx) => {
               if(item && (item.parent == 0 || item.parent === true)) {
                 generateNoteItem(item, 'areaPinNotes', idx, Zeke.orderedPinNoteIds[listId]);
-                initDnD('areaPinNotes');
               }
             });
             // 1.2. render pinned subnotes
             pinNotes.forEach((item, idx) => {
               if(item && item.parent > 0 && item.parent !== true) {
                 generateSubNoteItem(item, 'areaPinNotes', idx, Zeke.orderedPinNoteIds[listId]);
-                initDnD('areaPinNotes', true);
-    
                 updateCompletionPercentage(item.parent);
               }
             });
+            initNoteDnD('areaPinNotes');
           }
         }
         
@@ -114,8 +122,6 @@ request.onsuccess = async function(event) {
               idx,
               Zeke.orderedNoteIds[listId] && Zeke.orderedNoteIds[listId].includes(item.id));
           }
-          initDnD('areaListNotes');
-          
         });
 
         // 2.2 fetch subtasks
@@ -126,11 +132,11 @@ request.onsuccess = async function(event) {
               'areaListNotes',
               idx,
               Zeke.orderedNoteIds[listId] && Zeke.orderedNoteIds[listId].includes(item.id));
-            initDnD('areaListNotes', true);
-
             updateCompletionPercentage(item.parent);
           }
         });
+
+        initNoteDnD('areaListNotes');
       }
 
       // calculate usage
@@ -266,7 +272,7 @@ request.onsuccess = async function(event) {
           });
         }
 
-        initDnD('areaListLists');
+        initListDnD();
       }
     };
     
@@ -726,81 +732,120 @@ request.onsuccess = async function(event) {
     }
   }
 
-  function initDnD(listName, noteSubList = false) {
-    const list = document.querySelectorAll(`#${listName} ul${noteSubList?' ul':''}`);
-    list.forEach((li, idx) => {
-      Sortable.create(li, {
-        group: listName,
-        animation: 150,
-        fallbackOnBody: true,
-        swapThreshold: 0.65,
-        invertSwap: true,
-        direction: 'vertical',
-        ghostClass: "sortable-ghost",
-        chosenClass: "sortable-chosen",
-        fallbackClass: "sortable-fallback",
-        dragClass: "sortable-drag",
-        filter: "li.edit input.noteContent",
-        preventOnFilter: false,
-        onMove: function (evt) {
-          if(evt.dragged.querySelectorAll('.noteSubList li').length > 0 &&
-            evt.related.parentElement.classList.contains('noteSubList')){
-            return false;
-          }
-        },
-        onEnd: function (evt) {
-          let currentListId = parseInt(document.querySelector('#areaListLists input.active').dataset.id);
-          let sourceTaskId = parseInt(evt.item.dataset.id);
-          let sourceParentTaskId = parseInt(evt.from.parentElement.dataset.id);
-          let targetTaskId = parseInt(evt.to.parentElement.dataset.id);
-          // if subnote to parent note
-          if(evt.from.classList.contains('noteSubList') && !evt.to.classList.contains('noteSubList')) {
-            if(evt.from.childElementCount == 0) {
-              // update leaving ex-parent, if the dragged task is the last subtask of the previous parent task, set the ex-parent task as a normal task
-              dbUpdate('note', sourceParentTaskId, { parent: 0 });
-            }
-            dbUpdate('note', sourceTaskId, { parent: 0 });
-          };
-          // if parent note to subnote
-          if(evt.item.querySelector('span.noteSub') && 
-            evt.to.classList.contains('noteSubList')) {
-              // update dragged task to set its parent id that becomes to a subtask
-              dbUpdate('note', sourceTaskId, { parent: targetTaskId });
-              // update target task to set it becomes to a parent task
-              dbUpdate('note', targetTaskId, { parent: true });
-          };
-          // if subnote to subnote
-          if(evt.from.classList.contains('noteSubList') && evt.to.classList.contains('noteSubList')) {
-            // if ex-parent has no subtask
-            if(evt.from.childElementCount == 0) {
-              dbUpdate('note', sourceParentTaskId, { parent: 0 });
-            }
-            dbUpdate('note', targetTaskId, { parent: true });
-            dbUpdate('note', sourceTaskId, { parent: targetTaskId });
-          };
-          
-          updateSortIndexes(listName);
-          renderNotes(currentListId);
-        }
-      });
+  /**
+   * Initialize drag-and-drop for the sidebar list of lists.
+   */
+  function initListDnD() {
+    const listEl = document.querySelector('#areaListLists ul');
+    if (listEl.sortable) {
+      listEl.sortable.destroy();
+    }
+    listEl.sortable = Sortable.create(listEl, {
+      animation: 150,
+      direction: 'vertical',
+      ghostClass: "sortable-ghost",
+      chosenClass: "sortable-chosen",
+      dragClass: "sortable-drag",
+      filter: "li.edit input",
+      preventOnFilter: false,
+      onEnd: function () {
+        updateSortIndexes('areaListLists');
+      }
     });
   }
 
-  function updateSortIndexes(areaListName) {
-    const items = document.querySelectorAll(`#${areaListName} ul li`);
-    let areaListNameMap = {"areaListNotes":"orderedNoteIds", "areaPinNotes":"orderedPinNoteIds"};
+  /**
+   * Initialize drag-and-drop for a note area (parent notes + sub-note lists).
+   * @param {string} areaName 'areaListNotes' or 'areaPinNotes'
+   */
+  function initNoteDnD(areaName) {
+    // Main note list
+    const mainList = document.querySelector(`#${areaName} ul`);
+    initSortableOnNoteList(mainList, areaName);
+
+    // All sub-note lists within the area
+    const subLists = document.querySelectorAll(`#${areaName} ul ul`);
+    subLists.forEach(subList => initSortableOnNoteList(subList, areaName));
+  }
+
+  function initSortableOnNoteList(listEl, areaName) {
+    if (listEl.sortable) {
+      listEl.sortable.destroy();
+    }
+    listEl.sortable = Sortable.create(listEl, {
+      group: areaName,
+      animation: 150,
+      fallbackOnBody: true,
+      swapThreshold: 0.65,
+      invertSwap: true,
+      direction: 'vertical',
+      ghostClass: "sortable-ghost",
+      chosenClass: "sortable-chosen",
+      fallbackClass: "sortable-fallback",
+      dragClass: "sortable-drag",
+      filter: "li.edit input.noteContent",
+      preventOnFilter: false,
+      onMove: function (evt) {
+        // Prevent dragging a parent note with children into another note's sublist
+        if (evt.dragged.querySelectorAll('.noteSubList li').length > 0 && evt.related.parentElement.classList.contains('noteSubList')) {
+          return false;
+        }
+      },
+      onEnd:function (evt) {
+        let currentListId = parseInt(document.querySelector('#areaListLists input.active').dataset.id);
+        let sourceTaskId = parseInt(evt.item.dataset.id);
+        let sourceParentTaskId = parseInt(evt.from.parentElement.dataset.id);
+        let targetTaskId = parseInt(evt.to.parentElement.dataset.id);
+
+        // subnote ppromoted to parent note
+        if (evt.from.classList.contains('noteSubList') && !evt.to.classList.contains('noteSubList')) {
+          if (evt.from.childElementCount == 0) {
+            dbUpdate('note', sourceParentTaskId, { parent: 0 });
+          }
+          dbUpdate('note', sourceTaskId, { parent: 0 });
+        }
+        // parent note demoted to subnote
+        if (evt.item.querySelector('span.noteSub') && evt.to.classList.contains('noteSubList')) {
+          dbUpdate('note', sourceTaskId, { parent: targetTaskId });
+          dbUpdate('note', targetTaskId, { parent: true });
+        }
+        // subnote moved to a different parent's sublist
+        if (evt.from.classList.contains('noteSubList') && evt.to.classList.contains('noteSubList')) {
+          if (evt.from.childElementCount == 0) {
+            dbUpdate('note', sourceParentTaskId, { parent: 0 });
+          }
+          dbUpdate('note', targetTaskId, { parent: true });
+          dbUpdate('note', sourceTaskId, { parent: targetTaskId });
+        }
+
+        updateSortIndexes(areaName);
+        renderNotes(currentListId);
+      }
+    });
+  }
+
+  function updateSortIndexes(areaName) {
+    if (areaName === 'areaListLists') {
+      const items = document.querySelectorAll('#areaListLists ul li');
+      const newOrder = Array.from(items).map(item => item.dataset.id);
+      localStorage.setItem('listOrder', newOrder.join(','));
+      return;
+    }
+
+    const items = document.querySelectorAll(`#${areaName} ul li`);
+    const areaToKey = { "areaListNotes": "orderedNoteIds", "areaPinNotes": "orderedPinNoteIds" };
     let currentListId = parseInt(document.querySelector('#areaListLists input.active').dataset.id);
     let newOrder = [];
     items.forEach(item => {
-      // item.dataset.index = index;
       newOrder.push(parseInt(item.dataset.id));
     });
-    Zeke[areaListNameMap[areaListName]][currentListId] = newOrder;
-    dbUpdate('list', currentListId, {[areaListName] : newOrder});
+    Zeke[areaToKey[areaName]][currentListId] = newOrder;
+    dbUpdate('list', currentListId, { [areaName]: newOrder });
   }
 
   function updateCompletionPercentage(parentId) {
     const parentNote = document.querySelector(`#panelNote li[data-id="${parentId}"]`);
+    if (!parentNote) return;
     const parentCompletionButton = parentNote.querySelector(`input[type="checkbox"]`);
     const subnoteCompletedCount = parentNote.querySelectorAll('.noteSubList li.completed').length;
     const subnoteTotalCount = parentNote.querySelectorAll('.noteSubList li').length;
