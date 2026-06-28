@@ -112,6 +112,10 @@ individual, or aggression toward or disparagement of classes of individuals.
 **Consequence**: A permanent ban from any sort of public interaction within
 the community.
 
+## License Compliance
+
+All community members and contributors are expected to comply with the project's End User License Agreement (EULA). Please refer to the [LICENSE](LICENSE) file for full terms and conditions governing the use of InnerOutliner.
+
 ## Attribution
 
 This Code of Conduct is adapted from the [Contributor Covenant][homepage],

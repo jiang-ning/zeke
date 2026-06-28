@@ -11,8 +11,8 @@ All data generated and entered into the InnerOutliner app is stored locally on y
 3. Third-Party Sharing:
 InnerOutliner does not share any personal information with third parties. We do not engage in any data sharing practices with external entities, ensuring that your data remains confidential and secure.
 
-4. Open Source:
-InnerOutliner is an open-source app, which means that all the source code is publicly available for anyone to see. While this promotes transparency and collaboration, it is important to note that the open-source nature of the app does not compromise the privacy and security of your personal information.
+4. License:
+InnerOutliner is proprietary software provided under an End User License Agreement (EULA). For full details regarding your rights and restrictions when using InnerOutliner, please refer to the [LICENSE](LICENSE) file included with this software.
 
 5. Non-Personal Information:
 While using the InnerOutliner app, we may collect non-personal information, such as app usage statistics and crash reports. This information is solely used to improve the app's performance, enhance user experience, and fix any technical issues. Non-personal information is collected anonymously and cannot be used to identify individual users.
@@ -28,4 +28,4 @@ We may update our Privacy Policy from time to time. Any changes will be reflecte
 
 If you have any questions or concerns regarding our Privacy Policy, please contact us at ["Report a Vulnerability"](https://github.com/jiang-ning/zeke/security/advisories/new). Your privacy is important to us, and we are committed to addressing any issues promptly and transparently.
 
-Last updated: Dec 19, 2023
+Last updated: Jun 28, 2026
