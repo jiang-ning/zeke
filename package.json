@@ -1,6 +1,6 @@
 {
-  "name": "microstone",
-  "productName": "Microstone Pro",
+  "name": "inneroutliner",
+  "productName": "InnerOutliner",
   "version": "1.10.2",
   "description": "Effortless Note-Taking: Simplify, Secure, Succeed!",
   "main": "src/index.js",
@@ -22,8 +22,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "electron-squirrel-startup": "^1.0.1",
-    "update-electron-app": "^3.2.0"
+    "electron-squirrel-startup": "^1.0.1"
   },
   "devDependencies": {
     "@electron-forge/cli": "^7.11.2",
