@@ -1,6 +1,70 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, safeStorage } = require('electron');
 const path = require('path');
+const fs = require('fs');
+const crypto = require('crypto');
 
+// License public key for offline verification (RSA 2048-bit)
+const LICENSE_PUBLIC_KEY = `-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAl14dhVBEzGInVtCAFQAQ
+QFfU/WCSjfD86M+4bv7KwYLKPXxgAbFybQD5C7oPmbhAh6jc8Zr+NYhXDLLUreJv
+DOBfUZGlgDiURrMrAFJDHwKFL6Qe3tuJWMdKep9Lukkd6dxSC/nSn4yyBVOuPWNQ
+exk8THkP3Sn4+CH0GUl1dLQXVnKa9EcEVvEufUt1wzbN+gbJXqfjiEgUgeiGeN/r
+paVqBeTR1JSSSlnofbUZqioCV/efFHG8KsW7mH1cKa0J+lc/8lJegvkxIfuwLDDo
+r4O9NsjKCrbOE/M+MQ6YfcsGMsxuOPlt0XrC9UusBOO9cjg8EuxaxccnpuvRmK6u
+1wIDAQAB
+-----END PUBLIC KEY-----
+`;
+
+const LICENSE_FILE_PATH = path.join(app.getPath('userData'), 'license.dat');
+
+function saveLicenseToFile(encryptedBuffer) {
+  fs.writeFileSync(LICENSE_FILE_PATH, encryptedBuffer);
+}
+
+function loadLicenseFromFile() {
+  if (fs.existsSync(LICENSE_FILE_PATH)) {
+    return fs.readFileSync(LICENSE_FILE_PATH);
+  }
+  return null;
+}
+
+function deleteLicenseFile() {
+  if (fs.existsSync(LICENSE_FILE_PATH)) {
+    fs.unlinkSync(LICENSE_FILE_PATH);
+  }
+}
+
+function verifyLicense(licenseKey) {
+  try {
+    // License format: base64(JSON{name, email}) + '.' + base64(signature)
+    const parts = licenseKey.trim().split('.');
+    if (parts.length !== 2) {
+      return { valid: false, message: 'Invalid license format.'};
+    }
+
+    const payload = Buffer.from(parts[0], 'base64').toString('utf8');
+    const signature = Buffer.from(parts[1], 'base64');
+
+    const parsed = JSON.parse(payload);
+    if (!parsed.name || !parsed.email) {
+      return { valid: false, message: 'License missing required fields.'};
+    }
+
+    const verifier = crypto.createVerify('SHA256');
+    verifier.update(payload);
+    verifier.end();
+
+    const isValid = verifier.verify(LICENSE_PUBLIC_KEY, signature);
+
+    if (isValid) {
+      return { valid: true, name: parsed.name, email: parsed.email, message: 'License activated successfully.'};
+    } else {
+      return { valid: false, message: 'License signature verification failed.'};
+    }
+  } catch (e) {
+    return { valid: false, message: 'Invalid license key.'};
+  }
+}
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -101,6 +165,45 @@ const createWindow = () => {
       const webContents = event.sender;
       const win = BrowserWindow.fromWebContents(webContents);
       win.close();
+    });
+
+    // License IPC handlers
+    ipcMain.handle('license-activate', async (event, licenseKey) => {
+      const result = verifyLicense(licenseKey);
+      if (result.valid) {
+        // Encrypt and store license using OS-level encryption
+        if (safeStorage.isEncryptionAvailable()) {
+          const encrypted = safeStorage.encryptString(licenseKey);
+          saveLicenseToFile(encrypted);
+        } else {
+          // Fallback: store as-is (less secure but functional)
+          saveLicenseToFile(Buffer.from(licenseKey, 'utf8'));
+        }
+      }
+      return result;
+    });
+
+    ipcMain.handle('license-get', async () => {
+      const fileData = loadLicenseFromFile();
+      if (!fileData) {
+        return { valid: false, message: 'No license found.' };
+      }
+      try {
+        let licenseKey;
+        if (safeStorage.isEncryptionAvailable()) {
+          licenseKey = safeStorage.decryptString(fileData);
+        } else {
+          licenseKey = fileData.toString('uft8');
+        }
+        return verifyLicense(licenseKey);
+      } catch (e) {
+        return { valid: false, message: 'Failed to read stored license.' };
+      }
+    });
+
+    ipcMain.handle('license-remove', async () => {
+      deleteLicenseFile();
+      return { valid: false, message: 'License removed.'};
     });
 
     // and load the index.html of the app.

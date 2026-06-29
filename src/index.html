@@ -108,8 +108,18 @@
           <div class="modal settings">
             <div class="modal-contents">
               <div class="modal-section">
-                <div class="brand">InnerOutliner</div>
-                <div class="brand-version">v1.10.2</div>
+                <div class="brand-container">
+                  <span class="brand">InnerOutliner</span>
+                  <span class="edition">SE</span>
+                </div>
+                <div>
+                  <span id="editionUpgrade">[LICENSE]</span>
+                  <div id="license-section" class="license-section">
+                    <textarea id="license-input" rows="3" placeholder="Paste License Key here ..."></textarea>
+                    <button id="btnLicenseActive" data-lang-innertext="__Activate__">Activate</button>
+                    <button id="btnLicenseRemove" data-lang-innertext="__Remove__">Remove</button>
+                  </div>
+                </div>
               </div>
               <div class="modal-section">
                 <div class="modal-section-title" data-lang-innertext="__language__">Language</div>
@@ -169,6 +179,10 @@
                   <span data-lang-innertext="__click_to_remove__">KB, click button to remove all the data.</span>
                 </div>
                 <button id="clear" data-lang-innertext="__clear_all_data__">Clear all data</button>
+              </div>
+              <div class="modal-section">
+                <div class="modal-section-title" data-lang-innertext="__version__">Version</div>
+                <div class="modal-section-desc">1.10.2</div>
               </div>
             </div>
           </div>

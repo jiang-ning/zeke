@@ -1117,6 +1117,7 @@ function initModalSettings() {
   const languageList = document.getElementById('languageList');
   const restore = document.getElementById('restore');
   const clear = document.getElementById('clear');
+  const txtUpgrade = document.getElementById('editionUpgrade');
   const opacity = localStorage.getItem('opacity') || '100';
   const rememberedLanguage = localStorage.getItem('language') || 'en';
 
@@ -1211,6 +1212,53 @@ function initModalSettings() {
     window.indexedDB.deleteDatabase('neonote');
     location.reload();
   });
+
+  txtUpgrade.addEventListener('click', () => {
+    document.getElementById('license-section').classList.toggle('show');
+  });
+
+  // License activation
+  const btnLicenseActive = document.getElementById('btnLicenseActive');
+  const btnLicenseRemove = document.getElementById('btnLicenseRemove');
+  const licenseInput = document.getElementById('license-input');
+
+  // Load stored license on startup
+  window.electronAPI.licenseGet().then(result => {
+    if (result.valid) {
+      document.querySelector('.edition').innerText = 'Pro';
+      licenseInput.value = '';
+      licenseInput.placeholder = 'Licensed to ' + result.name + ' (' + result.email + ')';
+      btnLicenseActive.style.display = 'none';
+      btnLicenseRemove.style.display = 'inline-block';
+    } else {
+      document.querySelector('.edition').innerText = 'SE';
+      btnLicenseActive.style.display = 'inline-block';
+      btnLicenseRemove.style.display = 'none';
+    }
+  });
+
+  btnLicenseActive.addEventListener('click', async () => {
+    const licenseKey = licenseInput.value.trim();
+    if (!licenseKey) {
+      return;
+    }
+    const result = await window.electronAPI.licenseActivate(licenseKey);
+    if (result.valid) {
+      document.querySelector('.edition').innerText = 'Pro';
+      licenseInput.value = '';
+      licenseInput.placeholder = 'Licensed to ' + result.name + ' (' + result.email + ')';
+      btnLicenseActive.style.display = 'none';
+      btnLicenseRemove.style.display = 'inline-block';
+    }
+  });
+
+  btnLicenseRemove.addEventListener('click', async () => {
+    const result = await window.electronAPI.licenseRemove();
+    document.querySelector('.edition').innerText = 'SE';
+    licenseInput.placeholder = 'Paste License Key Here ...';
+    btnLicenseActive.style.display = 'inline-block';
+    btnLicenseRemove.style.display = 'none';
+  })
   
 }
 

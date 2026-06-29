@@ -14,4 +14,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   close: () => ipcRenderer.send('close'),
   getBounds: () => ipcRenderer.invoke('get-bounds'),
   setBounds: (bounds) => ipcRenderer.send('set-bounds', bounds),
+  licenseActivate: (licenseKey) => ipcRenderer.invoke('license-activate', licenseKey),
+  licenseGet: () => ipcRenderer.invoke('license-get'),
+  licenseRemove: () => ipcRenderer.invoke('license-remove'),
 });
