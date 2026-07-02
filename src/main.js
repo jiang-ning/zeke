@@ -1046,12 +1046,50 @@ request.onsuccess = async function(event) {
 
 };
 
+function restructureGrid(pro = false) {
+  const panelContainer = document.getElementById('panelsContainer');
+  const rememberedGrid = localStorage.getItem('grid-template-columns') || (pro ? '50px 100px 10px 1fr' : '0 100px 10px 1fr');
+  const listOpened = JSON.parse(localStorage.getItem('listOpened'));
+  let rememberedGridArray = rememberedGrid.split(' ');
+
+  // comtiability with old version
+  if (rememberedGridArray.length < 4) {
+    rememberedGridArray.unshift(pro ? '50px' : '0');
+  }
+  if (!pro && (rememberedGridArray[0] !== '0px' || rememberedGridArray[0] !== '0')) {
+    rememberedGridArray[0] = '0';
+  }
+
+  panelsContainer.style.gridTemplateColumns = rememberedGridArray[0] + ' ' + (listOpened ? rememberedGridArray[1] + ' 10px' : '0 0') + ' 1fr';
+  localStorage.setItem('grid-template-columns', rememberedGridArray[0] + ' ' + rememberedGridArray[1] + ' 10px 1fr');
+
+  if (pro) {
+    document.getElementById('btnSwitchNavbar').style.display = 'block';
+    document.getElementById('btnSettings_SE').style.display = 'none';
+  } else {
+    document.getElementById('btnSwitchNavbar').style.display = 'none';
+    document.getElementById('btnSettings_SE').style.display = 'block';
+  }
+}
+
 function initGrid() {
+
+  let isPro = false;
+
+  // Check license status and adjust grid accordingly
+  if (window.electronAPI && window.electronAPI.licenseGet) {
+    window.electronAPI.licenseGet().then(result => {
+      restructureGrid(result.valid);
+      isPro = true;
+    });
+  } else {
+    restructureGrid(false);
+  }
 
   const gutter = document.getElementById('gutter');
   const panelList = document.getElementById('panelList');
   const panelsContainer = document.getElementById('panelsContainer');
-  const rememberedGrid = localStorage.getItem('grid-template-columns') || '50px 100px 10px 1fr';
+  const rememberedGrid = localStorage.getItem('grid-template-columns') || '0 100px 10px 1fr';
   const listOpened = JSON.parse(localStorage.getItem('listOpened'));
 
   let isResizing = false;
@@ -1083,7 +1121,7 @@ function initGrid() {
         widthList = currentWidth / 2;
         isResizing = false;
       }
-      panelsContainer.setAttribute('style',`grid-template-columns: ${arrayRememberedGrid[0]} ${widthList}px ${widthGutter}px 1fr;`);
+      panelsContainer.setAttribute('style',`grid-template-columns: ${isPro ? arrayRememberedGrid[0] : '0'} ${widthList}px ${widthGutter}px 1fr;`);
     }
   });
 
@@ -1098,8 +1136,6 @@ function initGrid() {
     isResizing = false;
   });
 
-  panelsContainer.style.gridTemplateColumns = listOpened ? rememberedGrid : arrayRememberedGrid[0] + ' 0px 0px 1fr';
-
 }
 
 function initModalSettings() {
@@ -1108,6 +1144,7 @@ function initModalSettings() {
   const themes = document.querySelectorAll('.themeSelection');
   const modes = document.querySelectorAll('.modeSelection');
   const btnSettings = document.getElementById('btnSettings');
+  const btnSettings_SE = document.getElementById('btnSettings_SE');
   const btnReport = document.getElementById('btnReport');
   const btnTask = document.getElementById('btnTask');
   const panelNote = document.getElementById('panelNote');
@@ -1144,6 +1181,27 @@ function initModalSettings() {
       activedList.classList.add('hidden');
       btnSettings.classList.add('active');
       panelsContainer.style.gridTemplateColumns = '50px 0 0 1fr';
+    }
+  });
+
+  btnSettings_SE.addEventListener('click', () => {
+    const activedList = document.querySelector('#areaListLists input.active');
+
+    if(modalSettings.classList.contains('open')) {
+      panelNote.classList.remove('showModal');
+      modalSettings.classList.remove('open');
+      activedList.classList.remove('hidden');
+      btnSettings_SE.classList.remove('active');
+      btnTask.classList.add('active');
+      activedList.click();
+    } else {
+      if(!modalReport.classList.contains('open')) {
+        btnTask.classList.add('active');
+      }
+      panelNote.classList.add('showModal');
+      modalSettings.classList.add('open');
+      activedList.classList.add('hidden');
+      btnSettings_SE.classList.add('active');
     }
   });
 
@@ -1223,42 +1281,67 @@ function initModalSettings() {
   const licenseInput = document.getElementById('license-input');
 
   // Load stored license on startup
-  window.electronAPI.licenseGet().then(result => {
-    if (result.valid) {
-      document.querySelector('.edition').innerText = 'Pro';
-      licenseInput.value = '';
-      licenseInput.placeholder = 'Licensed to ' + result.name + ' (' + result.email + ')';
-      btnLicenseActive.style.display = 'none';
-      btnLicenseRemove.style.display = 'inline-block';
-    } else {
+  if (window.electronAPI && window.electronAPI.licenseGet) {
+    window.electronAPI.licenseGet().then(result => {
+      if (result.valid) {
+        document.querySelector('.edition').innerText = 'Pro';
+        licenseInput.value = '';
+        licenseInput.placeholder = 'Licensed to ' + result.name + ' (' + result.email + ')';
+        btnLicenseActive.style.display = 'none';
+        btnLicenseRemove.style.display = 'inline-block';
+        restructureGrid(true);
+      } else {
+        document.querySelector('.edition').innerText = 'SE';
+        btnLicenseActive.style.display = 'inline-block';
+        btnLicenseRemove.style.display = 'none';
+        restructureGrid(false);
+      }
+    });
+
+    btnLicenseActive.addEventListener('click', async () => {
+      const licenseKey = licenseInput.value.trim();
+      if (!licenseKey) {
+        return;
+      }
+      const result = await window.electronAPI.licenseActivate(licenseKey);
+      if (result.valid) {
+        const rememberedGrid = localStorage.getItem('grid-template-columns') || '50px 100px 10px 1fr';
+        const rememberedGridArray = rememberedGrid.split(' ');
+
+        document.querySelector('.edition').innerText = 'Pro';
+        licenseInput.value = '';
+        licenseInput.placeholder = 'Licensed to ' + result.name + ' (' + result.email + ')';
+        btnLicenseActive.style.display = 'none';
+        btnLicenseRemove.style.display = 'inline-block';
+
+        if (rememberedGridArray[0] === '0px' || rememberedGridArray[0] === '0') {
+          // first time activation from SE to Pro, open the navbar
+          rememberedGridArray[0] = '50px';
+          const newGrid = rememberedGridArray.join(' ');
+          panelsContainer.style.gridTemplateColumns = newGrid;
+          localStorage.setItem('grid-template-columns', newGrid);
+        } else {
+          restructureGrid(true);
+        }
+        
+      }
+    });
+
+    btnLicenseRemove.addEventListener('click', async () => {
+      const result = await window.electronAPI.licenseRemove();
       document.querySelector('.edition').innerText = 'SE';
+      licenseInput.placeholder = 'Paste License Key Here ...';
       btnLicenseActive.style.display = 'inline-block';
       btnLicenseRemove.style.display = 'none';
-    }
-  });
-
-  btnLicenseActive.addEventListener('click', async () => {
-    const licenseKey = licenseInput.value.trim();
-    if (!licenseKey) {
-      return;
-    }
-    const result = await window.electronAPI.licenseActivate(licenseKey);
-    if (result.valid) {
-      document.querySelector('.edition').innerText = 'Pro';
-      licenseInput.value = '';
-      licenseInput.placeholder = 'Licensed to ' + result.name + ' (' + result.email + ')';
-      btnLicenseActive.style.display = 'none';
-      btnLicenseRemove.style.display = 'inline-block';
-    }
-  });
-
-  btnLicenseRemove.addEventListener('click', async () => {
-    const result = await window.electronAPI.licenseRemove();
+      restructureGrid(false);
+    });
+  } else {
+    // No electronAPI available, treat as unlicensed
     document.querySelector('.edition').innerText = 'SE';
-    licenseInput.placeholder = 'Paste License Key Here ...';
     btnLicenseActive.style.display = 'inline-block';
     btnLicenseRemove.style.display = 'none';
-  })
+    restructureGrid(false);
+  }
   
 }
 
@@ -1446,13 +1529,28 @@ function initTitlebar() {
   btnSidebar.addEventListener('click', (e) => {
     let panelsContainer = document.getElementById('panelsContainer');
     const currentGrid = panelsContainer.style.gridTemplateColumns.split(' ');
-    const rememberedGrid = localStorage.getItem('grid-template-columns') || '50px 100px 10px 1fr';
+    const proEdition = document.querySelector('.edition').innerText === 'Pro' ? true : false;
+    const rememberedGrid = localStorage.getItem('grid-template-columns') || (proEdition ? '50px 100px 10px 1fr' : '0 100px 10px 1fr');
+    const rememberedGridArray = rememberedGrid.split(' ');
+    let currentListGrid = currentGrid[1];
 
-    if(currentGrid[1] == '0px') {
+    // Update legacy se edition
+    if (rememberedGridArray.length === 3) {
+      currentListGrid = currentGrid[0];
+      rememberedGridArray.unshift('0px');
+      localStorage.setItem('grid-template-columns', rememberedGridArray.join(' '));
+    }
+
+    // Update legacy pro edition
+    if (!proEdition && rememberedGridArray.length === 4 && (currentGrid[0] !== '0px' || currentGrid[0] !== '0')) {
+      rememberedGrid[0] = '0px';
+    }
+
+    if(currentListGrid == '0px') {
       panelsContainer.style.gridTemplateColumns = rememberedGrid;
       localStorage.setItem('listOpened', true);
     } else {
-      panelsContainer.style.gridTemplateColumns = currentGrid[0] + ' 0px 0px 1fr';
+      panelsContainer.style.gridTemplateColumns = proEdition ? currentGrid[0] + ' 0px 0px 1fr' : '0 0px 0px 1fr';
       localStorage.setItem('grid-template-columns', rememberedGrid); // remember previouse size
       localStorage.setItem('listOpened', false);
     }

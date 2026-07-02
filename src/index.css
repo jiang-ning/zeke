@@ -212,7 +212,7 @@ select:hover {
 }
 .panelsContainer {
   display: grid;
-  grid-template-columns: 50px 100px 10px 1fr;
+  grid-template-columns: 0 100px 10px 1fr;
   grid-template-rows: 1fr;
   height: calc(100vh - 3px);
   overflow: hidden;
@@ -674,6 +674,29 @@ li.edit .noteSub {
   display: grid;
 }
 
+#areaSettings {
+  grid-column: 1;
+  grid-row: 2;
+  line-height: 40px;
+  padding: 0 3px;
+  border-left: 4px solid transparent;
+}
+#areaSettings.active {
+  z-index: 9;
+  border-left-color: #ccc;
+}
+#areaSettings #btnSettings_SE {
+  width: 30px;
+  text-align: center;
+  line-height: 40px;
+  cursor: pointer;
+  color: #ccc;
+}
+#areaSettings.active #btnSettings_SE,
+#areaSettings #btnSettings_SE:hover {
+  color: #999;
+}
+
 /* Navbar */
 .areaNav {
   display: grid;
@@ -693,7 +716,7 @@ li.edit .noteSub {
 #btnSwitchNavbar {
   padding-left: 10px;
   cursor: pointer;
-  line-height: 26px;
+  line-height: 52px;
   color: #ccc;
 }
 #btnSwitchNavbar:hover {
