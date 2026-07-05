@@ -45,7 +45,11 @@ const Languages = {
         "__time_period__" : "الفترة الزمنية",
         "__incompleted__" : "غير مكتمل",
         "__completed__" : "اكمال",
-        "__total__" : "مجموع"
+        "__total__" : "مجموع",
+        "__license__" : "الترخيص",
+        "__paste_license_key_here__" : "ألصق مفتاح الترخيص هنا...",
+        "__activate__" : "تفعيل",
+        "__version__" : "الإصدار"
     },
     "de" : {
         "name" : "Deutsch",
@@ -93,7 +97,11 @@ const Languages = {
         "__time_period__" : "Zeitraum",
         "__incompleted__" : "Unvollständig",
         "__completed__" : "Abgeschlossen",
-        "__total__" : "Gesamt"
+        "__total__" : "Gesamt",
+        "__license__" : "LIZENZ",
+        "__paste_license_key_here__" : "Lizenzschlüssel hier einfügen ...",
+        "__activate__" : "Aktivieren",
+        "__version__" : "Version"
     },
     "en" : {
         "name" : "English",
@@ -141,7 +149,11 @@ const Languages = {
         "__time_period__" : "Time Period",
         "__incompleted__" : "Incomplete",
         "__completed__" : "Completed",
-        "__total__" : "Total"
+        "__total__" : "Total",
+        "__license__" : "LICENSE",
+        "__paste_license_key_here__" : "Paste license key here ...",
+        "__activate__" : "Activate",
+        "__version__" : "Version"
     },
     "es" : {
         "name" : "Español",
@@ -189,7 +201,11 @@ const Languages = {
         "__time_period__" : "Período de tiempo",
         "__incompleted__" : "Incompleto",
         "__completed__" : "Completado",
-        "__total__" : "Total"
+        "__total__" : "Total",
+        "__license__" : "LICENCIA",
+        "__paste_license_key_here__" : "Pegue aquí la clave de licencia...",
+        "__activate__" : "Activar",
+        "__version__" : "Versión"
     },
     "fr" : {
         "name" : "Française",
@@ -237,7 +253,11 @@ const Languages = {
         "__time_period__" : "Période",
         "__incompleted__" : "Incomplet",
         "__completed__" : "Terminé",
-        "__total__" : "Total"
+        "__total__" : "Total",
+        "__license__" : "LICENCE",
+        "__paste_license_key_here__" : "Collez la clé de licence ici…",
+        "__activate__" : "Activer",
+        "__version__" : "Version"
     },
     "in" : {
         "name" : "हिंदी",
@@ -285,7 +305,11 @@ const Languages = {
         "__time_period__" : "समय सीमा",
         "__incompleted__" : "अधूरा",
         "__completed__" : "पूरा किया",
-        "__total__" : "कुल"
+        "__total__" : "कुल",
+        "__license__" : "लाइसेंस",
+        "__paste_license_key_here__" : "लाइसेंस की यहाँ पेस्ट करें…",
+        "__activate__" : "एक्टिवेट करें",
+        "__version__" : "वर्जन"
     },
     "it" : {
         "name" : "Italiana",
@@ -333,7 +357,11 @@ const Languages = {
         "__time_period__" : "Periodo di tempo",
         "__incompleted__" : "Incompleto",
         "__completed__" : "Finito",
-        "__total__" : "Totale"
+        "__total__" : "Totale",
+        "__license__" : "LICENZA",
+        "__paste_license_key_here__" : "Incolla qui la chiave di licenza...",
+        "__activate__" : "Attiva",
+        "__version__" : "Versione"
     },
     "jp" : {
         "name" : "日本語",
@@ -381,7 +409,11 @@ const Languages = {
         "__time_period__" : "期間",
         "__incompleted__" : "不完全",
         "__completed__" : "完了",
-        "__total__" : "トータル"
+        "__total__" : "トータル",
+        "__license__" : "ライセンス",
+        "__paste_license_key_here__" : "ここにライセンスキーを貼り付けてください…",
+        "__activate__" : "アクティベート",
+        "__version__" : "バージョン"
     },
     "kr" : {
         "name" : "한국어",
@@ -429,7 +461,11 @@ const Languages = {
         "__time_period__" : "기간",
         "__incompleted__" : "불완전",
         "__completed__" : "완료",
-        "__total__" : "합계"
+        "__total__" : "합계",
+        "__license__" : "라이선스",
+        "__paste_license_key_here__" : "라이선스 키를 여기에 붙여넣으세요…",
+        "__activate__" : "활성화",
+        "__version__" : "버전"
     },
     "pk" : {
         "name" : "اردو",
@@ -477,7 +513,11 @@ const Languages = {
         "__time_period__" : "د وخت دوره",
         "__incompleted__" : "نابشپړ",
         "__completed__" : "بشپړ",
-        "__total__" : "ټول"
+        "__total__" : "ټول",
+        "__license__" : "جواز",
+        "__paste_license_key_here__" : "د جواز کیلي دلته پیسټ کړئ...",
+        "__activate__" : "فعال کړئ",
+        "__version__" : "نسخه"
     },
     "pt" : {
         "name" : "Português",
@@ -525,7 +565,15 @@ const Languages = {
         "__time_period__" : "Período de tempo",
         "__incompleted__" : "Incompleto",
         "__completed__" : "Concluída",
-        "__total__" : "Total"
+        "__total__" : "Total",
+        "__license__" : "LICENÇA",
+        "__paste_license_key_here__" : "Cole aqui a chave de licença...",
+        "__activate__" : "Ativar",
+        "__version__" : "Versão",
+        "__license__" : "LICENÇA",
+        "__paste_license_key_here__" : "Cole aqui a chave de licença…",
+        "__activate__" : "Ativar",
+        "__version__" : "Versão"
     },
     "ru" : {
         "name" : "Русский",
@@ -573,7 +621,11 @@ const Languages = {
         "__time_period__" : "Период времени",
         "__incompleted__" : "Неполный",
         "__completed__" : "Завершённый",
-        "__total__" : "Итог"
+        "__total__" : "Итог",
+        "__license__" : "ЛИЦЕНЗИЯ",
+        "__paste_license_key_here__" : "Вставьте лицензионный ключ сюда…",
+        "__activate__" : "Активировать",
+        "__version__" : "Версия"
     },
     "zhCN" : {
         "name" : "简体中文",
@@ -621,7 +673,11 @@ const Languages = {
         "__time_period__" : "时间段",
         "__incompleted__" : "未完成",
         "__completed__" : "已完成",
-        "__total__" : "总计"
+        "__total__" : "总计",
+        "__license__" : "许可证",
+        "__paste_license_key_here__" : "请在此处粘贴许可证密钥…",
+        "__activate__" : "激活",
+        "__version__" : "版本"
     },
     "zhTW" : {
         "name" : "繁體中文",
@@ -669,6 +725,10 @@ const Languages = {
         "__time_period__" : "時間段",
         "__incompleted__" : "未完成",
         "__completed__" : "已完成",
-        "__total__" : "總計"
+        "__total__" : "總計",
+        "__license__" : "許可證",
+        "__paste_license_key_here__" : "請在此處貼上許可證密鑰…",
+        "__activate__" : "啟用設定",
+        "__version__" : "版本"
     }
 }

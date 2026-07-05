@@ -167,6 +167,11 @@ input[type='checkbox'] {
   display: grid;
   place-content: center;
   margin-top: 12px;
+  --completion: 0%;
+  --fill-color: #cccccccc;
+}
+input[type='checkbox'].has-progress {
+  background-image: conic-gradient(transparent var(--completion), var(--fill-color) 0);
 }
 input[type="checkbox"]::before {
   content: "";
@@ -386,9 +391,6 @@ li.edit .noteSub {
   color: #000;
   border-left-color: #ccc;
 }
-#areaListLists input.active.hidden {
-  background-color: #eee;
-}
 #areaListLists li span {
   width: 20px;
   height: 40px;
@@ -544,6 +546,17 @@ li.edit .noteSub {
   padding: 0 10px;
   grid-template-columns: 26px 1fr auto auto auto auto auto auto;
   display: grid;
+  animation: noteSlideIn 0.2s ease-out;
+}
+@keyframes noteSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 #areaListNotes li.parent,
 #areaPinNotes li.parent {
@@ -722,8 +735,11 @@ li.edit .noteSub {
 #btnSwitchNavbar:hover {
   color: #999;
 }
-.switcherIcon.open {
+.switcherIcon {
   transform: scaleX(-1);
+}
+.switcherIcon.open {
+  transform: scaleX(1);
 }
 
 #areaListNotes .sortable-ghost,
@@ -987,6 +1003,35 @@ span.appIcon:hover {
 }
 .report tr:nth-child(even) {
   background-color: #eeeeee99;
+}
+
+/* for Arabic styles */
+.ar #gutter + #panelNote {
+  box-shadow: 1px 0px 0px #cccccccc;
+}
+.ar #gutter:hover + #panelNote {
+  box-shadow: 1px 0px 6px #ccccccff;
+  transition: box-shadow .3s;
+}
+.ar #areaListLists input {
+  border-right: 3px solid transparent;
+}
+.ar #areaListLists input.active {
+  border-right-color: #ccc;
+}
+.ar .noteCollapse {
+  transform: rotate(315deg);
+}
+.ar .noteCollapse.show.active {
+  transform: rotate(45deg);
+}
+.ar #panelNav {
+  border-right: none;
+  border-left: 1px solid #ccc;
+}
+.ar #txtNew {
+  padding-right: 10px;
+  padding-left: 0;
 }
 
 #web {

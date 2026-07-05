@@ -5,7 +5,8 @@ const request = indexedDB.open('neonote', 1);
 var Zeke = {
   orderedNoteIds:{}, orderedPinNoteIds:{}, 
   notesCompleted:{}, notesIncompleted:{}, 
-  notes:{}, lists:{}
+  notes:{}, lists:{},
+  expandedNotesIds: new Set()
 };
 var Zeke_ChartTimeline;
 var sortableInstances = [];
@@ -458,6 +459,10 @@ request.onsuccess = async function(event) {
 
     if(note.parent > 0 || note.parent === true) {
       noteCollapse.classList.add('show');
+      if(Zeke.expandedNotesIds.has(note.id)) {
+        noteCollapse.classList.add('active');
+        noteItem.classList.add('expand');
+      }
     }
 
     if(byUserOrdered) {
@@ -787,54 +792,134 @@ request.onsuccess = async function(event) {
     }
     listEl.sortable = Sortable.create(listEl, {
       group: areaName,
-        animation: 150,
-        fallbackOnBody: true,
-        swapThreshold: 0.65,
-        invertSwap: true,
-        direction: 'vertical',
-        ghostClass: "sortable-ghost",
-        chosenClass: "sortable-chosen",
-        fallbackClass: "sortable-fallback",
-        dragClass: "sortable-drag",
-        filter: "li.edit input.noteContent",
-        preventOnFilter: false,
-        onMove: function (evt) {
-        // Prevent dragging a parent note with children into another note's sublist
-        if (evt.dragged.querySelectorAll('.noteSubList li').length > 0 && evt.related.parentElement.classList.contains('noteSubList')) {
-            return false;
-          }
-        },
+      animation: 150,
+      fallbackOnBody: true,
+      swapThreshold: 0.65,
+      invertSwap: true,
+      direction: 'vertical',
+      ghostClass: "sortable-ghost",
+      chosenClass: "sortable-chosen",
+      fallbackClass: "sortable-fallback",
+      dragClass: "sortable-drag",
+      filter: "li.edit input.noteContent",
+      preventOnFilter: false,
+      onMove: function (evt) {
+      // Prevent dragging a parent note with children into another note's sublist
+      if (evt.dragged.querySelectorAll('.noteSubList li').length > 0 && evt.related.parentElement.classList.contains('noteSubList')) {
+          return false;
+        }
+      },
       onEnd:function (evt) {
-          let currentListId = parseInt(document.querySelector('#areaListLists input.active').dataset.id);
-          let sourceTaskId = parseInt(evt.item.dataset.id);
-          let sourceParentTaskId = parseInt(evt.from.parentElement.dataset.id);
-          let targetTaskId = parseInt(evt.to.parentElement.dataset.id);
+        let currentListId = parseInt(document.querySelector('#areaListLists input.active').dataset.id);
+        let sourceTaskId = parseInt(evt.item.dataset.id);
+        let sourceParentTaskId = parseInt(evt.from.parentElement.dataset.id);
+        let targetTaskId = parseInt(evt.to.parentElement.dataset.id);
+        let structureChanged = false;
 
-        // subnote ppromoted to parent note
+        // subnote promoted to parent note
         if (evt.from.classList.contains('noteSubList') && !evt.to.classList.contains('noteSubList')) {
+          structureChanged = true;
           if (evt.from.childElementCount == 0) {
-              dbUpdate('note', sourceParentTaskId, { parent: 0 });
+            dbUpdate('note', sourceParentTaskId, { parent: 0 });
+            // Remove parent indicators from source parent
+            const sourceParentEl = evt.from.parentElement;
+            if (sourceParentEl) {
+              sourceParentEl.classList.remove('parent', 'expand');
+              const collapseBtn = sourceParentEl.querySelector('.noteCollapse');
+              if (collapseBtn) collapseBtn.classList.remove('show', 'active');
             }
-            dbUpdate('note', sourceTaskId, { parent: 0 });
+          }
+          dbUpdate('note', sourceTaskId, { parent: 0 });
+
+          // Replace subnote element with a full parent note element in-place
+          const noteData = Zeke.notes.find(n => n.id === sourceTaskId);
+          if (noteData) {
+            noteData.parent = 0;
+            const nextSibling = evt.item.nextElementSibling;
+            const container = evt.item.parentElement;
+            evt.item.remove();
+            generateNoteItem(noteData, areaName, 0, true);
+            const newItem = container.querySelector(`li[data-id="${sourceTaskId}"]`);
+            if (newItem && nextSibling) {
+              container.insertBefore(newItem, nextSibling);
+            }
+          }
+          updateCompletionPercentage(sourceParentTaskId);
         }
         // parent note demoted to subnote
         if (evt.item.querySelector('span.noteSub') && evt.to.classList.contains('noteSubList')) {
-              dbUpdate('note', sourceTaskId, { parent: targetTaskId });
-              dbUpdate('note', targetTaskId, { parent: true });
+          structureChanged = true;
+          dbUpdate('note', sourceTaskId, { parent: targetTaskId });
+          dbUpdate('note', targetTaskId, { parent: true });
+
+          // Replace parent note element with a subnote element in-place
+          const noteData = Zeke.notes.find(n => n.id === sourceTaskId);
+          if (noteData) {
+            noteData.parent = targetTaskId;
+            const nextSibling = evt.item.nextElementSibling;
+            const container = evt.item.parentElement;
+            evt.item.remove();
+            generateSubNoteItem(noteData, areaName, 0, true);
+            const newItem = container.querySelector(`li[data-id="${sourceTaskId}"]`);
+            if (newItem && nextSibling) {
+              container.insertBefore(newItem, nextSibling);
+            }
+          }
+          // Update target parent's collapse state
+          const targetParentEl = document.querySelector(`#panelNote li[data-id="${targetTaskId}"]`);
+          if (targetParentEl) {
+            targetParentEl.classList.add('parent', 'expand');
+            const collapseBtn = targetParentEl.querySelector('.noteCollapse');
+            if (collapseBtn) collapseBtn.classList.add('show', 'active');
+          }
+          updateCompletionPercentage(targetTaskId);
         }
         // subnote moved to a different parent's sublist
-        if (evt.from.classList.contains('noteSubList') && evt.to.classList.contains('noteSubList')) {
+        if (evt.from.classList.contains('noteSubList') && evt.to.classList.contains('noteSubList') && evt.from !== evt.to) {
+          structureChanged = true;
           if (evt.from.childElementCount == 0) {
-              dbUpdate('note', sourceParentTaskId, { parent: 0 });
+            dbUpdate('note', sourceParentTaskId, { parent: 0 });
+            const sourceParentEl = evt.from.parentElement;
+            if (sourceParentEl) {
+              sourceParentEl.classList.remove('parent', 'expand');
+              const collapseBtn = sourceParentEl.querySelector('.noteCollapse');
+              if (collapseBtn) collapseBtn.classList.remove('show', 'active');
             }
-            dbUpdate('note', targetTaskId, { parent: true });
-            dbUpdate('note', sourceTaskId, { parent: targetTaskId });
+          }
+          dbUpdate('note', targetTaskId, { parent: true });
+          dbUpdate('note', sourceTaskId, { parent: targetTaskId });
+
+          // Replace subnote element so its event listeners reference the new parent
+          const noteData = Zeke.notes.find(n => n.id === sourceTaskId);
+          if (noteData) {
+            noteData.parent = targetTaskId;
+            const nextSibling = evt.item.nextElementSibling;
+            const container = evt.item.parentElement;
+            evt.item.remove();
+            generateSubNoteItem(noteData, areaName, 0, true);
+            const newItem = container.querySelector(`li[data-id="${sourceTaskId}"]`);
+            if (newItem && nextSibling) {
+              container.insertBefore(newItem, nextSibling);
+            }
+          }
+          // Update target parent's collapse state
+          const targetParentEl = document.querySelector(`#panelNote li[data-id="${targetTaskId}"]`);
+          if (targetParentEl) {
+            targetParentEl.classList.add('parent', 'expand');
+            const collapseBtn = targetParentEl.querySelector('.noteCollapse');
+            if (collapseBtn) collapseBtn.classList.add('show', 'active');
+          }
+          updateCompletionPercentage(sourceParentTaskId);
+          updateCompletionPercentage(targetTaskId);
         }
           
         updateSortIndexes(areaName);
-          renderNotes(currentListId);
+        // Re-init sortable on sublists when structure changed (new sublists may exist)
+        if (structureChanged) {
+          initNoteDnD(areaName);
         }
-      });
+      }
+    });
   }
 
   function updateSortIndexes(areaName) {
@@ -856,6 +941,20 @@ request.onsuccess = async function(event) {
     dbUpdate('list', currentListId, { [areaName]: newOrder });
   }
 
+  function animateCompletion(element, from, to, duration = 300) {
+    const start = performance.now();
+    function tick(now) {
+      const elapsed = now - start;
+      const progress = Math.min(elapsed / duration, 1);
+      const current = from + (to - from) * progress;
+      element.style.setProperty('--completion', `${current.toFixed(1)}%`);
+      if (progress < 1) {
+        requestAnimationFrame(tick);
+      }
+    }
+    requestAnimationFrame(tick);
+  }
+
   function updateCompletionPercentage(parentId) {
     const parentNote = document.querySelector(`#panelNote li[data-id="${parentId}"]`);
     if (!parentNote) return;
@@ -863,9 +962,11 @@ request.onsuccess = async function(event) {
     const subnoteCompletedCount = parentNote.querySelectorAll('.noteSubList li.completed').length;
     const subnoteTotalCount = parentNote.querySelectorAll('.noteSubList li').length;
     const completionPercentage = (subnoteCompletedCount / subnoteTotalCount * 100).toFixed();
+    const currentCompletion = parseFloat(parentCompletionButton.style.getPropertyValue('--completion')) || 0;
 
     if(completionPercentage == 100) {
-      parentCompletionButton.style = '';
+      animateCompletion(parentCompletionButton, currentCompletion, 100);
+      parentCompletionButton.classList.remove('has-progress');
       if(!parentNote.classList.contains('completed')) {
         parentCompletionButton.click();
       }
@@ -876,7 +977,9 @@ request.onsuccess = async function(event) {
       }
       const currentThemeStrokeColor = getCurrentThemeColor(true);
       const fillColor = currentThemeStrokeColor ? currentThemeStrokeColor + '66' : '#cccccccc';
-      parentCompletionButton.style.backgroundImage = `conic-gradient(transparent ${completionPercentage}%, ${fillColor} 0)`;
+      parentCompletionButton.style.setProperty('--fill-color', fillColor);
+      parentCompletionButton.classList.add('has-progress');
+      animateCompletion(parentCompletionButton, currentCompletion, parseFloat(completionPercentage));
     }
   }
 
@@ -1080,10 +1183,10 @@ function initGrid() {
   if (window.electronAPI && window.electronAPI.licenseGet) {
     window.electronAPI.licenseGet().then(result => {
       restructureGrid(result.valid);
-      isPro = true;
+      isPro = result.valid;
     });
   } else {
-    restructureGrid(false);
+    restructureGrid(isPro);
   }
 
   const gutter = document.getElementById('gutter');
@@ -1313,6 +1416,8 @@ function initModalSettings() {
         licenseInput.placeholder = 'Licensed to ' + result.name + ' (' + result.email + ')';
         btnLicenseActive.style.display = 'none';
         btnLicenseRemove.style.display = 'inline-block';
+        btnSettings_SE.style.display = 'none';
+        btnSwitchNavbar.style.display = 'block';
 
         if (rememberedGridArray[0] === '0px' || rememberedGridArray[0] === '0') {
           // first time activation from SE to Pro, open the navbar
@@ -1622,6 +1727,7 @@ function getCurrentThemeColor(stock = false) {
 function changeLanguage(languageCode) {
   const elementsInnerText = document.querySelectorAll('[data-lang-innertext]');
   const elementsTitle = document.querySelectorAll('[data-lang-title]');
+  const elementsPlaceholder = document.querySelectorAll('[data-lang-placeholder]');
 
   if(languageCode === 'ar' || languageCode === 'pk') {
     document.body.classList.add('ar');
@@ -1635,6 +1741,9 @@ function changeLanguage(languageCode) {
   });
   elementsTitle.forEach(el => {
     el.title = Languages[languageCode][el.dataset['langTitle']] || el.title;
+  });
+  elementsPlaceholder.forEach(el => {
+    el.placeholder = Languages[languageCode][el.dataset['langPlaceholder']] || el.placeholder;
   });
 }
 

@@ -55,6 +55,9 @@
 [class^="theme"] .areaNav {
   color: #00000033;
 }
+[class^="theme"] .settingsIcon_SE {
+  transition: fill 0.2s ease-in-out;
+}
 
 /* mode-dark */
 /* .theme-dark #titlebar, */
@@ -80,14 +83,18 @@
 .theme-dark #areaPinNotes li.edit > .noteContent,
 .theme-dark #areaListNotes li.edit > .noteContent,
 .theme-dark #areaListLists li.edit input,
-.theme-dark #titlebar .appIcon:hover {
+.theme-dark #titlebar .appIcon:hover,
+.theme-dark #languageList,
+.theme-dark button,
+.theme-dark button:hover {
   background-color: #00000066;
 }
 .theme-dark input[type="checkbox"]::before,
 .theme-dark .icon:hover,
 .theme-dark #btnNew:hover,
 .theme-dark #btnFilter:hover,
-.theme-dark #btnFilter.active {
+.theme-dark #btnFilter.active,
+.theme-dark .modal #license-input {
   background-color: #ffffffcc;
 }
 .theme-dark .report .filterButton,
@@ -119,7 +126,8 @@
 }
 .theme-dark #txtNew,
 .theme-dark #areaPinNotes li:hover input[type='text'],
-.theme-dark #areaListNotes li:hover input[type='text'] {
+.theme-dark #areaListNotes li:hover input[type='text'],
+.theme-dark button:hover {
   color: #fff;
 }
 .theme-dark #brand,
@@ -132,16 +140,19 @@
 .theme-dark #areaPinNotes li span.noteMoment,
 .theme-dark .modal-section,
 .theme-dark .modal-section-title,
-.theme-dark #areaSettings.active #btnSettings,
-.theme-dark #areaSettings #btnSettings:hover,
 .theme-dark #btnSwitchNavbar:hover,
 .theme-dark .report .filterDateRange .rangeButton:hover,
-.theme-dark .report table {
+.theme-dark .report table,
+.theme-dark .edition,
+.theme-dark #languageList,
+.theme-dark button,
+.theme-dark .modal #editionUpgrade:hover {
   color: #ffffff99;
 }
 .theme-dark #btnNew, 
 .theme-dark #btnFilter,
-.theme-dark #areaListLists input {
+.theme-dark #areaListLists input,
+.theme-dark .modal #editionUpgrade {
   color: #ffffff66;
 }
 .theme-dark #btnSwitchNavbar,
@@ -192,6 +203,14 @@
 }
 .theme-dark #gutter:hover + #panelNote {
   box-shadow: -1px 0px 6px #000000;
+}
+.theme-dark #btnSettings svg,
+.theme-dark #btnSettings_SE svg {
+  fill: #666;
+}
+.theme-dark #btnSettings:hover svg,
+.theme-dark #btnSettings_SE:hover svg {
+  fill: #999;
 }
 #web.theme-dark {
   background-image: radial-gradient(var(--dark-cc), #000);
@@ -248,7 +267,8 @@
 .theme-blue #titlebar,
 .theme-blue #areaPinNotes li:last-child,
 .theme-blue .report thead,
-.theme-blue .noteCollapse {
+.theme-blue .noteCollapse,
+.theme-blue .edition {
   border-color: var(--blue-stroke-66);
 }
 .theme-blue #btnNewList:hover,
@@ -307,6 +327,12 @@
 .theme-blue input[type="range"] {
   accent-color: var(--blue);
 }
+.theme-blue .settingsIcon_SE {
+  fill: var(--blue-stroke-66);
+}
+.theme-blue .settingsIcon_SE:hover {
+  fill: var(--blue-stroke);
+}
 #web.theme-blue {
   background-image: radial-gradient(var(--blue-66), var(--blue));
 }
@@ -363,7 +389,8 @@
 .theme-red #titlebar,
 .theme-red #areaPinNotes li:last-child,
 .theme-red .report thead,
-.theme-red .noteCollapse {
+.theme-red .noteCollapse,
+.theme-red .edition {
   border-color: var(--red-stroke-66);
 }
 .theme-red #btnNewList:hover,
@@ -421,6 +448,12 @@
 .theme-red input[type="range"] {
   accent-color: var(--red);
 }
+.theme-red .settingsIcon_SE {
+  fill: var(--red-stroke-66);
+}
+.theme-red .settingsIcon_SE:hover {
+  fill: var(--red-stroke);
+}
 #web.theme-red {
   background-image: radial-gradient(var(--red-66), var(--red));
 }
@@ -477,7 +510,8 @@
 .theme-orange #titlebar,
 .theme-orange #areaPinNotes li:last-child,
 .theme-orange .report thead,
-.theme-orange .noteCollapse {
+.theme-orange .noteCollapse,
+.theme-orange .edition {
   border-color: var(--orange-stroke-66);
 }
 .theme-orange #btnNewList:hover,
@@ -534,6 +568,12 @@
 }
 .theme-orange input[type="range"] {
   accent-color: var(--orange);
+}
+.theme-orange .settingsIcon_SE {
+  fill: var(--orange-stroke-66);
+}
+.theme-orange .settingsIcon_SE:hover {
+  fill: var(--orange-stroke);
 }
 #web.theme-orange {
   background-image: radial-gradient(var(--orange-66), var(--orange));
@@ -593,7 +633,8 @@
 .theme-amber #titlebar,
 .theme-amber #areaPinNotes li:last-child,
 .theme-amber .report thead,
-.theme-amber .noteCollapse {
+.theme-amber .noteCollapse,
+.theme-amber .edition {
   border-color: var(--amber-stroke-66);
 }
 .theme-amber #btnNewList:hover,
@@ -651,6 +692,12 @@
 .theme-amber input[type="range"] {
   accent-color: var(--amber);
 }
+.theme-amber .settingsIcon_SE {
+  fill: var(--amber-stroke-66);
+}
+.theme-amber .settingsIcon_SE:hover {
+  fill: var(--amber-stroke);
+}
 #web.theme-amber {
   background-image: radial-gradient(var(--amber-66), var(--amber));
 }
@@ -707,7 +754,8 @@
 .theme-green #titlebar,
 .theme-green #areaPinNotes li:last-child,
 .theme-green .report thead,
-.theme-green .noteCollapse {
+.theme-green .noteCollapse,
+.theme-green .edition {
   border-color: var(--green-stroke-66);
 }
 .theme-green #btnNewList:hover,
@@ -765,6 +813,12 @@
 .theme-green input[type="range"] {
   accent-color: var(--green);
 }
+.theme-green .settingsIcon_SE {
+  fill: var(--green-stroke-66);
+}
+.theme-green .settingsIcon_SE:hover {
+  fill: var(--green-stroke);
+}
 #web.theme-green {
   background-image: radial-gradient(var(--green-66), var(--green));
 }
@@ -821,7 +875,8 @@
 .theme-teal #titlebar,
 .theme-teal #areaPinNotes li:last-child,
 .theme-teal .report thead,
-.theme-teal .noteCollapse {
+.theme-teal .noteCollapse,
+.theme-teal .edition {
   border-color: var(--teal-stroke-66);
 }
 .theme-teal #btnNewList:hover,
@@ -879,6 +934,12 @@
 .theme-teal input[type="range"] {
   accent-color: var(--teal);
 }
+.theme-teal .settingsIcon_SE {
+  fill: var(--teal-stroke-66);
+}
+.theme-teal .settingsIcon_SE:hover {
+  fill: var(--teal-stroke);
+}
 #web.theme-teal {
   background-image: radial-gradient(var(--teal-66), var(--teal));
 }
@@ -935,7 +996,8 @@
 .theme-violet #titlebar,
 .theme-violet #areaPinNotes li:last-child,
 .theme-violet .report thead,
-.theme-violet .noteCollapse {
+.theme-violet .noteCollapse,
+.theme-violet .edition {
   border-color: var(--violet-stroke-66);
 }
 .theme-violet #btnNewList:hover,
@@ -993,6 +1055,12 @@
 .theme-violet input[type="range"] {
   accent-color: var(--violet);
 }
+.theme-violet .settingsIcon_SE {
+  fill: var(--violet-stroke-66);
+}
+.theme-violet .settingsIcon_SE:hover {
+  fill: var(--violet-stroke);
+}
 #web.theme-violet {
   background-image: radial-gradient(var(--violet-66), var(--violet));
 }
@@ -1049,7 +1117,8 @@
 .theme-purple #titlebar,
 .theme-purple #areaPinNotes li:last-child,
 .theme-purple .report thead,
-.theme-purple .noteCollapse {
+.theme-purple .noteCollapse,
+.theme-purple .edition {
   border-color: var(--purple-stroke-66);
 }
 .theme-purple #btnNewList:hover,
@@ -1107,6 +1176,12 @@
 .theme-purple input[type="range"] {
   accent-color: var(--purple);
 }
+.theme-purple .settingsIcon_SE {
+  fill: var(--purple-stroke-66);
+}
+.theme-purple .settingsIcon_SE:hover {
+  fill: var(--purple-stroke);
+}
 #web.theme-purple {
   background-image: radial-gradient(var(--purple-66), var(--purple));
 }
@@ -1163,7 +1238,8 @@
 .theme-pink #titlebar,
 .theme-pink #areaPinNotes li:last-child,
 .theme-pink .report thead,
-.theme-pink .noteCollapse {
+.theme-pink .noteCollapse,
+.theme-pink .edition {
   border-color: var(--pink-stroke-66);
 }
 .theme-pink #btnNewList:hover,
@@ -1220,6 +1296,12 @@
 }
 .theme-pink input[type="range"] {
   accent-color: var(--pink);
+}
+.theme-pink .settingsIcon_SE {
+  fill: var(--pink-stroke-66);
+}
+.theme-pink .settingsIcon_SE:hover {
+  fill: var(--pink-stroke);
 }
 #web.theme-pink {
   background-image: radial-gradient(var(--pink-66), var(--pink));
