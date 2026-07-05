@@ -1198,6 +1198,7 @@ function initGrid() {
   let isResizing = false;
   let startX = 0;
   let startWidth = 0;
+  let startNavWidth = '0';
   let arrayRememberedGrid = rememberedGrid.split(' ');
 
   panelsContainer.classList.add('toggling');
@@ -1206,10 +1207,13 @@ function initGrid() {
     isResizing = true;
     startX = e.clientX;
     startWidth = parseFloat(getComputedStyle(panelList).width);
+    // Capture the current navbar column width at resize start
+    const currentGrid = panelsContainer.style.gridTemplateColumns.split(' ');
+    startNavWidth = currentGrid[0] || '0';
     panelsContainer.classList.remove('toggling'); // disable animation for toggle nav and list when resizing
   });
 
-  gutter.addEventListener('mousemove', (e) => {
+  document.addEventListener('mousemove', (e) => {
     if (isResizing) {
       panelsContainer.classList.add('resizing');
       const diffX = e.clientX - startX;
@@ -1224,15 +1228,17 @@ function initGrid() {
         widthList = currentWidth / 2;
         isResizing = false;
       }
-      panelsContainer.setAttribute('style',`grid-template-columns: ${isPro ? arrayRememberedGrid[0] : '0'} ${widthList}px ${widthGutter}px 1fr;`);
+      panelsContainer.setAttribute('style',`grid-template-columns: ${startNavWidth} ${widthList}px ${widthGutter}px 1fr;`);
     }
   });
 
-  gutter.addEventListener('mouseup', () => {
-    isResizing = false;
-    localStorage.setItem('grid-template-columns', panelsContainer.style['grid-template-columns']);
-    panelsContainer.classList.remove('resizing');
-    panelsContainer.classList.add('toggling');
+  document.addEventListener('mouseup', () => {
+    if (isResizing) {
+      isResizing = false;
+      localStorage.setItem('grid-template-columns', panelsContainer.style['grid-template-columns']);
+      panelsContainer.classList.remove('resizing');
+      panelsContainer.classList.add('toggling');
+    }
   });
 
   panelsContainer.addEventListener('mouseup', () => {
