@@ -212,6 +212,64 @@
 .theme-dark #btnSettings_SE:hover svg {
   fill: #999;
 }
+.theme-dark .reminder-picker {
+  background: #2a2a2a;
+  border-color: #444;
+  box-shadow: 0 4px 16px #00000033;
+}
+.theme-dark .mini-calendar-header span {
+  color: #bbb;
+}
+.theme-dark .mini-calendar-prev:hover,
+.theme-dark .mini-calendar-next:hover {
+  background: #444;
+}
+.theme-dark .mini-calendar-weekdays span {
+  color: #777;
+}
+.theme-dark .mini-calendar-days span {
+  color: #ccc;
+}
+.theme-dark .mini-calendar-days span:hover {
+  background: #444;
+}
+.theme-dark .mini-calendar-days span.today {
+  border-color: #666;
+}
+.theme-dark .mini-calendar-days span.selected {
+  background: #555;
+  color: #fff;
+}
+.theme-dark .mini-calendar-days span.other-month {
+  color: #555;
+}
+.theme-dark .time-list {
+  border-color: #444;
+  background: #333;
+}
+.theme-dark .time-list li {
+  color: #bbb;
+}
+.theme-dark .time-list li:hover {
+  background: #444;
+}
+.theme-dark .time-list li.selected {
+  background: #555;
+  color: #fff;
+}
+.theme-dark .time-list-label,
+.theme-dark .time-list-separator {
+  color: #888;
+}
+.theme-dark .reminder-picker-actions button {
+  background: #333;
+  border-color: #555;
+  color: #ddd;
+}
+.theme-dark .reminder-picker-actions button:hover {
+  background: #444;
+  border-color: #666;
+}
 #web.theme-dark {
   background-image: radial-gradient(var(--dark-cc), #000);
 }

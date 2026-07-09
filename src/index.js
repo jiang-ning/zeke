@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, safeStorage } = require('electron');
+const { app, BrowserWindow, ipcMain, safeStorage, Notification } = require('electron');
 const path = require('path');
 const fs = require('fs');
 const crypto = require('crypto');
@@ -204,6 +204,17 @@ const createWindow = () => {
     ipcMain.handle('license-remove', async () => {
       deleteLicenseFile();
       return { valid: false, message: 'License removed.'};
+    });
+
+    ipcMain.on('show-notification', (event, { title, body }) => {
+      const notification = new Notification({ title, body });
+      notification.on('click', () => {
+        if (mainWindow) {
+          if (mainWindow.isMinimized()) mainWindow.restore();
+          mainWindow.focus();
+        }
+      });
+      notification.show();
     });
 
     // and load the index.html of the app.

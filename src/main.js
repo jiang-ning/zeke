@@ -1000,7 +1000,9 @@ request.onsuccess = async function(event) {
     const allNotes = document.querySelectorAll('#panelNote li' + queryToHiding);
 
     allNotes.forEach(note => {
-      let noteContent = note.querySelector('input.noteContent').value;
+      let noteContentEl = note.querySelector('input.noteContent');
+      if (!noteContentEl) return;
+      let noteContent = noteContentEl.value;
       if(!noteContent.includes(filterText)) {
         note.classList.add('hide');
       } else {
@@ -1077,6 +1079,7 @@ request.onsuccess = async function(event) {
   });
   document.getElementById('btnNew').addEventListener('click', () => {
     const noteContent = document.getElementById('txtNew').value.trim();
+    const reminderPickerInput = document.getElementById('reminderPickerInput');
     const listId = document.querySelector('#areaListLists li input.active').dataset.id;
     if(noteContent && listId && document.getElementById('btnFilter').className === '') {
       addNote({
@@ -1085,7 +1088,8 @@ request.onsuccess = async function(event) {
         completed: false,
         dateCreated: Date.now(),
         dateCompleted: '',
-        parent: 0
+        parent: 0,
+        remind: reminderPickerInput.value ? new Date(reminderPickerInput.value).getTime() : null
       });
     }
     document.getElementById('txtNew').value = '';
@@ -1104,21 +1108,85 @@ request.onsuccess = async function(event) {
   });
   document.getElementById('txtNew').addEventListener('focus', (e) => {
     const btnFilter = document.getElementById('btnFilter');
+    const btnReminder = document.getElementById('btnReminder');
     const areaNew = document.getElementById('areaNew');
-    if(btnFilter.className !== 'active' && btnFilter.className !== 'hide') {
-      areaNew.style.gridTemplateColumns = '0 1fr 30px';
+    if(btnFilter.className !== 'active' && btnFilter.className !== 'hide' && !btnReminder.classList.contains('active')) {
+      areaNew.style.gridTemplateColumns = '0 1fr auto 30px';
       btnFilter.style.display = 'none';
+      btnReminder.classList.add('active');
     }
   });
   document.getElementById('txtNew').addEventListener('focusout', (e) => {
     const btnFilter = document.getElementById('btnFilter');
     const areaNew = document.getElementById('areaNew');
-    if(btnFilter.className !== 'active') {
-      btnFilter.className = '';
-      areaNew.style.gridTemplateColumns = 'auto 1fr 30px';
-      btnFilter.style = '';
+    const btnReminder = document.getElementById('btnReminder');
+    setTimeout(() => {
+      // Don't hide if picker is open or reminder button is being used
+      if (reminderPicker.isOpen()) return;
+      if (btnFilter.className !== 'active') {
+        const txtNew = document.getElementById('txtNew');
+        // Keep button visible only if 'set' AND txtNew has content
+        if (btnReminder.classList.contains('set') && txtNew.value.trim() !== '') {
+          btnFilter.className = '';
+          btnFilter.style.display = 'none';
+          areaNew.style.gridTemplateColumns = '0 1fr auto 30px';
+        } else {
+          btnFilter.className = '';
+          btnFilter.style = '';
+          btnReminder.className = '';
+          areaNew.style.gridTemplateColumns = 'auto 1fr 30px';
+        }
+      }
+    }, 150);
+  });
+  // Use global DateTimePicker for reminder
+  const reminderPicker = new DateTimePicker(document.getElementById('reminderPicker'));
+  reminderPicker.onClose = () => hideReminderButton();
+
+  document.getElementById('btnReminder').addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (reminderPicker.el.contains(e.target)) {
+      return;
+    }
+    reminderPicker.toggle((dateTime) => {
+      const btnReminder = document.getElementById('btnReminder');
+      const txtNew = document.getElementById('txtNew');
+      const reminderPickerInput = document.getElementById('reminderPickerInput');
+      reminderPickerInput.value = dateTime;
+      console.log('Reminder set:', dateTime);
+      btnReminder.className = 'active set';
+      txtNew.focus();
+    });
+  });
+
+  document.addEventListener('click', (e) => {
+    const btnReminder = document.getElementById('btnReminder');
+    if (reminderPicker.isOpen() && !reminderPicker.el.contains(e.target) && !btnReminder.contains(e.target)) {
+      reminderPicker.close();
+      hideReminderButton();
     }
   });
+
+  function hideReminderButton() {
+    const btnReminder = document.getElementById('btnReminder');
+    const areaNew = document.getElementById('areaNew');
+    const btnFilter = document.getElementById('btnFilter');
+    const txtNew = document.getElementById('txtNew');
+    // Preserve 'set' state if reminder was confirmed with text
+    const hasSet = btnReminder.classList.contains('set');
+    if (hasSet && txtNew.value.trim() !== '') {
+      btnReminder.className = 'active set';
+      btnFilter.style.display = 'none';
+    } else {
+      btnReminder.className = '';
+    }
+    // Only reset grid if txtNew is not focused
+    if (document.activeElement !== txtNew && btnFilter.className !== 'active') {
+      areaNew.style.gridTemplateColumns = 'auto 1fr 30px';
+      btnFilter.style.display = '';
+    }
+  }
+
   document.getElementById('btnNewList').addEventListener('click', () => {
     document.getElementById('btnNewList').classList.add('hide');
     document.getElementById('listAddName').classList.add('active');
@@ -1146,6 +1214,27 @@ request.onsuccess = async function(event) {
   renderNotes(
     parseInt(localStorage.getItem('listActive'))
   );
+
+  // Reminder notification check loop
+  const notifiedReminders = new Set();
+  setInterval(() => {
+    const transaction = db.transaction(['note'], 'readonly');
+    const objectStore = transaction.objectStore('note');
+    const req = objectStore.getAll();
+    req.onsuccess = function(event) {
+      const now = Date.now();
+      const notes = event.target.result;
+      notes.forEach(note => {
+        if (note.remind && note.remind <= now && !notifiedReminders.has(note.id)) {
+          notifiedReminders.add(note.id);
+          window.electronAPI.showNotification(
+            'Reminder',
+            note.content || 'You have a reminder'
+          );
+        }
+      });
+    };
+  }, 3000); // Check every 30 seconds
 
 };
 

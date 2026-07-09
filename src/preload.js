@@ -17,4 +17,5 @@ contextBridge.exposeInMainWorld('electronAPI', {
   licenseActivate: (licenseKey) => ipcRenderer.invoke('license-activate', licenseKey),
   licenseGet: () => ipcRenderer.invoke('license-get'),
   licenseRemove: () => ipcRenderer.invoke('license-remove'),
+  showNotification: (title, body) => ipcRenderer.send('show-notification', { title, body }),
 });

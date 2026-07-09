@@ -49,7 +49,10 @@ const Languages = {
         "__license__" : "الترخيص",
         "__paste_license_key_here__" : "ألصق مفتاح الترخيص هنا...",
         "__activate__" : "تفعيل",
-        "__version__" : "الإصدار"
+        "__version__" : "الإصدار",
+        "__reminder__" : "تذكير",
+        "__ok__" : "موافق",
+        "__cancel__" : "إلغاء"
     },
     "de" : {
         "name" : "Deutsch",
@@ -101,7 +104,10 @@ const Languages = {
         "__license__" : "LIZENZ",
         "__paste_license_key_here__" : "Lizenzschlüssel hier einfügen ...",
         "__activate__" : "Aktivieren",
-        "__version__" : "Version"
+        "__version__" : "Version",
+        "__reminder__" : "Erinnerung",
+        "__ok__" : "OK",
+        "__cancel__" : "Abbrechen"
     },
     "en" : {
         "name" : "English",
@@ -153,7 +159,10 @@ const Languages = {
         "__license__" : "LICENSE",
         "__paste_license_key_here__" : "Paste license key here ...",
         "__activate__" : "Activate",
-        "__version__" : "Version"
+        "__version__" : "Version",
+        "__reminder__" : "Reminder",
+        "__ok__" : "OK",
+        "__cancel__" : "Cancel"
     },
     "es" : {
         "name" : "Español",
@@ -205,7 +214,10 @@ const Languages = {
         "__license__" : "LICENCIA",
         "__paste_license_key_here__" : "Pegue aquí la clave de licencia...",
         "__activate__" : "Activar",
-        "__version__" : "Versión"
+        "__version__" : "Versión",
+        "__reminder__" : "Recordatorio",
+        "__ok__" : "Aceptar",
+        "__cancel__" : "Cancelar"
     },
     "fr" : {
         "name" : "Française",
@@ -257,7 +269,10 @@ const Languages = {
         "__license__" : "LICENCE",
         "__paste_license_key_here__" : "Collez la clé de licence ici…",
         "__activate__" : "Activer",
-        "__version__" : "Version"
+        "__version__" : "Version",
+        "__reminder__" : "Rappel",
+        "__ok__" : "OK",
+        "__cancel__" : "Annuler"
     },
     "in" : {
         "name" : "हिंदी",
@@ -309,7 +324,10 @@ const Languages = {
         "__license__" : "लाइसेंस",
         "__paste_license_key_here__" : "लाइसेंस की यहाँ पेस्ट करें…",
         "__activate__" : "एक्टिवेट करें",
-        "__version__" : "वर्जन"
+        "__version__" : "वर्जन",
+        "__reminder__" : "रिमाइंडर",
+        "__ok__" : "ठीक है",
+        "__cancel__" : "रद्द करें"
     },
     "it" : {
         "name" : "Italiana",
@@ -361,7 +379,10 @@ const Languages = {
         "__license__" : "LICENZA",
         "__paste_license_key_here__" : "Incolla qui la chiave di licenza...",
         "__activate__" : "Attiva",
-        "__version__" : "Versione"
+        "__version__" : "Versione",
+        "__reminder__" : "Promemoria",
+        "__ok__" : "OK",
+        "__cancel__" : "Annulla"
     },
     "jp" : {
         "name" : "日本語",
@@ -413,7 +434,10 @@ const Languages = {
         "__license__" : "ライセンス",
         "__paste_license_key_here__" : "ここにライセンスキーを貼り付けてください…",
         "__activate__" : "アクティベート",
-        "__version__" : "バージョン"
+        "__version__" : "バージョン",
+        "__reminder__" : "リマインダー",
+        "__ok__" : "OK",
+        "__cancel__" : "キャンセル"
     },
     "kr" : {
         "name" : "한국어",
@@ -465,7 +489,10 @@ const Languages = {
         "__license__" : "라이선스",
         "__paste_license_key_here__" : "라이선스 키를 여기에 붙여넣으세요…",
         "__activate__" : "활성화",
-        "__version__" : "버전"
+        "__version__" : "버전",
+        "__reminder__" : "알림",
+        "__ok__" : "확인",
+        "__cancel__" : "취소"
     },
     "pk" : {
         "name" : "اردو",
@@ -517,7 +544,10 @@ const Languages = {
         "__license__" : "جواز",
         "__paste_license_key_here__" : "د جواز کیلي دلته پیسټ کړئ...",
         "__activate__" : "فعال کړئ",
-        "__version__" : "نسخه"
+        "__version__" : "نسخه",
+        "__reminder__" : "یاد دہانی",
+        "__ok__" : "ٹھیک ہے",
+        "__cancel__" : "منسوخ کریں۔"
     },
     "pt" : {
         "name" : "Português",
@@ -573,7 +603,10 @@ const Languages = {
         "__license__" : "LICENÇA",
         "__paste_license_key_here__" : "Cole aqui a chave de licença…",
         "__activate__" : "Ativar",
-        "__version__" : "Versão"
+        "__version__" : "Versão",
+        "__reminder__" : "Lembrete",
+        "__ok__" : "OK",
+        "__cancel__" : "Cancelar"
     },
     "ru" : {
         "name" : "Русский",
@@ -625,7 +658,10 @@ const Languages = {
         "__license__" : "ЛИЦЕНЗИЯ",
         "__paste_license_key_here__" : "Вставьте лицензионный ключ сюда…",
         "__activate__" : "Активировать",
-        "__version__" : "Версия"
+        "__version__" : "Версия",
+        "__reminder__" : "Напоминание",
+        "__ok__" : "OK",
+        "__cancel__" : "Отмена"
     },
     "zhCN" : {
         "name" : "简体中文",
@@ -677,7 +713,10 @@ const Languages = {
         "__license__" : "许可证",
         "__paste_license_key_here__" : "请在此处粘贴许可证密钥…",
         "__activate__" : "激活",
-        "__version__" : "版本"
+        "__version__" : "版本",
+        "__reminder__" : "提醒",
+        "__ok__" : "确定",
+        "__cancel__" : "取消"
     },
     "zhTW" : {
         "name" : "繁體中文",
@@ -729,6 +768,9 @@ const Languages = {
         "__license__" : "許可證",
         "__paste_license_key_here__" : "請在此處貼上許可證密鑰…",
         "__activate__" : "啟用設定",
-        "__version__" : "版本"
+        "__version__" : "版本",
+        "__reminder__" : "提醒",
+        "__ok__" : "確定",
+        "__cancel__" : "取消"
     }
 }
