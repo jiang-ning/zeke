@@ -198,3 +198,45 @@ class DateTimePicker {
     return null;
   }
 }
+
+/**
+ * Initialize a custom dropdown select component
+ * @param {HTMLElement} el - The .custom-select container element
+ * @param {string} initialValue - The initial selected value
+ */
+function initCustomSelect(el, initialValue) {
+  const trigger = el.querySelector('.custom-select-trigger');
+  const options = el.querySelectorAll('.custom-select-options li');
+  const valueDisplay = el.querySelector('.custom-select-value');
+
+  trigger.addEventListener('click', () => {
+    el.classList.toggle('open');
+  });
+
+  options.forEach(option => {
+    option.addEventListener('click', () => {
+      options.forEach(o => o.classList.remove('selected'));
+      option.classList.add('selected');
+      valueDisplay.textContent = option.textContent;
+      el.classList.remove('open');
+      const event = new CustomEvent('change', { detail: { value: option.dataset.value }});
+      el.dispatchEvent(event);
+    });
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!el.contains(e.target)) {
+      el.classList.remove('open');
+    }
+  });
+
+  // Set initial value
+  if (initialValue) {
+    const initialOption = el.querySelector(`[data-value="${initialValue}"]`);
+    if (initialOption) {
+      options.forEach(o => o.classList.remove('selected'));
+      initialOption.classList.add('selected');
+      valueDisplay.textContent = initialOption.textContent;
+    }
+  }
+}

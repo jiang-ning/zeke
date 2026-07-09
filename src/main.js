@@ -1231,6 +1231,8 @@ request.onsuccess = async function(event) {
             'Reminder',
             note.content || 'You have a reminder'
           );
+          // Clear remind so it won't notify again
+          dbUpdate('note', note.id, { remind: null });
         }
       });
     };
@@ -1419,11 +1421,11 @@ function initModalSettings() {
   });
 
   languageList.addEventListener('change', e => {
-    changeLanguage(e.target.value);
-    localStorage.setItem('language', e.target.value);
+    changeLanguage(e.detail.value);
+    localStorage.setItem('language', e.detail.value);
   });
 
-  languageList.value = rememberedLanguage;
+  initCustomSelect(languageList, rememberedLanguage);
 
   themes.forEach(theme => {
     theme.addEventListener('click', (e) => {

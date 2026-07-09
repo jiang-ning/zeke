@@ -84,10 +84,13 @@
 .theme-dark #areaListNotes li.edit > .noteContent,
 .theme-dark #areaListLists li.edit input,
 .theme-dark #titlebar .appIcon:hover,
-.theme-dark #languageList,
 .theme-dark button,
 .theme-dark button:hover {
   background-color: #00000066;
+}
+.theme-dark .custom-select-trigger,
+.theme-dark .custom-select-options {
+  background-color: #1c1c1c;
 }
 .theme-dark input[type="checkbox"]::before,
 .theme-dark .icon:hover,
@@ -99,7 +102,8 @@
 }
 .theme-dark .report .filterButton,
 .theme-dark ::-webkit-scrollbar-thumb,
-.theme-dark ::-webkit-scrollbar-thumb:hover {
+.theme-dark ::-webkit-scrollbar-thumb:hover,
+.theme-dark .custom-select-options li:hover {
   background-color: #ffffff33;
 }
 .theme-dark #txtNew:focus {
@@ -146,7 +150,9 @@
 .theme-dark .edition,
 .theme-dark #languageList,
 .theme-dark button,
-.theme-dark .modal #editionUpgrade:hover {
+.theme-dark .modal #editionUpgrade:hover,
+.theme-dark .custom-select-trigger,
+.theme-dark .custom-select-options li {
   color: #ffffff99;
 }
 .theme-dark #btnNew, 
@@ -372,14 +378,17 @@
 .theme-blue #areaPinNotes input[type='text'],
 .theme-blue #areaListNotes input[type='text'],
 .theme-blue #areaPinNotes li span.noteMoment,
-.theme-blue #areaListNotes li span.noteMoment {
+.theme-blue #areaListNotes li span.noteMoment,
+.theme-blue #btnReminder:hover,
+.theme-blue #btnReminder.active.set {
   color: var(--blue-stroke);
 }
 .theme-blue #btnSwitchNavbar,
 .theme-blue #filterCompleted, 
 .theme-blue #filterIncompleted,
 .theme-blue #areaPinNotes li.completed input[type='text'],
-.theme-blue #areaListNotes li.completed input[type='text'] {
+.theme-blue #areaListNotes li.completed input[type='text'],
+.theme-blue #btnReminder {
   color: var(--blue-stroke-66);
 }
 .theme-blue input[type="range"] {
@@ -493,14 +502,17 @@
 .theme-red #areaPinNotes input[type='text'],
 .theme-red #areaListNotes input[type='text'],
 .theme-red #areaPinNotes li span.noteMoment,
-.theme-red #areaListNotes li span.noteMoment {
+.theme-red #areaListNotes li span.noteMoment,
+.theme-red #btnReminder:hover,
+.theme-red #btnReminder.active.set {
   color: var(--red-stroke);
 }
 .theme-red #btnSwitchNavbar,
 .theme-red #filterCompleted, 
 .theme-red #filterIncompleted,
 .theme-red #areaPinNotes li.completed input[type='text'],
-.theme-red #areaListNotes li.completed input[type='text'] {
+.theme-red #areaListNotes li.completed input[type='text'],
+.theme-red #btnReminder {
   color: var(--red-stroke-66);
 }
 .theme-red input[type="range"] {
@@ -614,14 +626,17 @@
 .theme-orange #areaPinNotes input[type='text'],
 .theme-orange #areaListNotes input[type='text'],
 .theme-orange #areaPinNotes li span.noteMoment,
-.theme-orange #areaListNotes li span.noteMoment {
+.theme-orange #areaListNotes li span.noteMoment,
+.theme-orange #btnReminder:hover,
+.theme-orange #btnReminder.active.set  {
   color: var(--orange-stroke);
 }
 .theme-orange #btnSwitchNavbar,
 .theme-orange #filterCompleted, 
 .theme-orange #filterIncompleted,
 .theme-orange #areaPinNotes li.completed input[type='text'],
-.theme-orange #areaListNotes li.completed input[type='text'] {
+.theme-orange #areaListNotes li.completed input[type='text'],
+.theme-orange #btnReminder {
   color: var(--orange-stroke-66);
 }
 .theme-orange input[type="range"] {
@@ -737,14 +752,17 @@
 .theme-amber #areaPinNotes input[type='text'],
 .theme-amber #areaListNotes input[type='text'],
 .theme-amber #areaPinNotes li span.noteMoment,
-.theme-amber #areaListNotes li span.noteMoment {
+.theme-amber #areaListNotes li span.noteMoment,
+.theme-amber #btnReminder:hover,
+.theme-amber #btnReminder.active.set  {
   color: var(--amber-stroke);
 }
 .theme-amber #btnSwitchNavbar,
 .theme-amber #filterCompleted, 
 .theme-amber #filterIncompleted,
 .theme-amber #areaPinNotes li.completed input[type='text'],
-.theme-amber #areaListNotes li.completed input[type='text'] {
+.theme-amber #areaListNotes li.completed input[type='text'],
+.theme-amber #btnReminder {
   color: var(--amber-stroke-66);
 }
 .theme-amber input[type="range"] {
@@ -858,14 +876,17 @@
 .theme-green #areaPinNotes input[type='text'],
 .theme-green #areaListNotes input[type='text'],
 .theme-green #areaPinNotes li span.noteMoment,
-.theme-green #areaListNotes li span.noteMoment {
+.theme-green #areaListNotes li span.noteMoment,
+.theme-green #btnReminder:hover,
+.theme-green #btnReminder.active.set {
   color: var(--green-stroke);
 }
 .theme-green #btnSwitchNavbar,
 .theme-green #filterCompleted, 
 .theme-green #filterIncompleted,
 .theme-green #areaPinNotes li.completed input[type='text'],
-.theme-green #areaListNotes li.completed input[type='text'] {
+.theme-green #areaListNotes li.completed input[type='text'],
+.theme-green #btnReminder {
   color: var(--green-stroke-66);
 }
 .theme-green input[type="range"] {
@@ -979,14 +1000,17 @@
 .theme-teal #areaPinNotes input[type='text'],
 .theme-teal #areaListNotes input[type='text'],
 .theme-teal #areaPinNotes li span.noteMoment,
-.theme-teal #areaListNotes li span.noteMoment {
+.theme-teal #areaListNotes li span.noteMoment,
+.theme-teal #btnReminder:hover,
+.theme-teal #btnReminder.active.set {
   color: var(--teal-stroke);
 }
 .theme-teal #btnSwitchNavbar,
 .theme-teal #filterCompleted, 
 .theme-teal #filterIncompleted,
 .theme-teal #areaPinNotes li.completed input[type='text'],
-.theme-teal #areaListNotes li.completed input[type='text'] {
+.theme-teal #areaListNotes li.completed input[type='text'],
+.theme-teal #btnReminder {
   color: var(--teal-stroke-66);
 }
 .theme-teal input[type="range"] {
@@ -1100,14 +1124,17 @@
 .theme-violet #areaPinNotes input[type='text'],
 .theme-violet #areaListNotes input[type='text'],
 .theme-violet #areaPinNotes li span.noteMoment,
-.theme-violet #areaListNotes li span.noteMoment {
+.theme-violet #areaListNotes li span.noteMoment,
+.theme-violet #btnReminder:hover,
+.theme-violet #btnReminder.active.set {
   color: var(--violet-stroke);
 }
 .theme-violet #btnSwitchNavbar,
 .theme-violet #filterCompleted, 
 .theme-violet #filterIncompleted,
 .theme-violet #areaPinNotes li.completed input[type='text'],
-.theme-violet #areaListNotes li.completed input[type='text'] {
+.theme-violet #areaListNotes li.completed input[type='text'],
+.theme-violet #btnReminder {
   color: var(--violet-stroke-66);
 }
 .theme-violet input[type="range"] {
@@ -1221,14 +1248,17 @@
 .theme-purple #areaPinNotes input[type='text'],
 .theme-purple #areaListNotes input[type='text'],
 .theme-purple #areaPinNotes li span.noteMoment,
-.theme-purple #areaListNotes li span.noteMoment {
+.theme-purple #areaListNotes li span.noteMoment,
+.theme-purple #btnReminder:hover,
+.theme-purple #btnReminder.active.set {
   color: var(--purple-stroke);
 }
 .theme-purple #btnSwitchNavbar,
 .theme-purple #filterCompleted, 
 .theme-purple #filterIncompleted,
 .theme-purple #areaPinNotes li.completed input[type='text'],
-.theme-purple #areaListNotes li.completed input[type='text'] {
+.theme-purple #areaListNotes li.completed input[type='text'],
+.theme-purple #btnReminder {
   color: var(--purple-stroke-66);
 }
 .theme-purple input[type="range"] {
@@ -1342,14 +1372,17 @@
 .theme-pink #areaPinNotes input[type='text'],
 .theme-pink #areaListNotes input[type='text'],
 .theme-pink #areaPinNotes li span.noteMoment,
-.theme-pink #areaListNotes li span.noteMoment {
+.theme-pink #areaListNotes li span.noteMoment,
+.theme-pink #btnReminder:hover,
+.theme-pink #btnReminder.active.set {
   color: var(--pink-stroke);
 }
 .theme-pink #btnSwitchNavbar,
 .theme-pink #filterCompleted, 
 .theme-pink #filterIncompleted,
 .theme-pink #areaPinNotes li.completed input[type='text'],
-.theme-pink #areaListNotes li.completed input[type='text'] {
+.theme-pink #areaListNotes li.completed input[type='text'],
+.theme-pink #btnReminder {
   color: var(--pink-stroke-66);
 }
 .theme-pink input[type="range"] {
