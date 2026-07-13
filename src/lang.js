@@ -52,7 +52,13 @@ const Languages = {
         "__version__" : "الإصدار",
         "__reminder__" : "تذكير",
         "__ok__" : "موافق",
-        "__cancel__" : "إلغاء"
+        "__cancel__" : "إلغاء",
+        "__due_date__" : "تاريخ الاستحقاق",
+        "__due_at__" : "يستحق في",
+        "__remind_me_at__" : "ذكّرني في",
+        "__overdue__" : "متأخر",
+        "__due_today__" : "مستحق اليوم",
+        "__completed_on_time__" : "تم الإنجاز في الوقت المحدد"
     },
     "de" : {
         "name" : "Deutsch",
@@ -107,7 +113,13 @@ const Languages = {
         "__version__" : "Version",
         "__reminder__" : "Erinnerung",
         "__ok__" : "OK",
-        "__cancel__" : "Abbrechen"
+        "__cancel__" : "Abbrechen",
+        "__due_date__" : "Vervaldatum",
+        "__due_at__" : "Vervallen op",
+        "__remind_me_at__" : "Herinner me om",
+        "__overdue__" : "Te laat",
+        "__due_today__" : "Vervalt vandaag",
+        "__completed_on_time__" : "Op tijd voltooid"
     },
     "en" : {
         "name" : "English",
@@ -162,7 +174,13 @@ const Languages = {
         "__version__" : "Version",
         "__reminder__" : "Reminder",
         "__ok__" : "OK",
-        "__cancel__" : "Cancel"
+        "__cancel__" : "Cancel",
+        "__due_date__" : "Due Date",
+        "__due_at__" : "Due at",
+        "__remind_me_at__" : "Remind me at",
+        "__overdue__" : "Overdue",
+        "__due_today__" : "Due Today",
+        "__completed_on_time__" : "Completed on time"
     },
     "es" : {
         "name" : "Español",
@@ -217,7 +235,13 @@ const Languages = {
         "__version__" : "Versión",
         "__reminder__" : "Recordatorio",
         "__ok__" : "Aceptar",
-        "__cancel__" : "Cancelar"
+        "__cancel__" : "Cancelar",
+        "__due_date__" : "Fecha límite",
+        "__due_at__" : "Se debe entregar el",
+        "__remind_me_at__" : "Recuérdame a",
+        "__overdue__" : "Atrasado",
+        "__due_today__" : "Vence hoy",
+        "__completed_on_time__" : "Completado a tiempo"
     },
     "fr" : {
         "name" : "Française",
@@ -272,7 +296,13 @@ const Languages = {
         "__version__" : "Version",
         "__reminder__" : "Rappel",
         "__ok__" : "OK",
-        "__cancel__" : "Annuler"
+        "__cancel__" : "Annuler",
+        "__due_date__" : "Date d'échéance",
+        "__due_at__" : "À rendre le",
+        "__remind_me_at__" : "Me rappeler à",
+        "__overdue__" : "En retard",
+        "__due_today__" : "À rendre aujourd'hui",
+        "__completed_on_time__" : "Terminé à temps"
     },
     "in" : {
         "name" : "हिंदी",
@@ -327,7 +357,13 @@ const Languages = {
         "__version__" : "वर्जन",
         "__reminder__" : "रिमाइंडर",
         "__ok__" : "ठीक है",
-        "__cancel__" : "रद्द करें"
+        "__cancel__" : "रद्द करें",
+        "__due_date__" : "नियत तारीख",
+        "__due_at__" : "समय पर",
+        "__remind_me_at__" : "मुझे याद दिलाना",
+        "__overdue__" : "मुल्तवी",
+        "__due_today__" : "आज की तारीख़",
+        "__completed_on_time__" : "समय पर पूरा हुआ"
     },
     "it" : {
         "name" : "Italiana",
@@ -382,7 +418,13 @@ const Languages = {
         "__version__" : "Versione",
         "__reminder__" : "Promemoria",
         "__ok__" : "OK",
-        "__cancel__" : "Annulla"
+        "__cancel__" : "Annulla",
+        "__due_date__" : "Data di scadenza",
+        "__due_at__" : "Da completare il",
+        "__remind_me_at__" : "Ricordami alle",
+        "__overdue__" : "In ritardo",
+        "__due_today__" : "Scade oggi",
+        "__completed_on_time__" : "Completato in tempo"
     },
     "jp" : {
         "name" : "日本語",
@@ -437,7 +479,13 @@ const Languages = {
         "__version__" : "バージョン",
         "__reminder__" : "リマインダー",
         "__ok__" : "OK",
-        "__cancel__" : "キャンセル"
+        "__cancel__" : "キャンセル",
+        "__due_date__" : "締め切り日",
+        "__due_at__" : "締切は",
+        "__remind_me_at__" : "知らせてね",
+        "__overdue__" : "期限切れ",
+        "__due_today__" : "今日が期限",
+        "__completed_on_time__" : "期限内に完了"
     },
     "kr" : {
         "name" : "한국어",
@@ -492,7 +540,13 @@ const Languages = {
         "__version__" : "버전",
         "__reminder__" : "알림",
         "__ok__" : "확인",
-        "__cancel__" : "취소"
+        "__cancel__" : "취소",
+        "__due_date__" : "마감일",
+        "__due_at__" : "마감 시간",
+        "__remind_me_at__" : "알려줘",
+        "__overdue__" : "기한 지난 항목",
+        "__due_today__" : "오늘 마감",
+        "__completed_on_time__" : "제시간에 완료"
     },
     "pk" : {
         "name" : "اردو",
@@ -547,7 +601,13 @@ const Languages = {
         "__version__" : "نسخه",
         "__reminder__" : "یاد دہانی",
         "__ok__" : "ٹھیک ہے",
-        "__cancel__" : "منسوخ کریں۔"
+        "__cancel__" : "منسوخ کریں۔",
+        "__due_date__" : "آخری تاریخ",
+        "__due_at__" : "مقررہ وقت",
+        "__remind_me_at__" : "مجھے یاد دلان",
+        "__overdue__" : "مقررہ تاریخ سے گزر چکا",
+        "__due_today__" : "آج کی تاریخ",
+        "__completed_on_time__" : "وقت پر مکمل"
     },
     "pt" : {
         "name" : "Português",
@@ -606,7 +666,13 @@ const Languages = {
         "__version__" : "Versão",
         "__reminder__" : "Lembrete",
         "__ok__" : "OK",
-        "__cancel__" : "Cancelar"
+        "__cancel__" : "Cancelar",
+        "__due_date__" : "Data de entrega",
+        "__due_at__" : "Devido em",
+        "__remind_me_at__" : "Lembra-me às",
+        "__overdue__" : "Atrasado",
+        "__due_today__" : "Vence Hoje",
+        "__completed_on_time__" : "Concluído a tempo"
     },
     "ru" : {
         "name" : "Русский",
@@ -661,7 +727,13 @@ const Languages = {
         "__version__" : "Версия",
         "__reminder__" : "Напоминание",
         "__ok__" : "OK",
-        "__cancel__" : "Отмена"
+        "__cancel__" : "Отмена",
+        "__due_date__" : "Срок сдачи",
+        "__due_at__" : "Сдать к",
+        "__remind_me_at__" : "Напомни мне в",
+        "__overdue__" : "Просрочено",
+        "__due_today__" : "Срок сегодня",
+        "__completed_on_time__" : "Выполнено вовремя"
     },
     "zhCN" : {
         "name" : "简体中文",
@@ -716,7 +788,13 @@ const Languages = {
         "__version__" : "版本",
         "__reminder__" : "提醒",
         "__ok__" : "确定",
-        "__cancel__" : "取消"
+        "__cancel__" : "取消",
+        "__due_date__" : "截止日",
+        "__due_at__" : "到期时间",
+        "__remind_me_at__" : "提醒我在",
+        "__overdue__" : "已逾期",
+        "__due_today__" : "今天到期",
+        "__completed_on_time__" : "已按时完成"
     },
     "zhTW" : {
         "name" : "繁體中文",
@@ -771,6 +849,12 @@ const Languages = {
         "__version__" : "版本",
         "__reminder__" : "提醒",
         "__ok__" : "確定",
-        "__cancel__" : "取消"
+        "__cancel__" : "取消",
+        "__due_date__" : "到期日",
+        "__due_at__" : "到期時間",
+        "__remind_me_at__" : "提醒我在",
+        "__overdue__" : "逾期",
+        "__due_today__" : "今天到期",
+        "__completed_on_time__" : "準時完成"
     }
 }

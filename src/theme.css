@@ -23,7 +23,8 @@
 [class^="theme"] #panelList,
 [class^="theme"] #gutter,
 [class^="theme"] #areaListLists .listRemove:hover,
-[class^="theme"] span.appIcon:hover {
+[class^="theme"] span.appIcon:hover,
+[class^="theme"] #areaNew:has(#txtNew:focus) {
   background-color: #ffffff66;
 }
 [class^="theme"] #panelList .sortable-chosen,
@@ -74,7 +75,9 @@
 .theme-dark #panelList .sortable-chosen,
 .theme-dark #panelNote .sortable-chosen,
 .theme-dark #listAdd #listAddName.active,
-.theme-dark #filterbar.active {
+.theme-dark #filterbar.active,
+.theme-dark .modal #license-input,
+.theme-dark #areaNew:has(#txtNew:focus) {
   background-color: #00000099;
 }
 .theme-dark #panelNote,
@@ -96,8 +99,7 @@
 .theme-dark .icon:hover,
 .theme-dark #btnNew:hover,
 .theme-dark #btnFilter:hover,
-.theme-dark #btnFilter.active,
-.theme-dark .modal #license-input {
+.theme-dark #btnFilter.active {
   background-color: #ffffffcc;
 }
 .theme-dark .report .filterButton,
@@ -131,7 +133,8 @@
 .theme-dark #txtNew,
 .theme-dark #areaPinNotes li:hover input[type='text'],
 .theme-dark #areaListNotes li:hover input[type='text'],
-.theme-dark button:hover {
+.theme-dark button:hover,
+.theme-dark .modal #license-input {
   color: #fff;
 }
 .theme-dark #brand,
@@ -218,7 +221,7 @@
 .theme-dark #btnSettings_SE:hover svg {
   fill: #999;
 }
-.theme-dark .reminder-picker {
+.theme-dark .datetime-picker {
   background: #2a2a2a;
   border-color: #444;
   box-shadow: 0 4px 16px #00000033;
@@ -267,12 +270,12 @@
 .theme-dark .time-list-separator {
   color: #888;
 }
-.theme-dark .reminder-picker-actions button {
+.theme-dark .datetime-picker-actions button {
   background: #333;
   border-color: #555;
   color: #ddd;
 }
-.theme-dark .reminder-picker-actions button:hover {
+.theme-dark .datetime-picker-actions button:hover {
   background: #444;
   border-color: #666;
 }
@@ -345,7 +348,8 @@
 .theme-blue #areaListLists .edit input.active,
 .theme-blue #areaSettings.active,
 .theme-blue .modal-section button,
-.theme-blue select {
+.theme-blue .custom-select-trigger,
+.theme-blue .custom-select-options {
   border-color: var(--blue-stroke-cc);
 }
 .theme-blue #areaListLists input.active {
@@ -388,6 +392,8 @@
 .theme-blue #filterIncompleted,
 .theme-blue #areaPinNotes li.completed input[type='text'],
 .theme-blue #areaListNotes li.completed input[type='text'],
+.theme-blue #areaPinNotes li.completed span.noteMoment,
+.theme-blue #areaListNotes li.completed span.noteMoment,
 .theme-blue #btnReminder {
   color: var(--blue-stroke-66);
 }
@@ -470,7 +476,8 @@
 .theme-red #areaListLists .edit input.active,
 .theme-red #areaSettings.active,
 .theme-red .modal-section button,
-.theme-red select {
+.theme-red .custom-select-trigger,
+.theme-red .custom-select-options {
   border-color: var(--red-stroke-cc);
 }
 .theme-red #areaListLists input.active {
@@ -512,6 +519,8 @@
 .theme-red #filterIncompleted,
 .theme-red #areaPinNotes li.completed input[type='text'],
 .theme-red #areaListNotes li.completed input[type='text'],
+.theme-red #areaPinNotes li.completed span.noteMoment,
+.theme-red #areaListNotes li.completed span.noteMoment,
 .theme-red #btnReminder {
   color: var(--red-stroke-66);
 }
@@ -594,7 +603,8 @@
 .theme-orange #areaListLists .edit input.active,
 .theme-orange #areaSettings.active,
 .theme-orange .modal-section button,
-.theme-orange select {
+.theme-orange .custom-select-trigger,
+.theme-orange .custom-select-options {
   border-color: var(--orange-stroke-cc);
 }
 .theme-orange #areaListLists input.active {
@@ -636,6 +646,8 @@
 .theme-orange #filterIncompleted,
 .theme-orange #areaPinNotes li.completed input[type='text'],
 .theme-orange #areaListNotes li.completed input[type='text'],
+.theme-orange #areaPinNotes li.completed span.noteMoment,
+.theme-orange #areaListNotes li.completed span.noteMoment,
 .theme-orange #btnReminder {
   color: var(--orange-stroke-66);
 }
@@ -720,7 +732,8 @@
 .theme-amber #areaListLists .edit input.active,
 .theme-amber #areaSettings.active,
 .theme-amber .modal-section button,
-.theme-amber select {
+.theme-amber .custom-select-trigger,
+.theme-amber .custom-select-options {
   border-color: var(--amber-stroke-cc);
 }
 .theme-amber #areaListLists input.active {
@@ -762,6 +775,8 @@
 .theme-amber #filterIncompleted,
 .theme-amber #areaPinNotes li.completed input[type='text'],
 .theme-amber #areaListNotes li.completed input[type='text'],
+.theme-amber #areaPinNotes li.completed span.noteMoment,
+.theme-amber #areaListNotes li.completed span.noteMoment,
 .theme-amber #btnReminder {
   color: var(--amber-stroke-66);
 }
@@ -844,7 +859,8 @@
 .theme-green #areaListLists .edit input.active,
 .theme-green #areaSettings.active,
 .theme-green .modal-section button,
-.theme-green select {
+.theme-green .custom-select-trigger,
+.theme-green .custom-select-options {
   border-color: var(--green-stroke-cc);
 }
 .theme-green #areaListLists input.active {
@@ -886,6 +902,8 @@
 .theme-green #filterIncompleted,
 .theme-green #areaPinNotes li.completed input[type='text'],
 .theme-green #areaListNotes li.completed input[type='text'],
+.theme-green #areaPinNotes li.completed span.noteMoment,
+.theme-green #areaListNotes li.completed span.noteMoment,
 .theme-green #btnReminder {
   color: var(--green-stroke-66);
 }
@@ -968,7 +986,8 @@
 .theme-teal #areaListLists .edit input.active,
 .theme-teal #areaSettings.active,
 .theme-teal .modal-section button,
-.theme-teal select {
+.theme-teal .custom-select-trigger,
+.theme-teal .custom-select-options {
   border-color: var(--teal-stroke-cc);
 }
 .theme-teal #areaListLists input.active {
@@ -1010,6 +1029,8 @@
 .theme-teal #filterIncompleted,
 .theme-teal #areaPinNotes li.completed input[type='text'],
 .theme-teal #areaListNotes li.completed input[type='text'],
+.theme-teal #areaPinNotes li.completed span.noteMoment,
+.theme-teal #areaListNotes li.completed span.noteMoment,
 .theme-teal #btnReminder {
   color: var(--teal-stroke-66);
 }
@@ -1092,7 +1113,8 @@
 .theme-violet #areaListLists .edit input.active,
 .theme-violet #areaSettings.active,
 .theme-violet .modal-section button,
-.theme-violet select {
+.theme-violet .custom-select-trigger,
+.theme-violet .custom-select-options {
   border-color: var(--violet-stroke-cc);
 }
 .theme-violet #areaListLists input.active {
@@ -1134,6 +1156,8 @@
 .theme-violet #filterIncompleted,
 .theme-violet #areaPinNotes li.completed input[type='text'],
 .theme-violet #areaListNotes li.completed input[type='text'],
+.theme-violet #areaPinNotes li.completed span.noteMoment,
+.theme-violet #areaListNotes li.completed span.noteMoment,
 .theme-violet #btnReminder {
   color: var(--violet-stroke-66);
 }
@@ -1216,7 +1240,8 @@
 .theme-purple #areaListLists .edit input.active,
 .theme-purple #areaSettings.active,
 .theme-purple .modal-section button,
-.theme-purple select {
+.theme-purple .custom-select-trigger,
+.theme-purple .custom-select-options {
   border-color: var(--purple-stroke-cc);
 }
 .theme-purple #areaListLists input.active {
@@ -1258,6 +1283,8 @@
 .theme-purple #filterIncompleted,
 .theme-purple #areaPinNotes li.completed input[type='text'],
 .theme-purple #areaListNotes li.completed input[type='text'],
+.theme-purple #areaPinNotes li.completed span.noteMoment,
+.theme-purple #areaListNotes li.completed span.noteMoment,
 .theme-purple #btnReminder {
   color: var(--purple-stroke-66);
 }
@@ -1340,7 +1367,8 @@
 .theme-pink #areaListLists .edit input.active,
 .theme-pink #areaSettings.active,
 .theme-pink .modal-section button,
-.theme-pink select {
+.theme-pink .custom-select-trigger,
+.theme-pink .custom-select-options {
   border-color: var(--pink-stroke-cc);
 }
 .theme-pink #areaListLists input.active {
@@ -1382,6 +1410,8 @@
 .theme-pink #filterIncompleted,
 .theme-pink #areaPinNotes li.completed input[type='text'],
 .theme-pink #areaListNotes li.completed input[type='text'],
+.theme-pink #areaPinNotes li.completed span.noteMoment,
+.theme-pink #areaListNotes li.completed span.noteMoment,
 .theme-pink #btnReminder {
   color: var(--pink-stroke-66);
 }

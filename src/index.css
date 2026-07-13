@@ -160,7 +160,7 @@ input[type='checkbox'] {
   background-color: #fff;
   border: 1px solid #ddd;
   border-radius: 50%;
-  color: #016936;
+  color: #999;
   width: 20px;
   height: 20px;
   transform: translateY(-0.075em);
@@ -175,14 +175,14 @@ input[type='checkbox'].has-progress {
 }
 input[type="checkbox"]::before {
   content: "";
-  color: #333;
+  color: #999;
   width: 10px;
   height: 10px;
   transform: scale(0);
   transform-origin: bottom left;
   transition: 120ms transform ease-in-out;
   box-shadow: inset 1em 1em var(--form-control-color);
-  background-color: #333;
+  background-color: transparent;
   -webkit-clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
   clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
 }
@@ -538,7 +538,8 @@ li.edit .noteSub {
 }
 
 /* Reminder Picker */
-#btnReminder {
+#btnReminder,
+#btnDueDate {
   position: relative;
   cursor: pointer;
   display: none;
@@ -546,19 +547,21 @@ li.edit .noteSub {
   height: 21px;
   color: #ccc;
   line-height: 24px;
+  text-align: center;
 }
 #btnReminder:hover,
-#btnReminder.active.set {
+#btnReminder.active.set,
+#btnDueDate:hover,
+#btnDueDate.active.set {
   color: #999;
 }
-#btnReminder.active {
+#btnReminder.active,
+#btnDueDate.active {
   display: inline-block;
 }
-.reminder-picker {
+.datetime-picker {
   display: none;
-  position: absolute;
-  top: 32px;
-  right: 0;
+  position: fixed;
   z-index: 100;
   background: #fff;
   border: 1px solid #ddd;
@@ -567,15 +570,15 @@ li.edit .noteSub {
   padding: 10px;
   width: auto;
 }
-.reminder-picker.open {
+.datetime-picker.open {
   display: block;
 }
-.reminder-picker-body {
+.datetime-picker-body {
   display: flex;
   gap: 8px;
   align-items: stretch;
 }
-.reminder-picker-date {
+.datetime-picker-date {
   flex: 1;
 }
 .mini-calendar {
@@ -643,7 +646,7 @@ li.edit .noteSub {
 .mini-calendar-days span.other-month {
   color: #ccc;
 }
-.reminder-picker-time {
+.datetime-picker-time {
   display: flex;
   align-items: flex-start;
   gap: 2px;
@@ -694,13 +697,23 @@ li.edit .noteSub {
   font-weight: 600;
   color: #333;
 }
-.reminder-picker-actions {
+.datetime-picker-actions {
   display: flex;
   justify-content: flex-end;
   gap: 6px;
   margin-top: 8px;
 }
-.reminder-picker-actions button {
+.datetime-picker-actions .datetime-picker-remove {
+  margin-right: auto;
+  color: #333;
+  border-color: #ddd;
+  background: #f9f9f9;
+}
+.datetime-picker-actions .datetime-picker-remove:hover {
+  background-color: #eee;
+  border-color: #ccc;
+}
+.datetime-picker-actions button {
   padding: 4px 12px;
   border: 1px solid #ddd;
   border-radius: 4px;
@@ -709,7 +722,7 @@ li.edit .noteSub {
   font-size: 12px;
   color: #333;
 }
-.reminder-picker-actions button:hover {
+.datetime-picker-actions button:hover {
   background: #eee;
   border-color: #ccc;
 }
@@ -788,7 +801,19 @@ li.edit .noteSub {
 }
 #areaPinNotes li.edit:has(.noteMoment),
 #areaListNotes li.edit:has(.noteMoment) {
-  grid-template-columns: 26px 1fr auto auto auto auto;
+  grid-template-columns: 26px 1fr auto auto auto auto auto auto auto;
+}
+#areaPinNotes li.edit .noteReminder,
+#areaListNotes li.edit .noteReminder,
+#areaPinNotes li.edit .noteDueDate,
+#areaListNotes li.edit .noteDueDate {
+  display: inline-flex;
+}
+#areaPinNotes li.edit .noteReminder:hover,
+#areaListNotes li.edit .noteReminder:hover,
+#areaPinNotes li.edit .noteDueDate:hover,
+#areaListNotes li.edit .noteDueDate:hover {
+  color: #ccc;
 }
 #areaListNotes li:hover input[type='text'],
 #areaPinNotes li:hover input[type='text'] {
@@ -811,16 +836,18 @@ li.edit .noteSub {
   padding-right: 10px;
   height: 40px;
   overflow: hidden;
+  cursor: default;
+  width: max-content;
 }
 #areaListNotes li.completed input[type='text'],
 #areaPinNotes li.completed input[type='text'] {
   background-color: transparent;
-  color: #999;
+  color: #ccc;
   text-decoration: line-through;
 }
 #areaPinNotes li.completed .noteMoment,
 #areaListNotes li.completed .noteMoment {
-  color: #999;
+  color: #ccc;
 }
 #areaPinNotes li.completed input[type="checkbox"]::before,
 #areaListNotes li.completed input[type="checkbox"]::before {
@@ -831,15 +858,45 @@ li.edit .noteSub {
   z-index: 2;
   line-height: 24px;
 }
-#areaPinNotes li {
-  grid-template-columns: 26px 1fr 90px 20px auto auto;
-}
 #areaPinNotes li:last-child {
   border-bottom-color: #ccc;
 }
 #areaPinNotes .notePin {
   line-height: 24px;
   background-color: #eeeeee99;
+}
+.noteReminder,
+.noteDueDate {
+  display: none;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0 4px;
+  color: #999;
+  cursor: pointer;
+  width: 16px;
+}
+.noteReminder svg,
+.noteDueDate svg {
+  width: 12px;
+  height: 12px;
+}
+.noteReminder.active,
+.noteDueDate.active {
+  display: flex;
+  color: #ddd;
+}
+.noteDueDate.overDue,
+.noteDueDate.dueToday,
+.noteDueDate.dueAhead {
+  color: #ddd;
+}
+.completed .noteDueDate.overDue,
+.completed .noteDueDate.dueToday,
+.completed .noteDueDate.dueAhead {
+  color: #eee;
+}
+.completed input[type='checkbox'] {
+  border-color: #ccc;
 }
 
 #areaListNotes .noteSubList, 

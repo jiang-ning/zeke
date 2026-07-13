@@ -1,5 +1,12 @@
 # Change Log
 
+### v1.12.2
+##### 2026-07-09
+- Improvement: Reminder
+- Improvement: Due Date
+- Bug Fix: Sorting with high memory taken issue
+- Bug Fix: Smoothly UI upating
+
 ### v1.10.2
 ##### 2024-10-06
 - Improvement: Filter by incompleted / completed tasks

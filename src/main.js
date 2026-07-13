@@ -32,24 +32,11 @@ request.onsuccess = async function(event) {
     request.onsuccess = function(newNote) {
       console.log('Note added successfully');
 
-      if(note.parent > 0) {
-        generateSubNoteItem({
-          id: newNote.target.result,
-          content: note.content, 
-          dateCreated: note.dateCreated,
-          parent: note.parent
-        }, 'areaListNotes');
-      } else {
-        generateNoteItem({
-          id: newNote.target.result,
-          content: note.content, 
-          dateCreated: note.dateCreated
-        }, 'areaListNotes', newNote.target.result - 1);
-      }
-
-      updateSortIndexes('areaListNotes');
-      
-      console.log('Note added successfully');
+      // Preserve expanded state before re-render
+      document.querySelectorAll('#panelNote li.expand').forEach(li => {
+        Zeke.expandedNotesIds.add(parseInt(li.dataset.id));
+      });
+      renderNotes(parseInt(localStorage.getItem('listActive')));
 
     };
     
@@ -80,7 +67,6 @@ request.onsuccess = async function(event) {
         notes.sort((a, b) => b.id - a.id);
       }
       
-      console.log('Note:', notes);
       document.querySelector('#areaListNotes ul').innerHTML = '';
       document.querySelector('#areaPinNotes ul').innerHTML = '';
       
@@ -416,6 +402,8 @@ request.onsuccess = async function(event) {
     let noteItem = document.createElement('li');
     let noteCheckbox = document.createElement('input');
     let noteInput = document.createElement('input');
+    let noteDueDate = document.createElement('span');
+    let noteReminder = document.createElement('span');
     let noteMoment = document.createElement('span');
     let notePin = document.createElement('span');
     let noteRemove = document.createElement('span');
@@ -432,8 +420,16 @@ request.onsuccess = async function(event) {
     noteInput.className = 'noteContent';
     noteInput.value = note.content;
     noteInput.readOnly = true;
+    noteDueDate.className = note.due ? 'noteDueDate active' : 'noteDueDate';
+    noteDueDate.title = note.due ? translate('__due_at__') + ' ' + moment(note.due).format('YYYY-MM-DD') : 
+    '';
+    noteDueDate.innerHTML = note.due ? checkDueDateStatus(noteDueDate, note.due, note.dateCompleted) : iconDueDate;
+    noteReminder.className = note.remind ? 'noteReminder active' : 'noteReminder';
+    noteReminder.title = note.remind ? translate('__remind_me_at__') + ' ' + moment(note.remind).format('YYYY-MM-DD HH:MM') : '';
+    noteReminder.innerHTML = note.remind ? iconReminderActive : iconReminder;
     noteMoment.className = 'noteMoment';
     noteMoment.innerText = moment(note.dateCreated).fromNow();
+    noteMoment.title = moment(note.dateCreated).format('YYYY-MM-DD HH:MM');
     noteCollapse.className = 'noteCollapse';
     noteSub.className = 'icon noteSub';
     noteSub.innerText = '+';
@@ -450,6 +446,8 @@ request.onsuccess = async function(event) {
     noteRemove.title = translate('__remove__') || 'Remove';
     noteItem.append(noteCheckbox);
     noteItem.append(noteInput);
+    noteItem.append(noteDueDate);
+    noteItem.append(noteReminder);
     noteItem.append(noteSub);
     noteItem.append(noteMoment);
     noteItem.append(noteRemove);
@@ -519,6 +517,7 @@ request.onsuccess = async function(event) {
         let targetId = parseInt(e.target.parentNode.dataset.id);
         if(newVal && newVal != note.content) {
           dbUpdate('note', targetId, {content: newVal});
+          note.content = newVal;
         }
         noteInput.readOnly = true;
         setTimeout(()=>{
@@ -527,12 +526,26 @@ request.onsuccess = async function(event) {
       }
     });
 
+    noteInput.addEventListener('focusout', (e) => {
+      if (!noteInput.readOnly) {
+        let newVal = noteInput.value.trim();
+        let targetId = parseInt(noteItem.dataset.id);
+        if (newVal && newVal != note.content) {
+          dbUpdate('note', targetId, {content: newVal});
+          note.content = newVal;
+        }
+        noteInput.readOnly = true;
+        noteItem.classList.remove('edit');
+      }
+    });
+
     noteSub.addEventListener('click', e => {
       e.preventDefault();
       e.stopPropagation();
 
       // if add subnote button is not clicked on current parent note
-      if(e.target.parentElement.dataset.id != document.querySelector('#panelNote li.edit').dataset.id) {
+      const editLi = document.querySelector('#panelNote li.edit');
+      if(editLi && e.target.parentElement.dataset.id != editLi.dataset.id) {
         closeEditingNote();
       }
 
@@ -574,6 +587,30 @@ request.onsuccess = async function(event) {
             subNoteItem.remove(); // remove origin after new subnote added
             updateCompletionPercentage(note.id);
           }
+        }
+      });
+
+      subNoteInput.addEventListener('focusout', e => {
+        if (!subNoteItem.isConnected) return;
+        const noteContent = subNoteInput.value.trim();
+        const currentListId = note.list || document.querySelector('#areaListLists input.active')?.dataset.id;
+        if (noteContent && currentListId) {
+          addNote({
+            list: parseInt(currentListId),
+            parent: note.id,
+            content: noteContent,
+            completed: false,
+            dateCreated: Date.now(),
+            dateCompleted: ''
+          });
+          dbUpdate('note', note.id, { parent: true });
+          noteCollapse.classList.add('show');
+          noteCollapse.classList.add('active');
+          noteItem.classList.add('expand');
+          subNoteItem.remove();
+          updateCompletionPercentage(note.id);
+        } else {
+          subNoteItem.remove();
         }
       });
 
@@ -625,10 +662,90 @@ request.onsuccess = async function(event) {
         setTimeout(()=>{
           noteCollapse.classList.toggle('active');
           noteItem.classList.toggle('expand');
-        },100);
+          if (noteItem.classList.contains('expand')) {
+            Zeke.expandedNotesIds.add(note.id);
+          } else {
+            Zeke.expandedNotesIds.delete(note.id);
+          }
+        }, 100);
         noteItem.classList.remove('edit');
         noteInput.readOnly = true;
         noteInput.blur();
+      }
+    });
+
+    noteReminder.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      if (reminderPicker.isOpen()) {
+        reminderPicker.close();
+        return;
+      }
+
+      reminderPicker.onClose = null;
+      reminderPicker.show(noteReminder, note.remind, (dateTime) => {
+        const remindTimestamp = new Date(dateTime).getTime();
+        dbUpdate('note', note.id, { remind: remindTimestamp });
+        note.remind = remindTimestamp;
+        noteReminder.className = 'noteReminder active';
+        noteReminder.title = moment(remindTimestamp).format('YYYY-MM-DD HH:mm');
+        noteReminder.innerHTML = iconReminder;
+        // Preserve expaned state of parent notes before re-render
+        document.querySelectorAll('#panelNote li.expand').forEach(li => {
+          Zeke.expandedNotesIds.add(parseInt(li.dataset.id));
+        });
+        renderNotes(parseInt(localStorage.getItem('listActive')));
+      }, { alignRight: true, onRemove: () => {
+        dbUpdate('note', note.id, { remind: null });
+        note.remind = null;
+        noteReminder.className = 'noteReminder';
+        noteReminder.title = '';
+        document.querySelectorAll('#panelNote li.expand').forEach(li => {
+          Zeke.expandedNotesIds.add(parseInt(li.dataset.id));
+        });
+        renderNotes(parseInt(localStorage.getItem('listActive')));
+      }});
+    });
+
+    noteDueDate.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      if (dueDatePicker.isOpen()) {
+        dueDatePicker.close();
+        return;
+      }
+
+      dueDatePicker.onClose = null;
+      dueDatePicker.show(noteDueDate, note.due, (dateTime) => {
+        const dueDateTimestamp = new Date(dateTime).getTime();
+        dbUpdate('note', note.id, { due: dueDateTimestamp });
+        note.due = dueDateTimestamp;
+        noteDueDate.className = 'noteDueDate active';
+        noteDueDate.title = moment(dueDateTimestamp).format('YYYY-MM-DD');
+        noteDueDate.innerHTML = iconDueDateActive;
+        // Preserve expaned state of parent notes before re-render
+        document.querySelectorAll('#panelNote li.expand').forEach(li => {
+          Zeke.expandedNotesIds.add(parseInt(li.dataset.id));
+        });
+        renderNotes(parseInt(localStorage.getItem('listActive')));
+      }, { alignRight: true, hideTime: true, onRemove: () => {
+        dbUpdate('note', note.id, { due: null });
+        note.due = null;
+        noteDueDate.className = 'noteDueDate';
+        noteDueDate.title = '';
+        document.querySelectorAll('#panelNote li.expand').forEach(li => {
+          Zeke.expandedNotesIds.add(parseInt(li.dataset.id));
+        });
+        renderNotes(parseInt(localStorage.getItem('listActive')));
+      }});
+    });
+
+    // Prevent noteInput focusout when clicking action buttons, so the click event fires while edit mode is still active
+    noteItem.addEventListener('mousedown', (e) => {
+      if (e.target.closest('.notePin, .noteRemove, .noteSub, .noteReminder, .noteDueDate, .noteCollapse')) {
+        e.preventDefault();
       }
     });
 
@@ -647,6 +764,8 @@ request.onsuccess = async function(event) {
     let subNoteItem = document.createElement('li');
     let subNoteCheckbox = document.createElement('input');
     let subNoteInput = document.createElement('input');
+    let subNoteDueDate = document.createElement('span');
+    let subNoteReminder = document.createElement('span');
     let subNoteMoment = document.createElement('span');
     let subNoteRemove = document.createElement('span');
     subNoteItem.draggable = true;
@@ -659,8 +778,15 @@ request.onsuccess = async function(event) {
     subNoteInput.className = 'noteContent';
     subNoteInput.value = subNote.content;
     subNoteInput.readOnly = true;
+    subNoteDueDate.className = subNote.due ? 'noteDueDate active' : 'noteDueDate';
+    subNoteDueDate.title = subNote.due ? translate('__due_at__') + ' ' + moment(subNote.due).format('YYYY-MM-DD') : '';
+    subNoteDueDate.innerHTML = subNote.due ? checkDueDateStatus(subNoteDueDate, subNote.due, subNote.dateCompleted) : iconDueDate;
+    subNoteReminder.className = subNote.remind ? 'noteReminder active' : 'noteReminder';
+    subNoteReminder.title = subNote.remind ? translate('__remind_me_at__') + ' ' + moment(subNote.remind).format('YYYY-MM-DD HH:mm') : '';
+    subNoteReminder.innerHTML = subNote.remind ? iconReminderActive : iconReminder;
     subNoteMoment.className = 'noteMoment';
     subNoteMoment.innerText = moment(subNote.dateCreated).fromNow();
+    subNoteMoment.title = moment(subNote.dateCreated).format('YYYY-MM-DD HH:MM');
     subNoteRemove.className = 'icon noteRemove';
     subNoteRemove.innerText = '-';
     subNoteRemove.dataset['langTitle'] = '__remove__';
@@ -668,6 +794,8 @@ request.onsuccess = async function(event) {
 
     subNoteItem.append(subNoteCheckbox);
     subNoteItem.append(subNoteInput);
+    subNoteItem.append(subNoteDueDate);
+    subNoteItem.append(subNoteReminder);
     subNoteItem.append(subNoteMoment);
     subNoteItem.append(subNoteRemove);
 
@@ -698,11 +826,25 @@ request.onsuccess = async function(event) {
         let targetId = parseInt(e.target.parentNode.dataset.id);
         if(newVal && newVal != subNote.content) {
           dbUpdate('note', targetId, {content: newVal});
+          subNote.content = newVal;
         }
         subNoteInput.readOnly = true;
         setTimeout(()=>{
           subNoteItem.classList.remove('edit');
         },100);
+      }
+    });
+
+    subNoteInput.addEventListener('focusout', (e) => {
+      if (!subNoteInput.readOnly) {
+        let newVal = subNoteInput.value.trim();
+        let targetId = parseInt(subNoteItem.dataset.id);
+        if (newVal && newVal != subNote.content) {
+          dbUpdate('note', targetId, {content: newVal});
+          subNote.content = newVal;
+        }
+        subNoteInput.readOnly = true;
+        subNoteItem.classList.remove('edit');
       }
     });
 
@@ -713,6 +855,74 @@ request.onsuccess = async function(event) {
       subNoteItem.remove();
       updateSortIndexes(area);
       deleteNote(targetId);
+    });
+
+    subNoteReminder.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      if (reminderPicker.isOpen()) {
+        reminderPicker.close();
+        return;
+      }
+
+      reminderPicker.onClose = null;
+      reminderPicker.show(subNoteReminder, subNote.remind, (dateTime) => {
+        const remindTimestamp = new Date(dateTime).getTime();
+        dbUpdate('note', subNote.id, { remind: remindTimestamp });
+        subNote.remind = remindTimestamp;
+        subNoteReminder.className = 'noteReminder active';
+        subNoteReminder.title = moment(remindTimestamp).format('YYYY-MM-DD HH:mm');
+        subNoteReminder.innerHTML = iconReminder;
+        // Preserve expanded state of parent notes before re-render
+        document.querySelectorAll('#panelNote li.expand').forEach(li => {
+          Zeke.expandedNotesIds.add(parseInt(li.dataset.id));
+        });
+        renderNotes(parseInt(localStorage.getItem('listActive')));
+      }, { alignRight: true, onRemove: () => {
+        dbUpdate('note', subNote.id, { remind: null });
+        subNote.remind = null;
+        subNoteReminder.className = 'noteReminder';
+        subNoteReminder.title = '';
+        document.querySelectorAll('#panelNote li.expand').forEach(li => {
+          Zeke.expandedNotesIds.add(parseInt(li.dataset.id));
+        });
+        renderNotes(parseInt(localStorage.getItem('listActive')));
+      }});
+    });
+
+    subNoteDueDate.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      if (dueDatePicker.isOpen()) {
+        dueDatePicker.close();
+        return;
+      }
+
+      dueDatePicker.onClose = null;
+      dueDatePicker.show(subNoteDueDate, subNote.due, (dateTime) => {
+        const dueTimestamp = new Date(dateTime).getTime();
+        dbUpdate('note', subNote.id, { due: dueTimestamp });
+        subNote.due = dueTimestamp;
+        subNoteDueDate.className = 'noteDueDate active';
+        subNoteDueDate.title = moment(dueTimestamp).format('YYYY-MM-DD HH:mm');
+        subNoteDueDate.innerHTML = iconDueDateActive;
+        // Preserve expanded state of parent notes before re-render
+        document.querySelectorAll('#panelNote li.expand').forEach(li => {
+          Zeke.expandedNotesIds.add(parseInt(li.dataset.id));
+        });
+        renderNotes(parseInt(localStorage.getItem('listActive')));
+      }, { alignRight: true, hideTime: true, onRemove: () => {
+        dbUpdate('note', subNote.id, { due: null });
+        subNote.due = null;
+        subNoteDueDate.className = 'noteDueDate';
+        subNoteDueDate.title = '';
+        document.querySelectorAll('#panelNote li.expand').forEach(li => {
+          Zeke.expandedNotesIds.add(parseInt(li.dataset.id));
+        });
+        renderNotes(parseInt(localStorage.getItem('listActive')));
+      }});
     });
 
     subNoteItem.addEventListener('dblclick', (e) => {
@@ -729,6 +939,13 @@ request.onsuccess = async function(event) {
         e.target.focus();
       }
       
+    });
+
+    // Prevent subNoteInput focusout when clicking action buttons, so the click event fires while edit mode is still active
+    subNoteItem.addEventListener('mousedown', (e) => {
+      if (e.target.closest('.noteRemove, .noteReminder, noteDueDate')) {
+        e.preventDefault();
+      }
     });
 
   }
@@ -1079,6 +1296,8 @@ request.onsuccess = async function(event) {
   });
   document.getElementById('btnNew').addEventListener('click', () => {
     const noteContent = document.getElementById('txtNew').value.trim();
+    const btnReminder = document.getElementById('btnReminder');
+    const btnDueDate = document.getElementById('btnDueDate');
     const reminderPickerInput = document.getElementById('reminderPickerInput');
     const listId = document.querySelector('#areaListLists li input.active').dataset.id;
     if(noteContent && listId && document.getElementById('btnFilter').className === '') {
@@ -1089,10 +1308,13 @@ request.onsuccess = async function(event) {
         dateCreated: Date.now(),
         dateCompleted: '',
         parent: 0,
-        remind: reminderPickerInput.value ? new Date(reminderPickerInput.value).getTime() : null
+        remind: btnReminder.dataset.remindValue ? new Date(btnReminder.dataset.remindValue).getTime() : null,
+        due: btnDueDate.dataset.dueValue ? new Date(btnDueDate.dataset.dueValue).getTime() : null
       });
     }
     document.getElementById('txtNew').value = '';
+    btnReminder.dataset.remindValue = '';
+    btnDueDate.dataset.dueValue = '';
   });
   document.getElementById('txtNew').addEventListener('keypress', (e) => {
     if (e.key == "Enter" && document.getElementById('btnFilter').className !== 'active') {
@@ -1109,61 +1331,107 @@ request.onsuccess = async function(event) {
   document.getElementById('txtNew').addEventListener('focus', (e) => {
     const btnFilter = document.getElementById('btnFilter');
     const btnReminder = document.getElementById('btnReminder');
+    const btnDueDate = document.getElementById('btnDueDate');
     const areaNew = document.getElementById('areaNew');
-    if(btnFilter.className !== 'active' && btnFilter.className !== 'hide' && !btnReminder.classList.contains('active')) {
-      areaNew.style.gridTemplateColumns = '0 1fr auto 30px';
+    if(btnFilter.className !== 'active' && btnFilter.className !== 'hide' && !btnReminder.classList.contains('set') && !btnDueDate.classList.contains('set')) {
+      areaNew.style.gridTemplateColumns = '0 1fr 30px 30px 30px';
       btnFilter.style.display = 'none';
       btnReminder.classList.add('active');
+      btnDueDate.classList.add('active');
     }
   });
+
+  let txtNewFocusoutTimer = null;
   document.getElementById('txtNew').addEventListener('focusout', (e) => {
     const btnFilter = document.getElementById('btnFilter');
     const areaNew = document.getElementById('areaNew');
     const btnReminder = document.getElementById('btnReminder');
-    setTimeout(() => {
+    const btnDueDate = document.getElementById('btnDueDate');
+    txtNewFocusoutTimer = setTimeout(() => {
       // Don't hide if picker is open or reminder button is being used
-      if (reminderPicker.isOpen()) return;
+      if (reminderPicker.isOpen() || dueDatePicker.isOpen()) return;
       if (btnFilter.className !== 'active') {
         const txtNew = document.getElementById('txtNew');
         // Keep button visible only if 'set' AND txtNew has content
-        if (btnReminder.classList.contains('set') && txtNew.value.trim() !== '') {
+        if (txtNew.value.trim() !== '') {
           btnFilter.className = '';
           btnFilter.style.display = 'none';
-          areaNew.style.gridTemplateColumns = '0 1fr auto 30px';
+          areaNew.style.gridTemplateColumns = '0 1fr 30px 30px 30px';
         } else {
           btnFilter.className = '';
           btnFilter.style = '';
           btnReminder.className = '';
+          btnDueDate.className = '';
           areaNew.style.gridTemplateColumns = 'auto 1fr 30px';
         }
       }
     }, 150);
   });
-  // Use global DateTimePicker for reminder
-  const reminderPicker = new DateTimePicker(document.getElementById('reminderPicker'));
-  reminderPicker.onClose = () => hideReminderButton();
+  // Shared DateTimePicker for all date/time selections (reminder, due date, etc.)
+  const reminderPicker = new DateTimePicker(document.getElementById('sharedDateTimePicker'));
+  const dueDatePicker = new DateTimePicker(document.getElementById('sharedDateTimePicker'));
 
   document.getElementById('btnReminder').addEventListener('click', (e) => {
     e.stopPropagation();
-    if (reminderPicker.el.contains(e.target)) {
+
+    if (reminderPicker.isOpen()) {
+      reminderPicker.close();
       return;
     }
-    reminderPicker.toggle((dateTime) => {
-      const btnReminder = document.getElementById('btnReminder');
+
+    const btnReminder = document.getElementById('btnReminder');
+    reminderPicker.onClose = () => hideReminderButton();
+    reminderPicker.show(btnReminder, null, (dateTime) => {
       const txtNew = document.getElementById('txtNew');
-      const reminderPickerInput = document.getElementById('reminderPickerInput');
-      reminderPickerInput.value = dateTime;
-      console.log('Reminder set:', dateTime);
+      btnReminder.dataset.remindValue = dateTime;
       btnReminder.className = 'active set';
+      document.getElementById('iconReminderOutline').style.display = 'none';
+      document.getElementById('iconReminderSolid').style.display = 'inline';
       txtNew.focus();
-    });
+    }, { alignRight: true });
+  });
+
+  document.getElementById('btnDueDate').addEventListener('click', (e) => {
+    e.stopPropagation();
+    clearTimeout(txtNewFocusoutTimer);
+
+    if (dueDatePicker.isOpen()) {
+      dueDatePicker.close();
+      return;
+    }
+
+    const btnDueDate = document.getElementById('btnDueDate');
+    dueDatePicker.onClose = () => hideReminderButton();
+    dueDatePicker.show(btnDueDate, null, (dateTime) => {
+      const txtNew = document.getElementById('txtNew');
+      btnDueDate.dataset.dueValue = dateTime;
+      btnDueDate.className = 'active set';
+      document.getElementById('iconDueDateOutline').style.display = 'none';
+      document.getElementById('iconDueDateSolid').style.display = 'inline';
+      txtNew.focus();
+    }, { alignRight: true, hideTime: true });
   });
 
   document.addEventListener('click', (e) => {
     const btnReminder = document.getElementById('btnReminder');
-    if (reminderPicker.isOpen() && !reminderPicker.el.contains(e.target) && !btnReminder.contains(e.target)) {
+    const btnDueDate = document.getElementById('btnDueDate');
+    const iconReminderOutline = document.getElementById('iconReminderOutline');
+    const iconReminderSolid = document.getElementById('iconReminderSolid');
+    const iconDueDateOutline = document.getElementById('iconDueDateOutline');
+    const iconDueDateSolid = document.getElementById('iconDueDateSolid');
+    if (reminderPicker.isOpen() && !reminderPicker.el.contains(e.target) && !btnReminder.contains(e.target) && !e.target.closest('.noteReminder')) {
       reminderPicker.close();
-      hideReminderButton();
+    }
+    if (dueDatePicker.isOpen() && !dueDatePicker.el.contains(e.target) && !btnDueDate.contains(e.target) && !e.target.closest('.noteDueDate')) {
+      dueDatePicker.close();
+    }
+    if (!btnReminder.classList.contains('set') && !reminderPicker.isOpen()) {
+      iconReminderOutline.style.display = 'inline';
+      iconReminderSolid.style.display = 'none';
+    }
+    if (!btnDueDate.classList.contains('set') && !dueDatePicker.isOpen()) {
+      iconDueDateOutline.style.display = 'inline';
+      iconDueDateSolid.style.display = 'none';
     }
   });
 
@@ -1179,6 +1447,26 @@ request.onsuccess = async function(event) {
       btnFilter.style.display = 'none';
     } else {
       btnReminder.className = '';
+    }
+    // Only reset grid if txtNew is not focused
+    if (document.activeElement !== txtNew && btnFilter.className !== 'active') {
+      areaNew.style.gridTemplateColumns = 'auto 1fr 30px';
+      btnFilter.style.display = '';
+    }
+  }
+
+  function hideDueDateButton() {
+    const btnDueDate = document.getElementById('btnDueDate');
+    const areaNew = document.getElementById('areaNew');
+    const btnFilter = document.getElementById('btnFilter');
+    const txtNew = document.getElementById('txtNew');
+    // Preserve 'set' state if reminder was confirmed with text
+    const hasSet = btnDueDate.classList.contains('set');
+    if (hasSet && txtNew.value.trim() !== '') {
+      btnDueDate.className = 'active set';
+      btnFilter.style.display = 'none';
+    } else {
+      btnDueDate.className = '';
     }
     // Only reset grid if txtNew is not focused
     if (document.activeElement !== txtNew && btnFilter.className !== 'active') {
@@ -1228,8 +1516,8 @@ request.onsuccess = async function(event) {
         if (note.remind && note.remind <= now && !notifiedReminders.has(note.id)) {
           notifiedReminders.add(note.id);
           window.electronAPI.showNotification(
-            'Reminder',
-            note.content || 'You have a reminder'
+            translate('__reminder__') || 'Reminder',
+            note.content
           );
           // Clear remind so it won't notify again
           dbUpdate('note', note.id, { remind: null });
