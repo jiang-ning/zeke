@@ -219,8 +219,8 @@ const createWindow = () => {
 
     ipcMain.handle('save-file', async (event, { defaultName, content }) => {
       const win = BrowserWindow.fromWebContents(event.sender);
-      const result = await dialog.showSaveDialog(win, {
-        defaultPath: defaultName,
+      const result = await dialog.showSaveDialog(win || mainWindow, {
+        defaultPath: path.join(app.getPath('downloads'), defaultName),
         filters: [{ name: 'CSV Files', extensions: ['csv'] }]
       });
       if (result.canceled || !result.filePath) {
