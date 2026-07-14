@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, safeStorage, Notification } = require('electron');
+const { app, BrowserWindow, ipcMain, safeStorage, Notification, dialog } = require('electron');
 const path = require('path');
 const fs = require('fs');
 const crypto = require('crypto');
@@ -215,6 +215,19 @@ const createWindow = () => {
         }
       });
       notification.show();
+    });
+
+    ipcMain.handle('save-file', async (event, { defaultName, content }) => {
+      const win = BrowserWindow.fromWebContents(event.sender);
+      const result = await dialog.showSaveDialog(win, {
+        defaultPath: defaultName,
+        filters: [{ name: 'CSV Files', extensions: ['csv'] }]
+      });
+      if (result.canceled || !result.filePath) {
+        return { success: false };
+      }
+      fs.writeFileSync(result.filePath, '\uFEFF' + content, 'utf8');
+      return { success: true, filePath: result.filePath };
     });
 
     // and load the index.html of the app.

@@ -18,4 +18,5 @@ contextBridge.exposeInMainWorld('electronAPI', {
   licenseGet: () => ipcRenderer.invoke('license-get'),
   licenseRemove: () => ipcRenderer.invoke('license-remove'),
   showNotification: (title, body) => ipcRenderer.send('show-notification', { title, body }),
+  saveFile: (defaultName, content) => ipcRenderer.invoke('save-file', { defaultName, content }),
 });

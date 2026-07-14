@@ -1640,6 +1640,7 @@ function initModalSettings() {
   const btnSwitchNavbar = document.getElementById('btnSwitchNavbar');
   const opacitySelection = document.getElementById('opacitySelection');
   const languageList = document.getElementById('languageList');
+  const btnExport = document.getElementById('btnExport');
   const restore = document.getElementById('restore');
   const clear = document.getElementById('clear');
   const txtUpgrade = document.getElementById('editionUpgrade');
@@ -1737,6 +1738,72 @@ function initModalSettings() {
   opacitySelection.addEventListener('click', (e) => {
     document.body.style.opacity = e.target.value + '%';
     localStorage.setItem('opacity', e.target.value);
+  });
+
+  btnExport.addEventListener('click', (e) => {
+    const dbRequest = indexedDB.open('neonote', 1);
+    dbRequest.onsuccess = function(event) {
+      const exportDb = event.target.result;
+      const transaction = exportDb.transaction(['note', 'list'], 'readonly');
+      const noteStore = transaction.objectStore('note');
+      const listStore = transaction.objectStore('list');
+
+      const notesRequest = noteStore.getAll();
+      const listsRequest = listStore.getAll();
+
+      let allNotes = [];
+      let allLists = [];
+
+      notesRequest.onsuccess = function(e) { allNotes = e.target.result; };
+      listsRequest.onsuccess = function(e) { allLists = e.target.result; };
+
+      transaction.oncomplate = function() {
+        const listMap = {};
+        allLists.forEach(l => { listMap[l.id] = l.name; });
+
+        const formatDate = (ts) => {
+          if (!ts) return '';
+          const d = new Date(ts);
+          return d.getFullYear() + '-' +
+            String(d.getMonth() + 1).padStart(2, '0') + '-' +
+            String(d.getDate()).padStart(2, '0') + ' ' +
+            String(d.getHours()).padStart(2, '0') + ':' +
+            String(d.getMinutes()).padStart(2, '0') + ':' +
+            String(d.getSeconds()).padStart(2, '0');
+        };
+
+        const escapeCSV = (val) => {
+          if (val == null) return '';
+          const str = String(val);
+          if (str.includes(',') || str.includes('"') || str.includes('\n')) {
+            return '"' + str.replace(/"/g, '""') + '"';
+          }
+          return str;
+        };
+
+        const headers = ['Id', 'List Id', 'List Name', 'Content', 'Is Completed', 'Date Created', 'Date Completed', 'Parent Id', 'Remind Date', 'Due Date'];
+        const rows = [headers.join(',')];
+
+        allNotes.forEach(note => {
+          rows.push([
+            escapeCSV(note.id),
+            escapeCSV(note.list),
+            escapeCSV(listMap[note.list] || ''),
+            escapeCSV(note.content),
+            escapeCSV(note.completed ? 'Yes' : 'No'),
+            escapeCSV(formatDate(note.dateCreated)),
+            escapeCSV(formatDate(note.dateCompleted)),
+            escapeCSV(note.parent === true ? 'parent' : (note.parent || 0)),
+            escapeCSV(formatDate(note.remind)),
+            escapeCSV(formatDate(note.due))
+          ].join(','));
+        });
+
+        const csvContent = rows.join('\n');
+        const defaultName = 'inneroutliner_export_' + new Date().toISOString().slice(0, 10) + '.csv';
+        window.electronAPI.saveFile(defaultName, csvContent);
+      };
+    };
   });
 
   restore.addEventListener('click', (e) => {

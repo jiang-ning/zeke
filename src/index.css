@@ -999,6 +999,9 @@ li.edit .noteSub {
 #brand,
 .placeholder {
   -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
   -webkit-app-region: drag;
 }
 #titlebar {

@@ -58,7 +58,10 @@ const Languages = {
         "__remind_me_at__" : "ذكّرني في",
         "__overdue__" : "متأخر",
         "__due_today__" : "مستحق اليوم",
-        "__completed_on_time__" : "تم الإنجاز في الوقت المحدد"
+        "__completed_on_time__" : "تم الإنجاز في الوقت المحدد",
+        "__data_export__" : "تصدير البيانات",
+        "__data_export_desc__" : "اضغط الزر لتصدير كل البيانات إلى ملف CSV",
+        "__export__" : "تصدير"
     },
     "de" : {
         "name" : "Deutsch",
@@ -119,7 +122,10 @@ const Languages = {
         "__remind_me_at__" : "Herinner me om",
         "__overdue__" : "Te laat",
         "__due_today__" : "Vervalt vandaag",
-        "__completed_on_time__" : "Op tijd voltooid"
+        "__completed_on_time__" : "Op tijd voltooid",
+        "__data_export__" : "Datenexport",
+        "__data_export_desc__" : "Klicke auf den Button, um alle Daten in eine CSV-Datei zu exportieren",
+        "__export__" : "Exportieren"
     },
     "en" : {
         "name" : "English",
@@ -180,7 +186,10 @@ const Languages = {
         "__remind_me_at__" : "Remind me at",
         "__overdue__" : "Overdue",
         "__due_today__" : "Due Today",
-        "__completed_on_time__" : "Completed on time"
+        "__completed_on_time__" : "Completed on time",
+        "__data_export__" : "Data Export",
+        "__data_export_desc__" : "Click button to export all data into a CSV file.",
+        "__export__" : "Export"
     },
     "es" : {
         "name" : "Español",
@@ -241,7 +250,10 @@ const Languages = {
         "__remind_me_at__" : "Recuérdame a",
         "__overdue__" : "Atrasado",
         "__due_today__" : "Vence hoy",
-        "__completed_on_time__" : "Completado a tiempo"
+        "__completed_on_time__" : "Completado a tiempo",
+        "__data_export__" : "Exportar datos",
+        "__data_export_desc__" : "Haz clic en el botón para exportar todos los datos a un archivo CSV",
+        "__export__" : "Exportar"
     },
     "fr" : {
         "name" : "Française",
@@ -302,7 +314,10 @@ const Languages = {
         "__remind_me_at__" : "Me rappeler à",
         "__overdue__" : "En retard",
         "__due_today__" : "À rendre aujourd'hui",
-        "__completed_on_time__" : "Terminé à temps"
+        "__completed_on_time__" : "Terminé à temps",
+        "__data_export__" : "Exportation de données",
+        "__data_export_desc__" : "Cliquez sur le bouton pour exporter toutes les données dans un fichier CSV",
+        "__export__" : "Exporter"
     },
     "in" : {
         "name" : "हिंदी",
@@ -363,7 +378,10 @@ const Languages = {
         "__remind_me_at__" : "मुझे याद दिलाना",
         "__overdue__" : "मुल्तवी",
         "__due_today__" : "आज की तारीख़",
-        "__completed_on_time__" : "समय पर पूरा हुआ"
+        "__completed_on_time__" : "समय पर पूरा हुआ",
+        "__data_export__" : "डेटा एक्सपोर्ट",
+        "__data_export_desc__" : "सारे डेटा को CSV फाइल में एक्सपोर्ट करने के लिए बटन पर क्लिक करें",
+        "__export__" : "एक्सपोर्ट"
     },
     "it" : {
         "name" : "Italiana",
@@ -424,7 +442,10 @@ const Languages = {
         "__remind_me_at__" : "Ricordami alle",
         "__overdue__" : "In ritardo",
         "__due_today__" : "Scade oggi",
-        "__completed_on_time__" : "Completato in tempo"
+        "__completed_on_time__" : "Completato in tempo",
+        "__data_export__" : "Esporta Dati",
+        "__data_export_desc__" : "Clicca il pulsante per esportare tutti i dati in un file CSV",
+        "__export__" : "Esporta"
     },
     "jp" : {
         "name" : "日本語",
@@ -485,7 +506,10 @@ const Languages = {
         "__remind_me_at__" : "知らせてね",
         "__overdue__" : "期限切れ",
         "__due_today__" : "今日が期限",
-        "__completed_on_time__" : "期限内に完了"
+        "__completed_on_time__" : "期限内に完了",
+        "__data_export__" : "データエクスポート",
+        "__data_export_desc__" : "ボタンをクリックしてすべてのデータをCSVファイルにエクスポート",
+        "__export__" : "エクスポート"
     },
     "kr" : {
         "name" : "한국어",
@@ -546,7 +570,10 @@ const Languages = {
         "__remind_me_at__" : "알려줘",
         "__overdue__" : "기한 지난 항목",
         "__due_today__" : "오늘 마감",
-        "__completed_on_time__" : "제시간에 완료"
+        "__completed_on_time__" : "제시간에 완료",
+        "__data_export__" : "데이터 내보내기",
+        "__data_export_desc__" : "버튼을 클릭하면 모든 데이터를 CSV 파일로 내보낼 수 있어요",
+        "__export__" : "내보내기"
     },
     "pk" : {
         "name" : "اردو",
@@ -607,7 +634,10 @@ const Languages = {
         "__remind_me_at__" : "مجھے یاد دلان",
         "__overdue__" : "مقررہ تاریخ سے گزر چکا",
         "__due_today__" : "آج کی تاریخ",
-        "__completed_on_time__" : "وقت پر مکمل"
+        "__completed_on_time__" : "وقت پر مکمل",
+        "__data_export__" : "ڈیٹا ایکسپورٹ",
+        "__data_export_desc__" : "تمام ڈیٹا کو CSV فائل میں ایکسپورٹ کرنے کے لیے بٹن پر کلک کریں",
+        "__export__" : "ایکسپورٹ"
     },
     "pt" : {
         "name" : "Português",
@@ -672,7 +702,10 @@ const Languages = {
         "__remind_me_at__" : "Lembra-me às",
         "__overdue__" : "Atrasado",
         "__due_today__" : "Vence Hoje",
-        "__completed_on_time__" : "Concluído a tempo"
+        "__completed_on_time__" : "Concluído a tempo",
+        "__data_export__" : "Exportação de Dados",
+        "__data_export_desc__" : "Clique no botão para exportar todos os dados para um ficheiro CSV",
+        "__export__" : "Exportar"
     },
     "ru" : {
         "name" : "Русский",
@@ -733,7 +766,10 @@ const Languages = {
         "__remind_me_at__" : "Напомни мне в",
         "__overdue__" : "Просрочено",
         "__due_today__" : "Срок сегодня",
-        "__completed_on_time__" : "Выполнено вовремя"
+        "__completed_on_time__" : "Выполнено вовремя",
+        "__data_export__" : "Экспорт данных",
+        "__data_export_desc__" : "Нажмите кнопку, чтобы экспортировать все данные в файл CSV",
+        "__export__" : "Экспорт"
     },
     "zhCN" : {
         "name" : "简体中文",
@@ -794,7 +830,10 @@ const Languages = {
         "__remind_me_at__" : "提醒我在",
         "__overdue__" : "已逾期",
         "__due_today__" : "今天到期",
-        "__completed_on_time__" : "已按时完成"
+        "__completed_on_time__" : "已按时完成",
+        "__data_export__" : "数据导出",
+        "__data_export_desc__" : "点击按钮将所有数据导出为 CSV 文件",
+        "__export__" : "导出"
     },
     "zhTW" : {
         "name" : "繁體中文",
@@ -855,6 +894,9 @@ const Languages = {
         "__remind_me_at__" : "提醒我在",
         "__overdue__" : "逾期",
         "__due_today__" : "今天到期",
-        "__completed_on_time__" : "準時完成"
+        "__completed_on_time__" : "準時完成",
+        "__data_export__" : "資料匯出",
+        "__data_export_desc__" : "點擊按鈕將所有資料匯出為 CSV 檔案",
+        "__export__" : "匯出"
     }
 }
