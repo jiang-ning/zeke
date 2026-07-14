@@ -5,7 +5,7 @@
 - Improvement: Reminder
 - Improvement: Due Date
 - Bug Fix: Sorting with high memory taken issue
-- Bug Fix: Smoothly UI upating
+- Bug Fix: Smoothly UI updating
 
 ### v1.10.2
 ##### 2024-10-06
