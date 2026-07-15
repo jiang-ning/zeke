@@ -1757,7 +1757,7 @@ function initModalSettings() {
       notesRequest.onsuccess = function(e) { allNotes = e.target.result; };
       listsRequest.onsuccess = function(e) { allLists = e.target.result; };
 
-      transaction.oncomplate = function() {
+      transaction.oncomplete = function() {
         const listMap = {};
         allLists.forEach(l => { listMap[l.id] = l.name; });
 
