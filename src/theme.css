@@ -102,6 +102,10 @@
 .theme-dark #btnFilter.active {
   background-color: #ffffffcc;
 }
+.theme-dark #areaListNotes li.completed input[type="checkbox"]::before,
+.theme-dark #areaPinNotes li.completed input[type="checkbox"]::before {
+  background-color: #ffffff66;
+}
 .theme-dark .report .filterButton,
 .theme-dark ::-webkit-scrollbar-thumb,
 .theme-dark ::-webkit-scrollbar-thumb:hover,
@@ -150,24 +154,30 @@
 .theme-dark #btnSwitchNavbar:hover,
 .theme-dark .report .filterDateRange .rangeButton:hover,
 .theme-dark .report table,
-.theme-darkpink
 .theme-dark #languageList,
 .theme-dark button,
 .theme-dark .modal #editionUpgrade:hover,
 .theme-dark .custom-select-trigger,
-.theme-dark .custom-select-options li {
+.theme-dark .custom-select-options li,
+.theme-dark .modal .edition {
   color: #ffffff99;
 }
 .theme-dark #btnNew, 
 .theme-dark #btnFilter,
 .theme-dark #areaListLists input,
-.theme-dark .modal #editionUpgrade {
+.theme-dark .modal #editionUpgrade,
+.theme-dark .noteReminder.active,
+.theme-dark .noteDueDate.active {
   color: #ffffff66;
 }
 .theme-dark #btnSwitchNavbar,
 .theme-dark #areaSettings #btnSettings,
 .theme-dark #areaPinNotes li.completed input[type='text'],
-.theme-dark #areaListNotes li.completed input[type='text'] {
+.theme-dark #areaListNotes li.completed input[type='text'],
+.theme-dark #areaPinNotes li.completed span.noteMoment,
+.theme-dark #areaListNotes li.completed span.noteMoment,
+.theme-dark .completed .noteReminder.active,
+.theme-dark .completed .noteDueDate.active {
   color: #ffffff33;
 }
 .theme-dark,

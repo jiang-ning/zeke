@@ -189,7 +189,20 @@ const Languages = {
         "__completed_on_time__" : "Completed on time",
         "__data_export__" : "Data Export",
         "__data_export_desc__" : "Click button to export all data into a CSV file.",
-        "__export__" : "Export"
+        "__export__" : "Export",
+        "__reset__" : "Reset",
+        "__merge__" : "Merge",
+        "__replace__" : "Replace",
+        "__backup_and_restore__" : "Backup and Restore",
+        "__backup_and_restore_desc__" : "Click button to backup and restore data.",
+        "__backup__" : "Backup",
+        "__restore_mode_desc__" : "Select how to apply imported backup data.",
+        "__backup_saved_successfully__" : "Backup saved successfully.",
+        "__failed_to_create_backup__" : "Failed to create backup.",
+        "__failed_to_restore_backup__" : "Failed to restore backup.",
+        "__invalid_backup_file_content__" : "Invalid backup file content.",
+        "__restore_completed__" : "Restore completed.",
+        "__restore_canceled__" : "Restore canceled."
     },
     "es" : {
         "name" : "Español",
