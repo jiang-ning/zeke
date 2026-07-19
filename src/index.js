@@ -217,6 +217,42 @@ const createWindow = () => {
       notification.show();
     });
 
+    // --- Reminder scheduler (main-process timer) ---
+    let pendingReminders = []; // Array of { id, remind, content }
+
+    ipcMain.on('sync-reminders', (event, reminders) => {
+      pendingReminders = reminders || [];
+    });
+
+    setInterval(() => {
+      if (pendingReminders.length === 0) return;
+      const now = Date.now();
+      const fired = [];
+      pendingReminders = pendingReminders.filter(r => {
+        if (r.remind && r.remind <= now) {
+          fired.push(r);
+          return false;
+        }
+        return true;
+      });
+      fired.forEach(r => {
+        const notification = new Notification({
+          title: r.title || 'Reminder',
+          body: r.content
+        });
+        notification.on('click', () => {
+          if (mainWindow) {
+            if (mainWindow.isMinimized()) mainWindow.restore();
+            mainWindow.focus();
+          }
+        });
+        notification.show();
+        if (mainWindow && !mainWindow.isDestroyed()) {
+          mainWindow.webContents.send('reminder-fired', r.id);
+        }
+      });
+    }, 30000); // Check every 30 seconds
+
     ipcMain.handle('save-file', async (event, { defaultName, content }) => {
       const win = BrowserWindow.fromWebContents(event.sender);
       const result = await dialog.showSaveDialog(win || mainWindow, {
@@ -228,6 +264,37 @@ const createWindow = () => {
       }
       fs.writeFileSync(result.filePath, '\uFEFF' + content, 'utf8');
       return { success: true, filePath: result.filePath };
+    });
+
+    ipcMain.handle('save-text-file', async (event, { defaultName, content, filter }) => {
+      const win = BrowserWindow.fromWebContents(event.sender);
+      const result = await dialog.showSaveDialog(win || mainWindow, {
+        defaultPath: path.join(app.getPath('downloads'), defaultName),
+        filters: Array.isArray(filters) && filters.length > 0
+          ? filters
+          : [{ name: 'JSON Files', extensions: ['json'] }]
+      });
+      if (result.canceled || !result.filePath) {
+        return { success: false };
+      }
+      fs.writeFileSync(result.filePath, content, 'utf-8');
+      return { success: true, filePath: result.filePath };
+    });
+
+    ipcMain.handle('open-text-file', async (event, { filters }) => {
+      const win = BrowserWindow.fromWebContents(event.sender);
+      const result = await dialog.showOpenDialog(win || mainWindow, {
+        properties: ['openFile'],
+        filters: Array.isArray(filters) && filters.length > 0
+          ? filters
+          : [{ name: 'JSON Files', extensions: ['json'] }]
+      });
+      if (result.canceled || !result.filePaths || result.filePaths.length === 0) {
+        return { success: false };
+      }
+      const filePath = result.filePaths[0];
+      const content = fs.readFileSync(filePath, 'utf8');
+      return { success: true, filePath, content };
     });
 
     // and load the index.html of the app.

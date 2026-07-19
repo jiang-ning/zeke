@@ -10,6 +10,7 @@ var Zeke = {
 };
 var Zeke_ChartTimeline;
 var sortableInstances = [];
+var neonoteDb = null;
 
 // Create object store and define its structure
 request.onupgradeneeded = function(event) {
@@ -22,6 +23,7 @@ request.onupgradeneeded = function(event) {
 // Handle successful database opening
 request.onsuccess = async function(event) {
   const db = event.target.result;
+  neonoteDb = db;
 
   // Add a new note
   function addNote(note) {
@@ -105,7 +107,21 @@ request.onsuccess = async function(event) {
                 updateCompletionPercentage(item.parent);
               }
             });
+            // 1.3. render subnotes of pinned parents not yet tracked in orderedPinNoteIds
+            const pinnedParentIds = pinNotes
+              .filter(item => item && (item.parent == 0 || item.parent === true))
+              .map(item => item.id);
+            const pinNoteIdSet = new Set(Zeke.orderedPinNoteIds[listId].map(id => parseInt(id)));
+            notes.forEach((item) => {
+              if (item && item.parent > 0 && item.parent !== true
+                && pinnedParentIds.includes(item.parent)
+                && !pinNoteIdSet.has(item.id)) {
+                  generateSubNoteItem(item, 'areaPinNotes', 0, false);
+                  updateCompletionPercentage(item.parent);
+                }
+            });
             initNoteDnD('areaPinNotes');
+            updateSortIndexes('areaPinNotes');
           }
         }
         
@@ -121,9 +137,10 @@ request.onsuccess = async function(event) {
         });
 
         // 2.2 fetch subtasks
+        const pinnedIds = Zeke.orderedPinNoteIds[listId] ? new Set(Zeke.orderedPinNoteIds[listId].map(id => parseInt(id))) : new Set();
         listNotes.forEach((item, idx) => {
           let expactedParentNote = notes.filter(note => note.id == item.parent);
-          if(item && item.parent > 0 && item.parent !== true && expactedParentNote.length > 0) {
+          if(item && item.parent > 0 && item.parent !== true && expactedParentNote.length > 0 && !pinnedIds.has(item.parent)) {
             generateSubNoteItem(item,
               'areaListNotes',
               idx,
@@ -456,10 +473,17 @@ request.onsuccess = async function(event) {
     noteItem.append(noteSubList);
 
     if(note.parent > 0 || note.parent === true) {
-      noteCollapse.classList.add('show');
-      if(Zeke.expandedNotesIds.has(note.id)) {
-        noteCollapse.classList.add('active');
-        noteItem.classList.add('expand');
+      // Verify actual subnotes exist; fix stale parent:true in DB if none remain
+      const hasSubnotes = Zeke.notes.some(n => n.parent === note.id);
+      if (hasSubnotes) {
+        noteCollapse.classList.add('show');
+        if(Zeke.expandedNotesIds.has(note.id)) {
+          noteCollapse.classList.add('active');
+          noteItem.classList.add('expand');
+        }
+      } else {
+        note.parent = 0;
+        dbUpdate('note', note.id, { parent: 0 });
       }
     }
 
@@ -696,6 +720,7 @@ request.onsuccess = async function(event) {
           Zeke.expandedNotesIds.add(parseInt(li.dataset.id));
         });
         renderNotes(parseInt(localStorage.getItem('listActive')));
+        syncReminderToMain();
       }, { alignRight: true, onRemove: () => {
         dbUpdate('note', note.id, { remind: null });
         note.remind = null;
@@ -705,6 +730,7 @@ request.onsuccess = async function(event) {
           Zeke.expandedNotesIds.add(parseInt(li.dataset.id));
         });
         renderNotes(parseInt(localStorage.getItem('listActive')));
+        syncReminderToMain();
       }});
     });
 
@@ -855,6 +881,19 @@ request.onsuccess = async function(event) {
       subNoteItem.remove();
       updateSortIndexes(area);
       deleteNote(targetId);
+
+      // If parent has no more subnotes, hide collapse icon and remove parent status
+      const parentEl = document.querySelector(`#panelNote li[data-id="${subnote.parent}"]`);
+      if (parentEl) {
+        const remainingSubnotes = parentEl.querySelectorAll('.noteSubList li');
+        if (remainingSubnotes.length === 0) {
+          parentEl.classList.remove('parent', 'expand');
+          const collapseBtn = parentEl.querySelector('.noteCollapse');
+          if (collapseBtn) collapseBtn.classList.remove('show', 'active');
+          dbUpdate('note', subNote.parent, { parent: 0 });
+        }
+        updateCompletionPercentage(subNote.parent);
+      }
     });
 
     subNoteReminder.addEventListener('click', (e) => {
@@ -879,6 +918,7 @@ request.onsuccess = async function(event) {
           Zeke.expandedNotesIds.add(parseInt(li.dataset.id));
         });
         renderNotes(parseInt(localStorage.getItem('listActive')));
+        syncReminderToMain();
       }, { alignRight: true, onRemove: () => {
         dbUpdate('note', subNote.id, { remind: null });
         subNote.remind = null;
@@ -888,6 +928,7 @@ request.onsuccess = async function(event) {
           Zeke.expandedNotesIds.add(parseInt(li.dataset.id));
         });
         renderNotes(parseInt(localStorage.getItem('listActive')));
+        syncReminderToMain();
       }});
     });
 
@@ -1498,33 +1539,38 @@ request.onsuccess = async function(event) {
     }
   });
 
+  Zeke.getLists = getLists;
+  Zeke.renderNotes = renderNotes;
+
   getLists();
   renderNotes(
     parseInt(localStorage.getItem('listActive'))
   );
 
-  // Reminder notification check loop
-  const notifiedReminders = new Set();
-  setInterval(() => {
+  // Sync reminders to main process for reliable timer-based notification
+  function syncRemindersToMain() {
     const transaction = db.transaction(['note'], 'readonly');
     const objectStore = transaction.objectStore('note');
     const req = objectStore.getAll();
     req.onsuccess = function(event) {
-      const now = Date.now();
       const notes = event.target.result;
-      notes.forEach(note => {
-        if (note.remind && note.remind <= now && !notifiedReminders.has(note.id)) {
-          notifiedReminders.add(note.id);
-          window.electronAPI.showNotification(
-            translate('__reminder__') || 'Reminder',
-            note.content
-          );
-          // Clear remind so it won't notify again
-          dbUpdate('note', note.id, { remind: null });
-        }
-      });
+      const pending = notes
+        .filter(n => n.remind && !n.completed)
+        .map(n => ({ id: n.id, remind: n.remind, content: n.content, title: translate('__reminder__') || 'Reminder' }));
+      window.electronAPI.syncReminders(pending);
     };
-  }, 3000); // Check every 30 seconds
+  }
+  syncRemindersToMain();
+
+  // Listen for fired reminders from main process and clear them in DB
+  window.electronAPI.onReminderFired((noteId) => {
+    dbUpdate('note', noteId, { remind: null });
+    // Preserve expanded state before re-render
+    document.querySelectorAll('#panelNote li.expand').forEach(li => {
+      Zeke.expandedNotesIds.add(parseInt(li.dataset.id));
+    });
+    renderNotes(parseInt(localStorage.getItem('listActive')));
+  });
 
 };
 
@@ -1641,11 +1687,18 @@ function initModalSettings() {
   const opacitySelection = document.getElementById('opacitySelection');
   const languageList = document.getElementById('languageList');
   const btnExport = document.getElementById('btnExport');
-  const restore = document.getElementById('restore');
+  const btnReset = document.getElementById('btnReset');
   const clear = document.getElementById('clear');
   const txtUpgrade = document.getElementById('editionUpgrade');
   const opacity = localStorage.getItem('opacity') || '100';
   const rememberedLanguage = localStorage.getItem('language') || 'en';
+  const btnBackup = document.getElementById('btnBackup');
+  const btnRestore = document.getElementById('btnRestore');
+  const restoreModeModal = document.getElementById('restoreModeModal');
+  const restoreModeDesc = restoreModeModal ? restoreModeModal.querySelector('.restore-mode-desc') : null;
+  const restoreModeMerge = document.getElementById('restoreModeMerge');
+  const restoreModeReplace = document.getElementById('restoreModeReplace');
+  const restoreModeCancel = document.getElementById('restoreModeCancel');
 
   btnSettings.addEventListener('click', () => {
     const activedList = document.querySelector('#areaListLists input.active');
@@ -1740,6 +1793,171 @@ function initModalSettings() {
     localStorage.setItem('opacity', e.target.value);
   });
 
+  const BACKUP_LOCAL_STORAGE_KEYS = [
+    'noteOrder',
+    'pinNoteOrder',
+    'listOrder',
+    'theme',
+    'opacity',
+    'bounds',
+    'listActive',
+    'language',
+    'grid-template-columns',
+    'listOpened',
+    'alwaysOnTop'
+  ];
+
+  function readAllFromStore(store) {
+    return new Promise((resolve, reject) => {
+      const req = store.getAll();
+      req.onsuccess = (event) => resolve(event.target.result || []);
+      req.onerror = () => reject(req.error || new Error('Failed to read object store.'));
+    });
+  }
+
+  async function collectBackupData() {
+    const transaction = neonoteDb.transaction(['note', 'list'], 'readonly');
+    const noteStore = transaction.objectStore('note');
+    const listStore = transaction.objectStore('list');
+    const [notes, lists] = await Promise.all([readAllFromStore(noteStore), readAllFromStore(listStore)]);
+
+    const settings = {};
+    BACKUP_LOCAL_STORAGE_KEYS.forEach((key) => {
+      const value = localStorage.getItem(key);
+      if (value !== null && value !== undefined) {
+        settings[key] = value;
+      }
+    });
+
+    return {
+      backupSchemaVersion: 1,
+      createAt: new Date().toISOString(),
+      data: {
+        notes,
+        lists,
+        settings
+      }
+    };
+  }
+
+  function writeSettingFromBackup(settings, mode) {
+    if (!settings || typeof settings !== 'object') {
+      return;
+    }
+
+    if (mode === 'replace') {
+      BACKUP_LOCAL_STORAGE_KEYS.forEach((key) => localStorage.removeItem(key));
+      Object.keys(settings).forEach((key) => {
+        localStorage.setItem(key, settings[key]);
+      });
+      return;
+    }
+
+    Object.keys(settings).forEach((key) => {
+      if (localStorage.getItem(key) === null) {
+        localStorage.setItem(key, settings[key]);
+      }
+    });
+  }
+
+  async function applyBackupData(plainBackup, mode) {
+    if (!plainBackup || !plainBackup.data) {
+      throw new Error('Backup payload is missing data.');
+    }
+
+    const notes = Array.isArray(plainBackup.data.notes) ? plainBackup.data.notes : [];
+    const lists = Array.isArray(plainBackup.data.lists) ? plainBackup.data.lists : [];
+    const transaction = neonoteDb.transaction(['note', 'list'], 'readwrite');
+    const noteStore = transaction.objectStore('note');
+    const listStore = transaction.objectStore('list');
+
+    if (mode === 'replace') {
+      listStore.clear();
+      noteStore.clear();
+    }
+
+    lists.forEach((list) => {
+      if (list && typeof list === 'object') {
+        listStore.put(list);
+      }
+    });
+
+    notes.forEach((note) => {
+      if (note && typeof note === 'object') {
+        noteStore.put(note);
+      }
+    });
+
+    await new Promise((resolve, reject) => {
+      transaction.oncomplete = () => resolve();
+      transaction.onerror = () => reject(transaction.error || new Error('Failed to apply backup data.'));
+      transaction.onabort = () => reject(transaction.error || new Error('Backup restore aborted.'));
+    });
+
+    writeSettingFromBackup(plainBackup.data.settings || {}, mode);
+  }
+
+  function backupDefaultFileName() {
+    return 'inneroutliner_backup_' + new Date().toISOString().slice(0, 10) + '.ioeb.json';
+  }
+
+  function showRestoreInlinePanel(message, options = {}) {
+    const {
+      showMerge = false,
+      showReplace = false,
+      showCancel = false
+    } = options;
+
+    if (!restoreModeModal || !restoreModeDesc || !restoreModeMerge || !restoreModeReplace || !restoreModeCancel) {
+      return Promise.resolve();
+    }
+
+    restoreModeDesc.innerText = message;
+    restoreModeMerge.style.display = showMerge ? '' : 'none';
+    restoreModeReplace.style.display = showReplace ? '' : 'none';
+    restoreModeCancel.style.display = showCancel ? '' : 'none';
+    restoreModeModal.classList.add('open');
+
+    return Promise.resolve();
+  }
+
+  function pickRestoreMode() {
+    return new Promise((resolve) => {
+      if (!restoreModeModal || !restoreModeDesc || !restoreModeMerge || !restoreModeReplace || !restoreModeCancel) {
+        resolve(null);
+        return;
+      }
+
+      const cleanup = () => {
+        restoreModeModal.classList.remove('open');
+        restoreModeMerge.removeEventListener('click', onMerge);
+        restoreModeReplace.removeEventListener('click', onReplace);
+        restoreModeCancel.removeEventListener('click', onCancel);
+        restoreModeCancel.style.display = 'none';
+      };
+
+      const finish = (mode) => {
+        cleanup();
+        resolve(mode);
+      };
+
+      const onMerge = () => finish('merge');
+      const onReplace = () => finish('replace');
+      const onCancel = () => finish(null);
+
+      restoreModeDesc.innerText = translate('__select_how__restore_mode_desc__');
+      restoreModeMerge.style.display = '';
+      restoreModeReplace.style.display = '';
+      restoreModeCancel.style.display = '';
+
+      restoreModeModal.classList.add('open');
+      restoreModeMerge.addEventListener('click', onMerge);
+      restoreModeReplace.addEventListener('click', onReplace);
+      restoreModeCancel.addEventListener('click', onCancel);
+      restoreModeMerge.focus();
+    });
+  }
+
   btnExport.addEventListener('click', (e) => {
     const dbRequest = indexedDB.open('neonote', 1);
     dbRequest.onsuccess = function(event) {
@@ -1806,7 +2024,7 @@ function initModalSettings() {
     };
   });
 
-  restore.addEventListener('click', (e) => {
+  btnReset.addEventListener('click', (e) => {
     localStorage.removeItem('noteOrder');
     localStorage.removeItem('pinNoteOrder');
     localStorage.removeItem('listOrder');
@@ -1820,8 +2038,107 @@ function initModalSettings() {
     localStorage.removeItem('alwaysOnTop');
   });
 
+  btnBackup.addEventListener('click', async (e) => {
+    try {
+      const backupData = await collectBackupData();
+      const backupText = JSON.stringify(backupData, null, 2);
+
+      let result = null;
+      if (window.electronAPI && window.electronAPI.saveTextFile) {
+        result = await window.electronAPI.saveTextFile(
+          backupDefaultFileName(),
+          backupText,
+          [{ name: 'Backup JSON', extensions: ['json', 'ioeb']}]
+        );
+      } else {
+        const blob = new Blob([backupText], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = backupDefaultFileName();
+        link.click();
+        URL.revokeObjectURL(url);
+        result = { success: true };
+      }
+
+      if (result && result.success) {
+        await showRestoreInlinePanel(translate('__backup_saved_successfully__'));
+      }
+    } catch (err) {
+      console.error(err);
+      await showRestoreInlinePanel(translate('__failed_to_create_backup__'));
+    }
+  });
+
+  btnRestore.addEventListener('click', async (e) => {
+    try {
+      let backupText = null;
+
+      if (window.electronAPI && window.electronAPI.openTextFile) {
+        const openResult = await window.electronAPI.openTextFile([
+          { name: 'Backup JSON', extensions: ['json', 'ioeb'] }
+        ]);
+        if (!openResult || !openResult.success) return;
+        backupText = openResult.content;
+      } else {
+        backupText = await new Promise((resolve) => {
+          const input = document.createElement('input');
+          input.type = 'file';
+          input.accept = '.json,.ioeb';
+          input.onchange = () => {
+            const file = input.files && input.files[0];
+            if (!file) return resolve(null);
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = () => resolve(null);
+            reader.readAsText(file);
+          };
+          input.click();
+        });
+        if (!backupText) return;
+      }
+
+      let encryptedPayload = null;
+      try {
+        encryptedPayload = JSON.parse(backupText);
+      } catch (_err) {
+        await showRestoreInlinePanel(translate('__invalid_backup_file_content__'));
+        return;
+      }
+
+      let plainBackup;
+      try {
+        plainBackup = encryptedPayload;
+      } catch (_err) {
+        await showRestoreInlinePanel(translate('__invalid_backup_file_content__'));
+        return;
+      }
+
+      const modeInput = await pickRestoreMode();
+      if (modeInput !== 'merge' && modeInput !== 'replace') {
+        await showRestoreInlinePanel(translate('__restore_canceled__'));
+        return;
+      }
+
+      await applyBackupData(plainBackup, modeInput);
+
+      if (modeInput === 'replace') {
+        localStorage.setItem('listOpened', localStorage.getItem('listOpened') || 'true');
+      }
+
+      Zeke.expandedNotesIds.clear();
+      Zeke.getLists();
+      Zeke.renderNotes(parseInt(localStorage.getItem('listActive')));
+
+      await showRestoreInlinePanel(translate('__restore_completed__'));
+    } catch (err) {
+      console.error(err);
+      await showRestoreInlinePanel(translate('__failed_to_restore_backup__'));
+    }
+  });
+
   clear.addEventListener('click', (e) => {
-    restore.click();
+    btnReset.click();
     window.indexedDB.deleteDatabase('neonote');
     location.reload();
   });

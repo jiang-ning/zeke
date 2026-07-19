@@ -198,14 +198,32 @@
                 </div>
               </div>
               <div class="modal-section">
+                <div class="modal-section-title" data-lang-innertext="__custom_settings__">Custom Settings</div>
+                <div class="modal-section-desc" data-lang-innertext="__custom_settings_desc__">Click button to restore sorts, pins and theme.</div>
+                <button id="btnReset" data-lang-innertext="__reset__">Reset</button>
+              </div>
+              <div class="modal-section">
                 <div class="modal-section-title" data-lang-innertext="__data_export__">Data Export</div>
                 <div class="modal-section-desc" data-lang-innertext="__data_export_desc__">Click button to export all data into a CSV file.</div>
                 <button id="btnExport" data-lang-innertext="__export__">Export</button>
               </div>
               <div class="modal-section">
-                <div class="modal-section-title" data-lang-innertext="__custom_settings__">Custom Settings</div>
-                <div class="modal-section-desc" data-lang-innertext="__custom_settings_desc__">Click button to restore sorts, pins and theme.</div>
-                <button id="restore" data-lang-innertext="__restore__">Restore</button>
+                <div class="modal-section-title" data-lang-innertext="__backup_and_restore__">Backup and Restore</div>
+                <div class="modal-section-desc">
+                  <span data-lang-innertext="__backup_and_restore_desc__">Click button to backup and restore data.</span>
+                </div>
+                <button id="btnBackup" data-lang-innertext="__backup__">Backup</button>
+                <button id="btnRestore" data-lang-innertext="__restore__">Restore</button>
+                <div id="restoreModeModal" class="restore-mode-modal" aria-live="polite">
+                  <div class="restore-mode-dialog">
+                    <div class="restore-mode-desc" data-lang-innertext="__restore_mode_desc__">Select how to apply imported backup data.</div>
+                    <div class="restore-mode-actions">
+                      <button id="restoreModeMerge" type="button" data-lang-innertext="__merge__">Merge</button>
+                      <button id="restoreModeReplace" type="button" data-lang-innertext="__replace__">Replace</button>
+                      <button id="restoreModeCancel" type="button" data-lang-innertext="__cancel__">Cancel</button>
+                    </div>
+                  </div>
+                </div>
               </div>
               <div class="modal-section">
                 <div class="modal-section-title" data-lang-innertext="__data_storage__">Data Storage</div>
@@ -319,7 +337,7 @@
         <button id="dateTimePickerCancel" data-lang-innertext="__cancel__">Cancel</button>
       </div>
     </div>
-    
+
     <script src="./utility.js"></script>
     <script src="./main.js"></script>
   </body>
