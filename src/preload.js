@@ -19,8 +19,10 @@ contextBridge.exposeInMainWorld('electronAPI', {
   licenseRemove: () => ipcRenderer.invoke('license-remove'),
   showNotification: (title, body) => ipcRenderer.send('show-notification', { title, body }),
   syncReminders: (reminders) => ipcRenderer.send('sync-reminders', reminders),
-  onReminderFired: (callback) => ipcRenderer.invoke('save-file', { defaultName, content }),
+  onReminderFired: (callback) => {
+    ipcRenderer.on('reminder-fired', (_event, noteId) => callback(noteId));
+  },
   saveFile: (defaultName, content) => ipcRenderer.invoke('save-file', { defaultName, content }),
   saveTextFile: (defaultName, content, filters) => ipcRenderer.invoke('save-text-file', { defaultName, content, filters }),
-  openTextFiles: (filters) => ipcRenderer.invoke('open-text-file', { filters }),
+  openTextFile: (filters) => ipcRenderer.invoke('open-text-file', { filters }),
 });

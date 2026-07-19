@@ -266,7 +266,7 @@ const createWindow = () => {
       return { success: true, filePath: result.filePath };
     });
 
-    ipcMain.handle('save-text-file', async (event, { defaultName, content, filter }) => {
+    ipcMain.handle('save-text-file', async (event, { defaultName, content, filters }) => {
       const win = BrowserWindow.fromWebContents(event.sender);
       const result = await dialog.showSaveDialog(win || mainWindow, {
         defaultPath: path.join(app.getPath('downloads'), defaultName),
