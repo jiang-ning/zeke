@@ -1806,9 +1806,8 @@ function initModalSettings() {
       e.target.classList.add('selected');
 
       // If auto mode is selected, determine the theme based on system preference
-      if (e.target.dataset.id === 'auto-theme') {
-        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-        document.body.className = prefersDark ? 'theme-dark' : 'origin-theme-light';
+      if (e.target.id === 'mode-auto') {
+        applyAutoTheme();
       } else {
         document.body.className = e.currentTarget.dataset.id;
       }
@@ -2752,7 +2751,7 @@ function init() {
   const opacity = localStorage.getItem('opacity') || '100';
   const bounds = localStorage.getItem('bounds');
 
-  if (theme === 'auto-theme') {
+  if (theme === 'theme-auto') {
     applyAutoTheme();
   } else {
     document.body.className = theme;
