@@ -2742,6 +2742,11 @@ function generateBarChart() {
   });
 }
 
+function applyAutoTheme() {
+  const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  document.body.className = prefersDark ? 'theme-dark' : 'origin-theme-light';
+}
+
 function init() {
   const theme = localStorage.getItem('theme') || '';
   const opacity = localStorage.getItem('opacity') || '100';
@@ -2775,7 +2780,6 @@ if (window.matchMedia) {
   window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
     if (localStorage.getItem('theme') === 'theme-auto') {
       applyAutoTheme();
-      updateChartThemeColors();
     }
   })
 }
