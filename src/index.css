@@ -87,38 +87,74 @@
 .red {
   background-color: var(--red);
 }
+.red.selected {
+  box-shadow: 0 0 0px 3px var(--red-stroke);
+}
 .orange {
   background-color: var(--orange);
+}
+.orange.selected {
+  box-shadow: 0 0 0px 3px var(--orange-stroke);
 }
 .amber {
   background-color: var(--amber);
 }
+.amber.selected {
+  box-shadow: 0 0 0px 3px var(--amber-stroke);
+}
 .olive {
   background-color: var(--olive);
+}
+.olive.selected {
+  box-shadow: 0 0 0px 3px var(--olive-stroke);
 }
 .green {
   background-color: var(--green);
 }
+.green.selected {
+  box-shadow: 0 0 0px 3px var(--green-stroke);
+}
 .teal {
   background-color: var(--teal);
+}
+.teal.selected {
+  box-shadow: 0 0 0px 3px var(--teal-stroke);
 }
 .blue {
   background-color: var(--blue);
 }
+.blue.selected {
+  box-shadow: 0 0 0px 3px var(--blue-stroke);
+}
 .violet {
   background-color: var(--violet);
+}
+.violet.selected {
+  box-shadow: 0 0 0px 3px var(--violet-stroke);
 }
 .purple {
   background-color: var(--purple);
 }
+.purple.selected {
+  box-shadow: 0 0 0px 3px var(--purple-stroke);
+}
 .pink {
   background-color: var(--pink);
+}
+.pink.selected {
+  box-shadow: 0 0 0px 3px var(--pink-stroke);
 }
 .brown {
   background-color: var(--brown);
 }
+.brown.selected {
+  box-shadow: 0 0 0px 3px var(--brown-stroke);
+}
 .grey {
   background-color: var(--grey);
+}
+.grey.selected {
+  box-shadow: 0 0 0px 3px var(--grey-stroke);
 }
 
 ::-webkit-scrollbar {
@@ -1191,6 +1227,7 @@ span.appIcon.placeholder:hover {
 }
 .sectionMode {
   margin-bottom: 10px;
+  display: flex;
 }
 .sectionMode .modeSelection {
   display: inline-block;
@@ -1201,7 +1238,7 @@ span.appIcon.placeholder:hover {
   cursor: pointer;
   text-align: center;
   line-height: 33px;
-  margin: 0 2px;
+  margin-right: 6px;
 }
 .sectionMode #mode-light {
   background: url('./images/sun.svg') center center no-repeat #eee;
@@ -1209,6 +1246,18 @@ span.appIcon.placeholder:hover {
 .sectionMode #mode-dark {
   background: url('./images/moon.svg') center center no-repeat #999;
   filter: invert(1);
+}
+.sectionMode #mode-auto {
+  background-color: #eee;
+  font-size: 10px;
+  line-height: 30px;
+}
+.sectionMode #mode-auto.selected,
+.sectionMode #mode-light.selected {
+  box-shadow: 0 0 0px 3px #999;
+}
+.sectionMode #mode-dark.selected {
+  box-shadow: 0 0 0px 3px #333;
 }
 
 /* Report */

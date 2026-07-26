@@ -1699,6 +1699,7 @@ function initModalSettings() {
   const restoreModeMerge = document.getElementById('restoreModeMerge');
   const restoreModeReplace = document.getElementById('restoreModeReplace');
   const restoreModeCancel = document.getElementById('restoreModeCancel');
+  const rememberedTheme = localStorage.getItem('theme') || 'origin-theme-light';
 
   btnSettings.addEventListener('click', () => {
     const activedList = document.querySelector('#areaListLists input.active');
@@ -1770,7 +1771,18 @@ function initModalSettings() {
   initCustomSelect(languageList, rememberedLanguage);
 
   themes.forEach(theme => {
+
+    if (rememberedTheme === theme.dataset.id) {
+      theme.classList.add('selected');
+    }
+
     theme.addEventListener('click', (e) => {
+      const selectedMode = document.querySelector('.modeSelection.selected');
+      const selectedTheme = document.querySelector('.themeSelection.selected');
+      if (selectedMode) selectedMode.classList.remove('selected');
+      if (selectedTheme) selectedTheme.classList.remove('selected');
+      e.target.classList.add('selected');
+
       document.body.className = e.target.dataset.id;
       localStorage.setItem('theme', e.target.dataset.id);
       Zeke_ChartTimeline.data.datasets[0].borderColor = getCurrentThemeColor();
@@ -1781,7 +1793,18 @@ function initModalSettings() {
   });
 
   modes.forEach(mode => {
+
+    if (rememberedTheme === mode.dataset.id) {
+      mode.classList.add('selected');
+    }
+
     mode.addEventListener('click', (e) => {
+      const selectedMode = document.querySelector('.modeSelection.selected');
+      const selectedTheme = document.querySelector('.themeSelection.selected');
+      if (selectedMode) selectedMode.classList.remove('selected');
+      if (selectedTheme) selectedTheme.classList.remove('selected');
+      e.target.classList.add('selected');
+
       document.body.className = e.currentTarget.dataset.id;
       localStorage.setItem('theme', e.currentTarget.dataset.id);
     });

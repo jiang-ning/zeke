@@ -109,7 +109,8 @@
 .theme-dark .report .filterButton,
 .theme-dark ::-webkit-scrollbar-thumb,
 .theme-dark ::-webkit-scrollbar-thumb:hover,
-.theme-dark .custom-select-options li:hover {
+.theme-dark .custom-select-options li:hover,
+.theme-dark #mode-auto {
   background-color: #ffffff33;
 }
 .theme-dark #txtNew:focus {
@@ -138,7 +139,8 @@
 .theme-dark #areaPinNotes li:hover input[type='text'],
 .theme-dark #areaListNotes li:hover input[type='text'],
 .theme-dark button:hover,
-.theme-dark .modal #license-input {
+.theme-dark .modal #license-input,
+.theme-dark #mode-auto {
   color: #fff;
 }
 .theme-dark #brand,
@@ -401,11 +403,17 @@
 .theme-blue #btnReminder:hover,
 .theme-blue #btnReminder.active.set,
 .theme-blue #btnDueDate:hover,
-.theme-blue #btnDueDate.active.set {
+.theme-blue #btnDueDate.active.set,
+.theme-blue #areaPinNotes li.edit .noteReminder:hover,
+.theme-blue #areaListNotes li.edit .noteReminder:hover,
+.theme-blue #areaPinNotes li.edit .noteDueDate:hover,
+.theme-blue #areaListNotes li.edit .noteDueDate:hover {
   color: var(--blue-stroke);
 }
+.theme-blue .noteReminder,
+.theme-blue .noteDueDate,
 .theme-blue .noteReminder.active,
-.theme-blue .noteDueDate {
+.theme-blue .noteDueDate.active {
   color: var(--blue-stroke-cc);
 }
 .theme-blue #btnSwitchNavbar,
@@ -540,11 +548,17 @@
 .theme-red #btnReminder:hover,
 .theme-red #btnReminder.active.set,
 .theme-red #btnDueDate:hover,
-.theme-red #btnDueDate.active.set {
+.theme-red #btnDueDate.active.set,
+.theme-red #areaPinNotes li.edit .noteReminder:hover,
+.theme-red #areaListNotes li.edit .noteReminder:hover,
+.theme-red #areaPinNotes li.edit .noteDueDate:hover,
+.theme-red #areaListNotes li.edit .noteDueDate:hover {
   color: var(--red-stroke);
 }
+.theme-red .noteReminder,
+.theme-red .noteDueDate,
 .theme-red .noteReminder.active,
-.theme-red .noteDueDate {
+.theme-red .noteDueDate.active {
   color: var(--red-stroke-cc);
 }
 .theme-red #btnSwitchNavbar,
@@ -617,8 +631,8 @@
 }
 .theme-orange .noteCollapse:hover,
 .theme-orange .noteCollapse.active,
-.theme-red #areaPinNotes li:hover input[type='checkbox'],
-.theme-red #areaListNotes li:hover input[type='checkbox'] {
+.theme-orange #areaPinNotes li:hover input[type='checkbox'],
+.theme-orange #areaListNotes li:hover input[type='checkbox'] {
   border-color: var(--orange-stroke);
 }
 .theme-orange #panelNav,
@@ -679,11 +693,17 @@
 .theme-orange #btnReminder:hover,
 .theme-orange #btnReminder.active.set,
 .theme-orange #btnDueDate:hover,
-.theme-orange #btnDueDate.active.set {
+.theme-orange #btnDueDate.active.set,
+.theme-orange #areaPinNotes li.edit .noteReminder:hover,
+.theme-orange #areaListNotes li.edit .noteReminder:hover,
+.theme-orange #areaPinNotes li.edit .noteDueDate:hover,
+.theme-orange #areaListNotes li.edit .noteDueDate:hover {
   color: var(--orange-stroke);
 }
+.theme-orange .noteReminder,
+.theme-orange .noteDueDate,
 .theme-orange .noteReminder.active,
-.theme-orange .noteDueDate {
+.theme-orange .noteDueDate.active {
   color: var(--orange-stroke-cc);
 }
 .theme-orange #btnSwitchNavbar,
@@ -820,11 +840,17 @@
 .theme-amber #btnReminder:hover,
 .theme-amber #btnReminder.active.set,
 .theme-amber #btnDueDate:hover,
-.theme-amber #btnDueDate.active.set {
+.theme-amber #btnDueDate.active.set,
+.theme-amber #areaPinNotes li.edit .noteReminder:hover,
+.theme-amber #areaListNotes li.edit .noteReminder:hover,
+.theme-amber #areaPinNotes li.edit .noteDueDate:hover,
+.theme-amber #areaListNotes li.edit .noteDueDate:hover {
   color: var(--amber-stroke);
 }
+.theme-amber .noteReminder,
+.theme-amber .noteDueDate,
 .theme-amber .noteReminder.active,
-.theme-amber .noteDueDate {
+.theme-amber .noteDueDate.active {
   color: var(--amber-stroke-cc);
 }
 .theme-amber #btnSwitchNavbar,
@@ -959,11 +985,17 @@
 .theme-green #btnReminder:hover,
 .theme-green #btnReminder.active.set,
 .theme-green #btnDueDate:hover,
-.theme-green #btnDueDate.active.set {
+.theme-green #btnDueDate.active.set,
+.theme-green #areaPinNotes li.edit .noteReminder:hover,
+.theme-green #areaListNotes li.edit .noteReminder:hover,
+.theme-green #areaPinNotes li.edit .noteDueDate:hover,
+.theme-green #areaListNotes li.edit .noteDueDate:hover {
   color: var(--green-stroke);
 }
+.theme-green .noteReminder,
+.theme-green .noteDueDate,
 .theme-green .noteReminder.active,
-.theme-green .noteDueDate {
+.theme-green .noteDueDate.active {
   color: var(--green-stroke-cc);
 }
 .theme-green #btnSwitchNavbar,
@@ -1098,11 +1130,17 @@
 .theme-teal #btnReminder:hover,
 .theme-teal #btnReminder.active.set,
 .theme-teal #btnDueDate:hover,
-.theme-teal #btnDueDate.active.set {
+.theme-teal #btnDueDate.active.set,
+.theme-teal #areaPinNotes li.edit .noteReminder:hover,
+.theme-teal #areaListNotes li.edit .noteReminder:hover,
+.theme-teal #areaPinNotes li.edit .noteDueDate:hover,
+.theme-teal #areaListNotes li.edit .noteDueDate:hover {
   color: var(--teal-stroke);
 }
+.theme-teal .noteReminder,
+.theme-teal .noteDueDate,
 .theme-teal .noteReminder.active,
-.theme-teal .noteDueDate {
+.theme-teal .noteDueDate.active {
   color: var(--teal-stroke-cc);
 }
 .theme-teal #btnSwitchNavbar,
@@ -1237,11 +1275,17 @@
 .theme-violet #btnReminder:hover,
 .theme-violet #btnReminder.active.set,
 .theme-violet #btnDueDate:hover,
-.theme-violet #btnDueDate.active.set {
+.theme-violet #btnDueDate.active.set,
+.theme-violet #areaPinNotes li.edit .noteReminder:hover,
+.theme-violet #areaListNotes li.edit .noteReminder:hover,
+.theme-violet #areaPinNotes li.edit .noteDueDate:hover,
+.theme-violet #areaListNotes li.edit .noteDueDate:hover {
   color: var(--violet-stroke);
 }
+.theme-violet .noteReminder,
+.theme-violet .noteDueDate,
 .theme-violet .noteReminder.active,
-.theme-violet .noteDueDate {
+.theme-violet .noteDueDate.active {
   color: var(--violet-stroke-cc);
 }
 .theme-violet #btnSwitchNavbar,
@@ -1376,11 +1420,17 @@
 .theme-purple #btnReminder:hover,
 .theme-purple #btnReminder.active.set,
 .theme-purple #btnDueDate:hover,
-.theme-purple #btnDueDate.active.set {
+.theme-purple #btnDueDate.active.set,
+.theme-purple #areaPinNotes li.edit .noteReminder:hover,
+.theme-purple #areaListNotes li.edit .noteReminder:hover,
+.theme-purple #areaPinNotes li.edit .noteDueDate:hover,
+.theme-purple #areaListNotes li.edit .noteDueDate:hover {
   color: var(--purple-stroke);
 }
+.theme-purple .noteReminder,
+.theme-purple .noteDueDate,
 .theme-purple .noteReminder.active,
-.theme-purple .noteDueDate {
+.theme-purple .noteDueDate.active {
   color: var(--purple-stroke-cc);
 }
 .theme-purple #btnSwitchNavbar,
@@ -1515,11 +1565,17 @@
 .theme-pink #btnReminder:hover,
 .theme-pink #btnReminder.active.set,
 .theme-pink #btnDueDate:hover,
-.theme-pink #btnDueDate.active.set {
+.theme-pink #btnDueDate.active.set,
+.theme-pink #areaPinNotes li.edit .noteReminder:hover,
+.theme-pink #areaListNotes li.edit .noteReminder:hover,
+.theme-pink #areaPinNotes li.edit .noteDueDate:hover,
+.theme-pink #areaListNotes li.edit .noteDueDate:hover {
   color: var(--pink-stroke);
 }
+.theme-pink .noteReminder,
+.theme-pink .noteDueDate,
 .theme-pink .noteReminder.active,
-.theme-pink .noteDueDate {
+.theme-pink .noteDueDate.active {
   color: var(--pink-stroke-cc);
 }
 .theme-pink #btnSwitchNavbar,
