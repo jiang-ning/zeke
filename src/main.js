@@ -1805,7 +1805,13 @@ function initModalSettings() {
       if (selectedTheme) selectedTheme.classList.remove('selected');
       e.target.classList.add('selected');
 
-      document.body.className = e.currentTarget.dataset.id;
+      // If auto mode is selected, determine the theme based on system preference
+      if (e.target.id === 'mode-auto') {
+        applyAutoTheme();
+      } else {
+        document.body.className = e.currentTarget.dataset.id;
+      }
+
       localStorage.setItem('theme', e.currentTarget.dataset.id);
     });
   });
@@ -2735,15 +2741,25 @@ function generateBarChart() {
   });
 }
 
+function applyAutoTheme() {
+  const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  document.body.className = prefersDark ? 'theme-dark' : 'origin-theme-light';
+}
+
 function init() {
   const theme = localStorage.getItem('theme') || '';
   const opacity = localStorage.getItem('opacity') || '100';
   const bounds = localStorage.getItem('bounds');
 
-  document.body.className = theme;
+  if (theme === 'theme-auto') {
+    applyAutoTheme();
+  } else {
+    document.body.className = theme;
+  }
+
   document.body.style.opacity = opacity + '%';
 
-  if(!getCurrentThemeColor()) {
+  if(!getCurrentThemeColor()) { 
     document.body.className = 'origin-theme-light';
   }
 
@@ -2757,6 +2773,14 @@ function init() {
   initModalReport();
   initModalSettings();
   initLanguage();
+}
+
+if (window.matchMedia) {
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+    if (localStorage.getItem('theme') === 'theme-auto') {
+      applyAutoTheme();
+    }
+  })
 }
 
 init();
