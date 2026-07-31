@@ -83,6 +83,9 @@
   --dark-cc:  #333333cc;
   --dark-ee:  #333333ee;
   --dark:     #333333;
+  --success:  #090;
+  --warning:  #ff9800;
+  --error:    #900;
 }
 .red {
   background-color: var(--red);
@@ -362,28 +365,32 @@ li.edit .noteSub {
   display: inline;
 }
 .noteCollapse {
-  filter: opacity(0);
-  border: solid #ccc;
-  border-width: 0 1px 1px 0;
-  transform: rotate(135deg);
-  width: 3px;
-  height: 3px;
-  padding: 3px;
-  margin: 16px 10px;
+  display: flex;
+  width: 20px;
+  justify-content: center;
+  align-items: center;
   z-index: 2;
   cursor: pointer;
   transition: linear .1s;
 }
-.noteCollapse.show {
+.noteCollapse.show .iconCollapse {
   filter: opacity(1);
   transition: linear .1s;
 }
-.noteCollapse.show:hover {
+.noteCollapse.show:hover .iconCollapse {
   border-color: #333;
 }
-.noteCollapse.show.active {
+.noteCollapse.show.active .iconCollapse {
   transform: rotate(45deg);
   transition: linear .1s;
+}
+.noteCollapse .iconCollapse {
+  filter: opacity(0);
+  border: solid #ccc;
+  border-width: 0 1px 1px 0;
+  transform: rotate(135deg);
+  width: 8px;
+  height: 8px;
 }
 
 #areaListLists {
@@ -957,6 +964,46 @@ li.edit .noteSub {
   display: grid;
 }
 
+/* Duedate styles */
+#panelNote li.overdue:not(.completed) > input[type='checkbox'] {
+  border-color: #900000CC;
+}
+#panelNote li.overdue:not(.completed) > .noteContent {
+  background-color: transparent;
+  color: #900000CC;
+}
+#panelNote li.overdue:not(.completed) > input[type='checkbox']:hover,
+#panelNote li.overdue:not(.completed):hover > input[type='checkbox'] {
+  border-color: #900000;
+}
+#panelNote li.overdue:not(.completed) > .noteContent:hover {
+  color: #900000;
+}
+#panelNote li.overdue:not(.completed) > .noteDueDate svg,
+#panelNote li.overdue:not(.completed) > .noteReminder svg,
+#panelNote li.overdue:not(.completed) > .noteMoment {
+  color: #900000CC;
+}
+#panelNote li.due-today:not(.completed) > input[type='checkbox'] {
+  border-color: #ff9800CC;
+}
+#panelNote.panel li.due-today:not(.completed) > .noteContent {
+  background-color: transparent;
+  color: #ff9800CC;
+}
+#panelNote li.due-today:not(.completed) > input[type='checkbox']:hover,
+#panelNote li.due-today:not(.completed):hover > input[type='checkbox'] {
+  border-color: #ff9800;
+}
+#panelNote.panel li.due-today:not(.completed) > .noteContent:hover {
+  color: #ff9800;
+}
+#panelNote li.due-today:not(.completed) > .noteDueDate svg,
+#panelNote li.due-today:not(.completed) > .noteReminder svg,
+#panelNote li.due-today:not(.completed) > .noteMoment {
+  color: #ff9800CC;
+}
+
 #areaSettings {
   grid-column: 1;
   grid-row: 2;
@@ -1134,6 +1181,23 @@ span.appIcon.placeholder:hover {
 }
 .modal .license-section.show {
   display: block;
+}
+.modal #license-activate-message {
+  font-size: 12px;
+  padding: 6px 10px;
+  margin: 6px 0;
+  background-color: #eee;
+  width: 290px;
+  border-radius: 6px;
+  line-height: 21px;
+}
+.modal #license-activate-message.error {
+  background-color: #fdd;
+  color: #900;
+}
+.modal #license-activate-message.success {
+  background-color: #dfd;
+  color: #090;
 }
 .modal #license-input {
   display: block;

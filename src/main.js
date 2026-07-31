@@ -424,13 +424,13 @@ request.onsuccess = async function(event) {
     let noteMoment = document.createElement('span');
     let notePin = document.createElement('span');
     let noteRemove = document.createElement('span');
-    let noteCollapse = document.createElement('span');
+    let noteCollapse = document.createElement('div');
     let noteSub = document.createElement('span');
     let noteSubList = document.createElement('ul');
     noteItem.draggable = true;
     noteItem.dataset.id = note.id;
     noteItem.dataset.index = order;
-    noteItem.className = note.completed ? "completed" : "";
+    noteItem.className = updateCompletionStyle(note.due, note.dateCompleted);
     noteCheckbox.type = 'checkbox';
     noteCheckbox.checked = note.completed;
     noteInput.type = 'text';
@@ -448,6 +448,7 @@ request.onsuccess = async function(event) {
     noteMoment.innerText = moment(note.dateCreated).fromNow();
     noteMoment.title = moment(note.dateCreated).format('YYYY-MM-DD HH:MM');
     noteCollapse.className = 'noteCollapse';
+    noteCollapse.innerHTML = '<span class="iconCollapse"></span>';
     noteSub.className = 'icon noteSub';
     noteSub.innerText = '+';
     noteSub.title = translate('__new_subtask__') || 'New Subtask';
@@ -797,7 +798,7 @@ request.onsuccess = async function(event) {
     subNoteItem.draggable = true;
     subNoteItem.dataset.id = subNote.id;
     subNoteItem.dataset.index = order;
-    subNoteItem.className = subNote.completed ? "completed" : "";
+    subNoteItem.className = updateCompletionStyle(subNote.due, subNote.dateCompleted);
     subNoteCheckbox.type = 'checkbox';
     subNoteCheckbox.checked = subNote.completed;
     subNoteInput.type = 'text';
@@ -1234,11 +1235,45 @@ request.onsuccess = async function(event) {
         parentCompletionButton.checked = false;
       }
       const currentThemeStrokeColor = getCurrentThemeColor(true);
-      const fillColor = currentThemeStrokeColor ? currentThemeStrokeColor + '66' : '#cccccccc';
+      const overdue = parentNote.classList.contains('overdue');
+      const dueToday = parentNote.classList.contains('due-today');
+      let fillColor = currentThemeStrokeColor ? currentThemeStrokeColor + '66' : '#cccccccc';
+
+      if (overdue) {
+        fillColor = '#900';
+      }
+      if (dueToday) {
+        fillColor = '#ff9800';
+      }
+      
       parentCompletionButton.style.setProperty('--fill-color', fillColor);
       parentCompletionButton.classList.add('has-progress');
       animateCompletion(parentCompletionButton, currentCompletion, parseFloat(completionPercentage));
     }
+  }
+
+  function updateCompletionStyle(duedate, dateCompleted) {
+    let className = '';
+
+    if (dateCompleted) {
+      className = 'completed';
+
+      if (duedate && moment(duedate).isBefore(dateCompleted, 'day')) {
+        className = 'completed overdue';
+      }
+      if (duedate && moment(duedate).isAfter(dateCompleted, 'day')) {
+        className = 'completed on-time';
+      }
+    } else {
+      if (duedate && moment(duedate).isBefore(Date.now(), 'day')) {
+        className = 'overdue';
+      }
+      if (duedate && moment(duedate).isSame(Date.now(), 'day')) {
+        className = 'due-today';
+      }
+    }
+
+    return className;
   }
 
   function filterNote() {
@@ -2201,6 +2236,7 @@ function initModalSettings() {
 
     btnLicenseActive.addEventListener('click', async () => {
       const licenseKey = licenseInput.value.trim();
+      const activateMessage = document.getElementById('license-activate-message');
       if (!licenseKey) {
         return;
       }
@@ -2226,7 +2262,17 @@ function initModalSettings() {
         } else {
           restructureGrid(true);
         }
+
+        activateMessage.innerText = translate('__license_activation_success__');
+        activateMessage.classList.remove('error');
+        activateMessage.classList.add('success');
+        activateMessage.style.display = 'block';
         
+      } else {
+        activateMessage.innerText = result.message || translate('__license_activation_failed__');
+        activateMessage.classList.remove('success');
+        activateMessage.classList.add('error');
+        activateMessage.style.display = 'block';
       }
     });
 
