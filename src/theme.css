@@ -77,7 +77,8 @@
 .theme-dark #listAdd #listAddName.active,
 .theme-dark #filterbar.active,
 .theme-dark .modal #license-input,
-.theme-dark #areaNew:has(#txtNew:focus) {
+.theme-dark #areaNew:has(#txtNew:focus),
+.theme-dark .badgePro {
   background-color: #00000099;
 }
 .theme-dark #panelNote,
@@ -103,7 +104,8 @@
   background-color: #ffffffcc;
 }
 .theme-dark #areaListNotes li.completed input[type="checkbox"]::before,
-.theme-dark #areaPinNotes li.completed input[type="checkbox"]::before {
+.theme-dark #areaPinNotes li.completed input[type="checkbox"]::before,
+.theme-dark .badgePro.btnNew {
   background-color: #ffffff66;
 }
 .theme-dark .report .filterButton,
@@ -179,7 +181,8 @@
 .theme-dark #areaPinNotes li.completed span.noteMoment,
 .theme-dark #areaListNotes li.completed span.noteMoment,
 .theme-dark .completed .noteReminder.active,
-.theme-dark .completed .noteDueDate.active {
+.theme-dark .completed .noteDueDate.active,
+.theme-dark .modal-section button:disabled {
   color: #ffffff33;
 }
 .theme-dark,

@@ -464,8 +464,8 @@ request.onsuccess = async function(event) {
     noteRemove.title = translate('__remove__') || 'Remove';
     noteItem.append(noteCheckbox);
     noteItem.append(noteInput);
-    noteItem.append(noteDueDate);
     noteItem.append(noteReminder);
+    noteItem.append(noteDueDate);
     noteItem.append(noteSub);
     noteItem.append(noteMoment);
     noteItem.append(noteRemove);
@@ -821,8 +821,8 @@ request.onsuccess = async function(event) {
 
     subNoteItem.append(subNoteCheckbox);
     subNoteItem.append(subNoteInput);
-    subNoteItem.append(subNoteDueDate);
     subNoteItem.append(subNoteReminder);
+    subNoteItem.append(subNoteDueDate);
     subNoteItem.append(subNoteMoment);
     subNoteItem.append(subNoteRemove);
 
@@ -1576,6 +1576,8 @@ request.onsuccess = async function(event) {
 
   Zeke.getLists = getLists;
   Zeke.renderNotes = renderNotes;
+  Zeke.dbUpdate = dbUpdate;
+  Zeke.addNote = addNote;
 
   getLists();
   renderNotes(
@@ -1627,11 +1629,11 @@ function restructureGrid(pro = false) {
   localStorage.setItem('grid-template-columns', rememberedGridArray[0] + ' ' + rememberedGridArray[1] + ' 10px 1fr');
 
   if (pro) {
-    document.getElementById('btnSwitchNavbar').style.display = 'block';
-    document.getElementById('btnSettings_SE').style.display = 'none';
+    btnSwitchNavbar.style.display = 'block';
+    btnSettings_SE.style.display = 'none';
   } else {
-    document.getElementById('btnSwitchNavbar').style.display = 'none';
-    document.getElementById('btnSettings_SE').style.display = 'block';
+    btnSwitchNavbar.style.display = 'none';
+    btnSettings_SE.style.display = 'block';
   }
 }
 
@@ -1735,6 +1737,11 @@ function initModalSettings() {
   const restoreModeReplace = document.getElementById('restoreModeReplace');
   const restoreModeCancel = document.getElementById('restoreModeCancel');
   const rememberedTheme = localStorage.getItem('theme') || 'origin-theme-light';
+
+  btnExport.disabled = true;
+  btnBackup.disabled = true;
+  btnRestore.disabled = true;
+  setBadgeProVisibility(true);
 
   btnSettings.addEventListener('click', () => {
     const activedList = document.querySelector('#areaListLists input.active');
@@ -2022,6 +2029,12 @@ function initModalSettings() {
     });
   }
 
+  function setBadgeProVisibility(isPro) {
+    document.querySelectorAll('.badgePro').forEach((badge) => {
+      badge.style.display = isPro ? 'none' : '';
+    });
+  }
+
   btnExport.addEventListener('click', (e) => {
     const dbRequest = indexedDB.open('neonote', 1);
     dbRequest.onsuccess = function(event) {
@@ -2225,11 +2238,19 @@ function initModalSettings() {
         licenseInput.placeholder = 'Licensed to ' + result.name + ' (' + result.email + ')';
         btnLicenseActive.style.display = 'none';
         btnLicenseRemove.style.display = 'inline-block';
+        btnExport.disabled = false;
+        btnBackup.disabled = false;
+        btnRestore.disabled = false;
+        setBadgeProVisibility(true);
         restructureGrid(true);
       } else {
         document.querySelector('.edition').innerText = 'SE';
         btnLicenseActive.style.display = 'inline-block';
         btnLicenseRemove.style.display = 'none';
+        btnExport.disabled = true;
+        btnBackup.disabled = true;
+        btnRestore.disabled = true;
+        setBadgeProVisibility(false);
         restructureGrid(false);
       }
     });
@@ -2250,8 +2271,12 @@ function initModalSettings() {
         licenseInput.placeholder = 'Licensed to ' + result.name + ' (' + result.email + ')';
         btnLicenseActive.style.display = 'none';
         btnLicenseRemove.style.display = 'inline-block';
+        btnExport.disabled = false;
+        btnBackup.disabled = false;
+        btnRestore.disabled = false;
         btnSettings_SE.style.display = 'none';
         btnSwitchNavbar.style.display = 'block';
+        setBadgeProVisibility(true);
 
         if (rememberedGridArray[0] === '0px' || rememberedGridArray[0] === '0') {
           // first time activation from SE to Pro, open the navbar
@@ -2282,6 +2307,10 @@ function initModalSettings() {
       licenseInput.placeholder = 'Paste License Key Here ...';
       btnLicenseActive.style.display = 'inline-block';
       btnLicenseRemove.style.display = 'none';
+      btnExport.disabled = true;
+      btnBackup.disabled = true;
+      btnRestore.disabled = true;
+      setBadgeProVisibility(false);
       restructureGrid(false);
     });
   } else {
@@ -2289,6 +2318,10 @@ function initModalSettings() {
     document.querySelector('.edition').innerText = 'SE';
     btnLicenseActive.style.display = 'inline-block';
     btnLicenseRemove.style.display = 'none';
+    btnExport.disabled = true;
+    btnBackup.disabled = true;
+    btnRestore.disabled = true;
+    setBadgeProVisibility(false);
     restructureGrid(false);
   }
   

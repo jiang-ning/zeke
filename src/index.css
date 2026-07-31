@@ -366,7 +366,7 @@ li.edit .noteSub {
 }
 .noteCollapse {
   display: flex;
-  width: 20px;
+  width: 30px;
   justify-content: center;
   align-items: center;
   z-index: 2;
@@ -1236,10 +1236,14 @@ span.appIcon.placeholder:hover {
   line-height: 16px;
   padding: 6px 12px;
 }
-.modal-section button:hover {
+.modal-section button:not(:disabled):hover {
   background-color: #eeeeeeee;
   border: 1px solid #ccccccee;
   color: #000000ee;
+}
+.modal-section button:disabled {
+  color: #00000066;
+  cursor: default;
 }
 
 .restore-mode-modal {
@@ -1507,6 +1511,15 @@ span.appIcon.placeholder:hover {
 }
 .custom-select-options li:last-child {
   border-radius: 0 0 12px 12px;
+}
+.badgePro {
+  padding: 4px;
+  border-radius: 6px;
+  background-color: #eee;
+}
+.badgePro.btnNew,
+.badgePro.btnNewList {
+  font-size: 9px;
 }
 
 #web {
