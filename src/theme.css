@@ -15,6 +15,7 @@
 [class^="theme"] #panelNote li.sortable-fallback,
 [class^="theme"] #areaPinNotes li.edit > .noteContent,
 [class^="theme"] #areaListNotes li.edit > .noteContent,
+[class^="theme"] #panelNote li.edit.due-today:not(.completed) > .noteContent,
 [class^="theme"] #areaListLists li.edit input,
 [class^="theme"] #listAdd #listAddName.active {
   background-color: #ffffff99;
@@ -60,6 +61,16 @@
   transition: fill 0.2s ease-in-out;
 }
 
+.origin-theme-light #areaListNotes li.edit:has(.noteMoment) {
+  background-color: #eeeeee99;
+}
+.origin-theme-light #areaListNotes li.completed input[type='text'],
+.origin-theme-light #areaPinNotes li.completed input[type='text'],
+.origin-theme-light #panelNote li.edit.overdue:not(.completed) > .noteContent,
+.origin-theme-light #panelNote li.edit.due-today:not(.completed) > .noteContent {
+  background-color: #fff;
+}
+
 /* mode-dark */
 /* .theme-dark #titlebar, */
 .theme-dark .panelsContainer,
@@ -86,6 +97,7 @@
 .theme-dark #gutter,
 .theme-dark #areaPinNotes li.edit > .noteContent,
 .theme-dark #areaListNotes li.edit > .noteContent,
+.theme-dark #panelNote li.edit.due-today:not(.completed) > .noteContent,
 .theme-dark #areaListLists li.edit input,
 .theme-dark #titlebar .appIcon:hover,
 .theme-dark button,

@@ -496,13 +496,12 @@ request.onsuccess = async function(event) {
     noteDueDate.className = note.due ? 'noteDueDate active' : 'noteDueDate';
     noteDueDate.title = note.due ? translate('__due_at__') + ' ' + moment(note.due).format('YYYY-MM-DD') : 
     '';
-    noteDueDate.innerHTML = note.due ? checkDueDateStatus(noteDueDate, note.due, note.dateCompleted) : iconDueDate;
+    noteDueDate.innerHTML = note.due ? getDueDateStatus(noteDueDate, note.due, note.dateCompleted) : iconDueDate;
     noteReminder.className = note.remind ? 'noteReminder active' : 'noteReminder';
     noteReminder.title = note.remind ? translate('__remind_me_at__') + ' ' + moment(note.remind).format('YYYY-MM-DD HH:MM') : '';
     noteReminder.innerHTML = note.remind ? iconReminderActive : iconReminder;
     noteMoment.className = 'noteMoment';
-    noteMoment.innerText = moment(note.dateCreated).fromNow();
-    noteMoment.title = moment(note.dateCreated).format('YYYY-MM-DD HH:MM');
+    noteMoment.innerText = getMomentText(noteMoment, note.dateCreated, note.due, note.dateCompleted);
     noteCollapse.className = 'noteCollapse';
     noteCollapse.innerHTML = '<span class="iconCollapse"></span>';
     noteSub.className = 'icon noteSub';
@@ -864,13 +863,12 @@ request.onsuccess = async function(event) {
     subNoteInput.readOnly = true;
     subNoteDueDate.className = subNote.due ? 'noteDueDate active' : 'noteDueDate';
     subNoteDueDate.title = subNote.due ? translate('__due_at__') + ' ' + moment(subNote.due).format('YYYY-MM-DD') : '';
-    subNoteDueDate.innerHTML = subNote.due ? checkDueDateStatus(subNoteDueDate, subNote.due, subNote.dateCompleted) : iconDueDate;
+    subNoteDueDate.innerHTML = subNote.due ? getDueDateStatus(subNoteDueDate, subNote.due, subNote.dateCompleted) : iconDueDate;
     subNoteReminder.className = subNote.remind ? 'noteReminder active' : 'noteReminder';
     subNoteReminder.title = subNote.remind ? translate('__remind_me_at__') + ' ' + moment(subNote.remind).format('YYYY-MM-DD HH:mm') : '';
     subNoteReminder.innerHTML = subNote.remind ? iconReminderActive : iconReminder;
     subNoteMoment.className = 'noteMoment';
-    subNoteMoment.innerText = moment(subNote.dateCreated).fromNow();
-    subNoteMoment.title = moment(subNote.dateCreated).format('YYYY-MM-DD HH:MM');
+    subNoteMoment.innerText = getMomentText(subNoteMoment, subNote.dateCreated, subNote.due, subNote.dateCompleted);
     subNoteRemove.className = 'icon noteRemove';
     subNoteRemove.innerText = '-';
     subNoteRemove.dataset['langTitle'] = '__remove__';
@@ -1291,6 +1289,7 @@ request.onsuccess = async function(event) {
       if(parentNote.classList.contains('completed')) {
         parentNote.classList.remove('completed');
         parentCompletionButton.checked = false;
+        dbUpdate('note', parentId, {completed: false, dateCompleted: null});
       }
       const currentThemeStrokeColor = getCurrentThemeColor(true);
       const overdue = parentNote.classList.contains('overdue');
