@@ -1516,6 +1516,7 @@ span.appIcon.placeholder:hover {
   padding: 4px;
   border-radius: 6px;
   background-color: #eee;
+  cursor: default;
 }
 .badgePro.btnNew,
 .badgePro.btnNewList {

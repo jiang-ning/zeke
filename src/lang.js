@@ -77,7 +77,10 @@ const Languages = {
         "__restore_canceled__" : "تم إلغاء الاستعادة.",
         "__license_activation_success__" : "تم تفعيل الترخيص بنجاح.",
         "__license_activation_failed__" : "فشل تفعيل الترخيص.",
-        "__calendar__" : "التقويم"
+        "__calendar__" : "التقويم",
+        "__badgePro_desc__" : "قم بالترقية إلى النسخة الاحترافية لفتح هذه الميزة",
+        "__badgePro_btnNew_desc__" : "النسخة العادية تحدد عدد المهام إلى 10، قم بالترقية إلى النسخة الاحترافية لفتح عدد غير محدود من المهام",
+        "__badgePro_btnNewList_desc__" : "النسخة العادية تحدد عدد القوائم إلى 3، قم بالترقية إلى النسخة الاحترافية لفتح عدد غير محدود من القوائم"
     },
     "de" : {
         "name" : "Deutsch",
@@ -157,7 +160,10 @@ const Languages = {
         "__restore_canceled__" : "Wiederherstellung abgebrochen.",
         "__license_activation_success__" : "Lizenz erfolgreich aktiviert.",
         "__license_activation_failed__" : "Lizenzaktivierung fehlgeschlagen.",
-        "__calendar__" : "Kalender"
+        "__calendar__" : "Kalender",
+        "__badgePro_desc__": "Upgrade auf die Pro-Version, um diese Funktion freizuschalten",
+        "__badgePro_btnNew_desc__" : "Die Standardversion begrenzt die Anzahl der Aufgaben auf 10, upgrade auf die Pro-Version, um unbegrenzte Aufgaben freizuschalten.",
+        "__badgePro_btnNewList_desc__" : "Die Standardversion begrenzt die Anzahl der Listen auf 3, upgrade auf die Pro-Version, um unbegrenzte Listen freizuschalten."
     },
     "en" : {
         "name" : "English",
@@ -237,7 +243,11 @@ const Languages = {
         "__restore_canceled__" : "Restore canceled.",
         "__license_activation_success__" : "License activated successfully.",
         "__license_activation_failed__" : "License activation failed.",
-        "__calendar__" : "Calendar"
+        "__calendar__" : "Calendar",
+        "__badgePro_desc__": "",
+        "__badgePro_desc__" : "Upgrade to the Pro version to unlock this feature",
+        "__badgePro_btnNew_desc__" : "The standard version limits the number of tasks to 10, upgrade to the Pro version to unlock unlimited tasks",
+        "__badgePro_btnNewList_desc__" : "The standard version limits the number of lists to 3, upgrade to the Pro version to unlock unlimited lists"
     },
     "es" : {
         "name" : "Español",
@@ -317,7 +327,10 @@ const Languages = {
         "__restore_canceled__" : "Restauración cancelada.",
         "__license_activation_success__" : "Licencia activada con éxito.",
         "__license_activation_failed__" : "Error al activar la licencia.",
-        "__calendar__" : "Calendario"
+        "__calendar__" : "Calendario",
+        "__badgePro_desc__": "Actualiza a la versión Pro para desbloquear esta función",
+        "__badgePro_btnNew_desc__" : "La versión estándar limita el número de tareas a 10, actualiza a la versión Pro para desbloquear tareas ilimitadas.",
+        "__badgePro_btnNewList_desc__" : "La versión estándar limita el número de listas a 3, actualiza a la versión Pro para desbloquear listas ilimitadas."
     },
     "fr" : {
         "name" : "Française",
@@ -397,7 +410,10 @@ const Languages = {
         "__restore_canceled__" : "Restauration annulée.",
         "__license_activation_success__" : "Licence activée avec succès.",
         "__license_activation_failed__" : "Échec de l'activation de la licence.",
-        "__calendar__" : "Calendrier"
+        "__calendar__" : "Calendrier",
+        "__badgePro_desc__" : "Passe à la version Pro pour débloquer cette fonctionnalité",
+        "__badgePro_btnNew_desc__" : "La version standard limite le nombre de tâches à 10, passe à la version Pro pour débloquer un nombre illimité de tâches.",
+        "__badgePro_btnNewList_desc__" : "La version standard limite le nombre de listes à 3, passe à la version Pro pour débloquer un nombre illimité de listes."
     },
     "in" : {
         "name" : "हिंदी",
@@ -477,7 +493,10 @@ const Languages = {
         "__restore_canceled__" : "रिस्टोर रद्द कर दिया गया।",
         "__license_activation_success__" : "लाइसेंस सफलतापूर्वक सक्रिय किया गया।",
         "__license_activation_failed__" : "लाइसेंस सक्रिय करने में असफल।",
-        "__calendar__" : "कैलेंडर"
+        "__calendar__" : "कैलेंडर",
+        "__badgePro_desc__": "इस फीचर को अनलॉक करने के लिए प्रो वर्शन में अपग्रेड करें",
+        "__badgePro_btnNew_desc__" : "स्टैंडर्ड वर्ज़न में टास्क की संख्या 10 तक सीमित है, अनलिमिटेड टास्क के लिए प्रो वर्ज़न में अपग्रेड करें",
+        "__badgePro_btnNewList_desc__" : "स्टैंडर्ड वर्ज़न में लिस्ट की संख्या 3 तक सीमित है, अनलिमिटेड लिस्ट के लिए प्रो वर्ज़न में अपग्रेड करें"
     },
     "it" : {
         "name" : "Italiana",
@@ -557,7 +576,10 @@ const Languages = {
         "__restore_canceled__" : "Ripristino annullato.",
         "__license_activation_success__" : "Licenza attivata con successo.",
         "__license_activation_failed__" : "Attivazione della licenza fallita.",
-        "__calendar__" : "Calendario"
+        "__calendar__" : "Calendario",
+        "__badgePro_desc__" : "Aggiorna alla versione Pro per sbloccare questa funzione",
+        "__badgePro_btnNew_desc__" : "La versione standard limita il numero di attività a 10, aggiorna alla versione Pro per sbloccare attività illimitate",
+        "__badgePro_btnNewList_desc__" : "La versione standard limita il numero di liste a 3, aggiorna alla versione Pro per sbloccare liste illimitate"
     },
     "jp" : {
         "name" : "日本語",
@@ -637,7 +659,10 @@ const Languages = {
         "__restore_canceled__" : "復元がキャンセルされました。",
         "__license_activation_success__" : "ライセンスが正常に有効化されました。",
         "__license_activation_failed__" : "ライセンスの有効化に失敗しました。",
-        "__calendar__" : "カレンダー"
+        "__calendar__" : "カレンダー",
+        "__badgePro_desc__" : "この機能を使うには、Proバージョンにアップグレードしてね",
+        "__badgePro_btnNew_desc__" : "標準版ではタスクの数が10に制限されています。無制限のタスクを使いたい場合はPro版にアップグレードしてください。",
+        "__badgePro_btnNewList_desc__" : "標準版ではリストの数が3に制限されています。無制限のリストを使いたい場合はPro版にアップグレードしてください。"
     },
     "kr" : {
         "name" : "한국어",
@@ -717,7 +742,10 @@ const Languages = {
         "__restore_canceled__" : "복원이 취소되었습니다.",
         "__license_activation_success__" : "라이선스가 성공적으로 활성화되었습니다.",
         "__license_activation_failed__" : "라이선스 활성화에 실패했습니다.",
-        "__calendar__" : "달력"
+        "__calendar__" : "달력",
+        "__badgePro_desc__" : "이 기능을 이용하려면 프로 버전으로 업그레이드하세요",
+        "__badgePro_btnNew_desc__" : "표준 버전은 작업 수를 10개로 제한해요. 무제한 작업을 원하면 Pro 버전으로 업그레이드하세요.",
+        "__badgePro_btnNewList_desc__" : "표준 버전은 리스트 수를 3개로 제한해요. 무제한 리스트를 원하면 Pro 버전으로 업그레이드하세요."
     },
     "pk" : {
         "name" : "اردو",
@@ -797,7 +825,10 @@ const Languages = {
         "__restore_canceled__" : "بحالی منسوخ کر دی گئی۔",
         "__license_activation_success__" : "لائسنس کامیابی کے ساتھ فعال ہو گیا۔",
         "__license_activation_failed__" : "لائسنس کی فعال کاری میں ناکامی۔",
-        "__calendar__" : "کلینڈر"
+        "__calendar__" : "کلینڈر",
+        "__badgePro_desc__" : "اس فیچر کو انلاک کرنے کے لیے پرو ورژن پر اپگریڈ کریں",
+        "__badgePro_btnNew_desc__" : "اسٹینڈرڈ ورژن میں ٹاسکس کی تعداد 10 تک محدود ہے، لامحدود ٹاسکس کو ان لاک کرنے کے لیے پرو ورژن میں اپ گریڈ کریں۔",
+        "__badgePro_btnNewList_desc__" : "اسٹینڈرڈ ورژن میں لسٹس کی تعداد 3 تک محدود ہے، لامحدود لسٹس کو ان لاک کرنے کے لیے پرو ورژن میں اپ گریڈ کریں۔"
     },
     "pt" : {
         "name" : "Português",
@@ -881,7 +912,10 @@ const Languages = {
         "__restore_canceled__" : "Restauração cancelada.",
         "__license_activation_success__" : "Licença ativada com sucesso.",
         "__license_activation_failed__" : "Falha na ativação da licença.",
-        "__calendar__" : "Calendário"
+        "__calendar__" : "Calendário",
+        "__badgePro_desc__" : "Faz upgrade para a versão Pro para desbloquear esta funcionalidade",
+        "__badgePro_btnNew_desc__" : "A versão standard limita o número de tarefas a 10, faz upgrade para a versão Pro para desbloquear tarefas ilimitadas",
+        "__badgePro_btnNewList_desc__" : "A versão standard limita o número de listas a 3, faz upgrade para a versão Pro para desbloquear listas ilimitadas"
     },
     "ru" : {
         "name" : "Русский",
@@ -961,7 +995,10 @@ const Languages = {
         "__restore_canceled__" : "Восстановление отменено.",
         "__license_activation_success__" : "Лицензия успешно активирована.",
         "__license_activation_failed__" : "Не удалось активировать лицензию.",
-        "__calendar__" : "Календарь"
+        "__calendar__" : "Календарь",
+        "__badgePro_desc__" : "Обновите до версии Pro, чтобы открыть эту функцию",
+        "__badgePro_btnNew_desc__" : "Стандартная версия ограничивает количество задач до 10, обновитесь до версии Pro, чтобы открыть неограниченное количество задач.",
+        "__badgePro_btnNewList_desc__" : "Стандартная версия ограничивает количество списков до 3, обновитесь до версии Pro, чтобы открыть неограниченное количество списков."
     },
     "zhCN" : {
         "name" : "简体中文",
@@ -1041,7 +1078,10 @@ const Languages = {
         "__restore_canceled__" : "恢复已取消。",
         "__license_activation_success__" : "许可证激活成功。",
         "__license_activation_failed__" : "许可证激活失败。",
-        "__calendar__" : "日历"
+        "__calendar__" : "日历",
+        "__badgePro_desc__" : "升级到专业版以解锁此功能",
+        "__badgePro_btnNew_desc__" : "标准版将任务数量限制为10个，升级到专业版可解锁无限任务",
+        "__badgePro_btnNewList_desc__" : "标准版将清单数量限制为3个，升级到专业版可解锁无限清单"
     },
     "zhTW" : {
         "name" : "繁體中文",
@@ -1121,6 +1161,9 @@ const Languages = {
         "__restore_canceled__" : "還原已取消。",
         "__license_activation_success__" : "授權已成功啟用。",
         "__license_activation_failed__" : "授權啟用失敗。",
-        "__calendar__" : "行事曆"
+        "__calendar__" : "行事曆",
+        "__badgePro_desc__" : "升級到專業版以解鎖此功能",
+        "__badgePro_btnNew_desc__" : "標準版將任務數量限制為 10，升級到專業版以解鎖無限任務",
+        "__badgePro_btnNewList_desc__" : "標準版將清單數量限制為 3，升級到專業版以解鎖無限清單"
     }
 }

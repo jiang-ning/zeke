@@ -11,6 +11,55 @@ var Zeke = {
 var Zeke_ChartTimeline;
 var sortableInstances = [];
 var neonoteDb = null;
+const SE_MAX_LISTS = 3;
+const SE_MAX_NOTES = 10;
+
+function isProEdition() {
+  return document.querySelector('.edition')?.innerText === 'Pro';
+}
+
+function updateSeNoteCreationState() {
+  const btnNew = document.getElementById('btnNew');
+  const txtNew = document.getElementById('txtNew');
+  const btnNewBadgePro = document.querySelector('.badgePro.btnNew');
+  const totalNotes = document.querySelectorAll('#areaPinNotes ul li, #areaListNotes ul li, #areaListNotes .noteSubList li, #areaPinNotes .noteSubList li').length;
+  const isSeMaxNotesReached = !isProEdition() && totalNotes >= SE_MAX_NOTES;
+
+  if (btnNew) {
+    btnNew.style.display = isSeMaxNotesReached ? 'none' : '';
+  }
+  if (txtNew) {
+    txtNew.disabled = isSeMaxNotesReached;
+  }
+  if (btnNewBadgePro) {
+    btnNewBadgePro.style.display = isSeMaxNotesReached ? '' : 'none';
+  }
+
+  return isSeMaxNotesReached;
+}
+
+function updateSeListCreationState() {
+  const listAddNameInput = document.getElementById('listAddName');
+  const btnNewList = document.getElementById('btnNewList');
+  const btnNewListBadgePro = document.querySelector('.badgePro.btnNewList');
+  const currentListCount = document.querySelectorAll('#areaListLists ul li').length;
+  const isSeMaxListReached = !isProEdition() && currentListCount >= SE_MAX_LISTS;
+
+  if (isSeMaxListReached && listAddNameInput && btnNewList) {
+    listAddNameInput.classList.remove('active');
+    listAddNameInput.value = '';
+    listAddNameInput.blur();
+    btnNewList.classList.add('hide');
+  } else if (btnNewList) {
+    btnNewList.classList.remove('hide');
+  }
+
+  if (btnNewListBadgePro) {
+    btnNewListBadgePro.style.display = isSeMaxListReached ? '' : 'none';
+  }
+
+  return isSeMaxListReached;
+}
 
 // Create object store and define its structure
 request.onupgradeneeded = function(event) {
@@ -155,6 +204,7 @@ request.onsuccess = async function(event) {
       // calculate usage
       const usage = (JSON.stringify(notes).length / 1024).toFixed(2);
       document.getElementById('db-usage').innerText = usage;
+      updateSeNoteCreationState();
     };
     
     request.onerror = function() {
@@ -230,6 +280,7 @@ request.onsuccess = async function(event) {
       currentOrder ? currentOrder = currentOrder.split(',') : currentOrder = [];
       currentOrder.push(newList.target.result);
       localStorage.setItem('listOrder', currentOrder);
+      updateSeListCreationState();
       console.log('List added successfully');
     };
     
@@ -286,6 +337,7 @@ request.onsuccess = async function(event) {
         }
 
         initListDnD();
+        updateSeListCreationState();
       }
     };
     
@@ -310,6 +362,9 @@ request.onsuccess = async function(event) {
   }
 
   function addNewList() {
+    if (updateSeListCreationState()) {
+      return;
+    }
     const listName = document.getElementById('listAddName').value.trim();
     if(listName) {
       addList({name: listName});
@@ -399,6 +454,7 @@ request.onsuccess = async function(event) {
         localStorage.setItem('listOrder', newOrder);
         console.log(newOrder);
         listItem.remove();
+        updateSeListCreationState();
         deleteList(id);
       }
     });
@@ -678,6 +734,7 @@ request.onsuccess = async function(event) {
       noteItem.remove();
       updateSortIndexes(area);
       deleteNote(targetId);
+      updateSeNoteCreationState();
     });
 
     noteCollapse.addEventListener('click', (e) => {
@@ -882,6 +939,7 @@ request.onsuccess = async function(event) {
       subNoteItem.remove();
       updateSortIndexes(area);
       deleteNote(targetId);
+      updateSeNoteCreationState();
 
       // If parent has no more subnotes, hide collapse icon and remove parent status
       const parentEl = document.querySelector(`#panelNote li[data-id="${subnote.parent}"]`);
@@ -1552,6 +1610,10 @@ request.onsuccess = async function(event) {
   }
 
   document.getElementById('btnNewList').addEventListener('click', () => {
+    if (updateSeListCreationState()) {
+      return;
+    }
+
     document.getElementById('btnNewList').classList.add('hide');
     document.getElementById('listAddName').classList.add('active');
     document.getElementById('listAddName').value = '';
@@ -1567,6 +1629,7 @@ request.onsuccess = async function(event) {
     document.getElementById('btnNewList').classList.remove('hide');
     document.getElementById('listAddName').classList.remove('active');
     document.getElementById('listAddName').value = '';
+    updateSeListCreationState();
   }, true);
   document.getElementById('panelsContainer').addEventListener('click', (e) => {
     if(e.target.readOnly || e.target.nodeName !== 'INPUT') {
@@ -2031,8 +2094,14 @@ function initModalSettings() {
 
   function setBadgeProVisibility(isPro) {
     document.querySelectorAll('.badgePro').forEach((badge) => {
+      if (badge.classList.contains('btnNewList') || badge.classList.contains('btnNew')) {
+        return;
+      }
       badge.style.display = isPro ? 'none' : '';
     });
+
+    updateSeListCreationState();
+    updateSeNoteCreationState();
   }
 
   btnExport.addEventListener('click', (e) => {
