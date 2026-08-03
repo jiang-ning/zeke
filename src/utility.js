@@ -344,7 +344,7 @@ function getMomentText(el, createdDateStr, dueDateStr, completedDateStr) {
 
   if (completed) {
     if (due) {
-      if (completed.isBefore(due, 'day')) {
+      if (completed.isSameOrBefore(due)) {
         el.title = translate('__completed_in__') + ' ' + completed.from(created, true) + ' (' + completed.format('YYYY-MM-DD HH:MM') + ')';
         return translate('__completed_on_time__');
       } else {

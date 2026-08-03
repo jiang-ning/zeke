@@ -64,10 +64,10 @@
 .origin-theme-light #areaListNotes li.edit:has(.noteMoment) {
   background-color: #eeeeee99;
 }
-.origin-theme-light #areaListNotes li.completed input[type='text'],
-.origin-theme-light #areaPinNotes li.completed input[type='text'],
-.origin-theme-light #panelNote li.edit.overdue:not(.completed) > .noteContent,
-.origin-theme-light #panelNote li.edit.due-today:not(.completed) > .noteContent {
+.origin-theme-light #areaListNotes li:not(.sortable-chosen).completed input[type='text'],
+.origin-theme-light #areaPinNotes li:not(.sortable-chosen).completed input[type='text'],
+.origin-theme-light #panelNote li:not(.sortable-chosen).edit.overdue:not(.completed) > .noteContent,
+.origin-theme-light #panelNote li:not(.sortable-chosen).edit.due-today:not(.completed) > .noteContent {
   background-color: #fff;
 }
 

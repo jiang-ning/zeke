@@ -556,7 +556,9 @@ request.onsuccess = async function(event) {
       const subnotesCompleted = subnotesList.querySelectorAll(`li.completed`);
       if(noteCheckbox.checked == true) {
         noteItem.classList.add('completed');
-        dbUpdate('note', noteId, {completed: true, dateCompleted: Date.now()});
+        note.dateCompleted = Date.now();
+        dbUpdate('note', noteId, {completed: true, dateCompleted: note.dateCompleted});
+        noteMoment.innerText = getMomentText(noteMoment, note.dateCreated, note.due, note.dateCompleted);
         if(subnotesIncomplete.length > 0) {
           subnotesIncomplete.forEach((subnote) => {
             subnote.querySelector('input[type="checkbox"]').click();
@@ -564,7 +566,9 @@ request.onsuccess = async function(event) {
         }
       } else {
         noteItem.classList.remove('completed');
+        note.dateCompleted = null;
         dbUpdate('note', noteId, {completed: false, dateCompleted: null});
+        noteMoment.innerText = getMomentText(noteMoment, note.dateCreated, note.due, note.dateCompleted);
         if(subnotesCompleted.length > 0) {
           subnotesCompleted.forEach((subnote) => {
             subnote.querySelector('input[type="checkbox"]').click();
@@ -802,7 +806,7 @@ request.onsuccess = async function(event) {
 
       dueDatePicker.onClose = null;
       dueDatePicker.show(noteDueDate, note.due, (dateTime) => {
-        const dueDateTimestamp = new Date(dateTime).getTime();
+        const dueDateTimestamp = moment(dateTime).endOf('day').valueOf();
         dbUpdate('note', note.id, { due: dueDateTimestamp });
         note.due = dueDateTimestamp;
         noteDueDate.className = 'noteDueDate active';
@@ -1000,7 +1004,7 @@ request.onsuccess = async function(event) {
 
       dueDatePicker.onClose = null;
       dueDatePicker.show(subNoteDueDate, subNote.due, (dateTime) => {
-        const dueTimestamp = new Date(dateTime).getTime();
+        const dueTimestamp = moment(dateTime).endOf('day').valueOf();
         dbUpdate('note', subNote.id, { due: dueTimestamp });
         subNote.due = dueTimestamp;
         subNoteDueDate.className = 'noteDueDate active';
