@@ -1,7 +1,7 @@
 # Change Log
 
 ### v1.12.2
-##### 2026-07-09
+##### 2026-08-09
 - Improvement: Reminder
 - Improvement: Due Date
 - Bug Fix: Sorting with high memory taken issue

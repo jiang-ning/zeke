@@ -1414,10 +1414,10 @@ span.appIcon.placeholder:hover {
   border-right-color: #ccc;
 }
 .ar .noteCollapse {
-  transform: rotate(315deg);
+  transform: rotate(180deg);
 }
 .ar .noteCollapse.show.active {
-  transform: rotate(45deg);
+  transform: rotate(0deg);
 }
 .ar #panelNav {
   border-right: none;

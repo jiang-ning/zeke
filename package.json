@@ -1,7 +1,7 @@
 {
   "name": "inneroutliner",
   "productName": "InnerOutliner",
-  "version": "1.10.2",
+  "version": "1.12.2",
   "description": "Effortless Note-Taking: Simplify, Secure, Succeed!",
   "main": "src/index.js",
   "scripts": {

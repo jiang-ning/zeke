@@ -117,7 +117,8 @@
 }
 .theme-dark #areaListNotes li.completed input[type="checkbox"]::before,
 .theme-dark #areaPinNotes li.completed input[type="checkbox"]::before,
-.theme-dark .badgePro.btnNew {
+.theme-dark .badgePro.btnNew,
+.theme-dark .badgePro.btnNewList {
   background-color: #ffffff66;
 }
 .theme-dark .report .filterButton,
