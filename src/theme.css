@@ -334,7 +334,8 @@
 .theme-blue #filterIncompleted.active,
 .theme-blue #txtNew:focus + #btnNew:hover,
 .theme-blue #areaListNotes li.completed input[type="checkbox"]::before,
-.theme-blue #areaPinNotes li.completed input[type="checkbox"]::before {
+.theme-blue #areaPinNotes li.completed input[type="checkbox"]::before,
+.theme-blue .badgePro {
   background-color: var(--blue-stroke-66);
 }
 .theme-blue {
@@ -480,7 +481,8 @@
 .theme-red #filterIncompleted.active,
 .theme-red #txtNew:focus + #btnNew:hover,
 .theme-red #areaListNotes li.completed input[type="checkbox"]::before,
-.theme-red #areaPinNotes li.completed input[type="checkbox"]::before  {
+.theme-red #areaPinNotes li.completed input[type="checkbox"]::before,
+.theme-red .badgePro  {
   background-color: var(--red-stroke-66);
 }
 .theme-red {
@@ -625,7 +627,8 @@
 .theme-orange #filterIncompleted.active,
 .theme-orange #txtNew:focus + #btnNew:hover,
 .theme-orange #areaListNotes li.completed input[type="checkbox"]::before,
-.theme-orange #areaPinNotes li.completed input[type="checkbox"]::before {
+.theme-orange #areaPinNotes li.completed input[type="checkbox"]::before,
+.theme-orange .badgePro {
   background-color: var(--orange-stroke-66);
 }
 .theme-orange {
@@ -772,7 +775,8 @@
   background-color: var(--amber-stroke-66);
 }
 .theme-amber #areaListNotes li.completed input[type="checkbox"]::before,
-.theme-amber #areaPinNotes li.completed input[type="checkbox"]::before {
+.theme-amber #areaPinNotes li.completed input[type="checkbox"]::before,
+.theme-amber .badgePro {
   background-color: var(--amber-stroke-cc);
 }
 .theme-amber {
@@ -917,7 +921,8 @@
 .theme-green #filterIncompleted.active,
 .theme-green #txtNew:focus + #btnNew:hover,
 .theme-green #areaListNotes li.completed input[type="checkbox"]::before,
-.theme-green #areaPinNotes li.completed input[type="checkbox"]::before {
+.theme-green #areaPinNotes li.completed input[type="checkbox"]::before,
+.theme-green .badgePro {
   background-color: var(--green-stroke-66);
 }
 .theme-green {
@@ -1062,7 +1067,8 @@
 .theme-teal #filterIncompleted.active,
 .theme-teal #txtNew:focus + #btnNew:hover,
 .theme-teal #areaListNotes li.completed input[type="checkbox"]::before,
-.theme-teal #areaPinNotes li.completed input[type="checkbox"]::before {
+.theme-teal #areaPinNotes li.completed input[type="checkbox"]::before,
+.theme-teal .badgePro {
   background-color: var(--teal-stroke-66);
 }
 .theme-teal {
@@ -1207,7 +1213,8 @@
 .theme-violet #filterIncompleted.active,
 .theme-violet #txtNew:focus + #btnNew:hover,
 .theme-violet #areaListNotes li.completed input[type="checkbox"]::before,
-.theme-violet #areaPinNotes li.completed input[type="checkbox"]::before {
+.theme-violet #areaPinNotes li.completed input[type="checkbox"]::before,
+.theme-violet .badgePro {
   background-color: var(--violet-stroke-66);
 }
 .theme-violet {
@@ -1352,7 +1359,8 @@
 .theme-purple #filterIncompleted.active,
 .theme-purple #txtNew:focus + #btnNew:hover,
 .theme-purple #areaListNotes li.completed input[type="checkbox"]::before,
-.theme-purple #areaPinNotes li.completed input[type="checkbox"]::before {
+.theme-purple #areaPinNotes li.completed input[type="checkbox"]::before,
+.theme-purple .badgePro {
   background-color: var(--purple-stroke-66);
 }
 .theme-purple {
@@ -1497,7 +1505,8 @@
 .theme-pink #filterIncompleted.active,
 .theme-pink #txtNew:focus + #btnNew:hover,
 .theme-pink #areaListNotes li.completed input[type="checkbox"]::before,
-.theme-pink #areaPinNotes li.completed input[type="checkbox"]::before {
+.theme-pink #areaPinNotes li.completed input[type="checkbox"]::before,
+.theme-pink .badgePro {
   background-color: var(--pink-stroke-66);
 }
 .theme-pink {
