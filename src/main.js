@@ -2299,7 +2299,14 @@ function initModalSettings() {
   // License activation
   const btnLicenseActive = document.getElementById('btnLicenseActive');
   const btnLicenseRemove = document.getElementById('btnLicenseRemove');
+  const btnBuyLicense = document.getElementById('btnBuyLicense');
   const licenseInput = document.getElementById('license-input');
+
+  if (btnBuyLicense && window.electronAPI && window.electronAPI.openCheckout) {
+    btnBuyLicense.addEventListener('click', async () => {
+      await window.electronAPI.openCheckout();
+    })
+  }
 
   // Load stored license on startup
   if (window.electronAPI && window.electronAPI.licenseGet) {
@@ -2310,6 +2317,7 @@ function initModalSettings() {
         licenseInput.placeholder = 'Licensed to ' + result.name + ' (' + result.email + ')';
         btnLicenseActive.style.display = 'none';
         btnLicenseRemove.style.display = 'inline-block';
+        if (btnBuyLicense) btnBuyLicense.style.display = 'none';
         btnExport.disabled = false;
         btnBackup.disabled = false;
         btnRestore.disabled = false;
@@ -2319,6 +2327,7 @@ function initModalSettings() {
         document.querySelector('.edition').innerText = 'SE';
         btnLicenseActive.style.display = 'inline-block';
         btnLicenseRemove.style.display = 'none';
+        if (btnBuyLicense) btnBuyLicense.style.display = 'inline-block';
         btnExport.disabled = true;
         btnBackup.disabled = true;
         btnRestore.disabled = true;
@@ -2343,6 +2352,7 @@ function initModalSettings() {
         licenseInput.placeholder = 'Licensed to ' + result.name + ' (' + result.email + ')';
         btnLicenseActive.style.display = 'none';
         btnLicenseRemove.style.display = 'inline-block';
+        if (btnBuyLicense) btnBuyLicense.style.display = 'none';
         btnExport.disabled = false;
         btnBackup.disabled = false;
         btnRestore.disabled = false;
@@ -2379,6 +2389,7 @@ function initModalSettings() {
       licenseInput.placeholder = 'Paste License Key Here ...';
       btnLicenseActive.style.display = 'inline-block';
       btnLicenseRemove.style.display = 'none';
+      if (btnBuyLicense) btnBuyLicense.style.display = 'inline-block';
       btnExport.disabled = true;
       btnBackup.disabled = true;
       btnRestore.disabled = true;
@@ -2390,6 +2401,7 @@ function initModalSettings() {
     document.querySelector('.edition').innerText = 'SE';
     btnLicenseActive.style.display = 'inline-block';
     btnLicenseRemove.style.display = 'none';
+    if (btnBuyLicense) btnBuyLicense.style.display = 'inline-block';
     btnExport.disabled = true;
     btnBackup.disabled = true;
     btnRestore.disabled = true;

@@ -1,7 +1,9 @@
-const { app, BrowserWindow, ipcMain, safeStorage, Notification, dialog } = require('electron');
+const { app, BrowserWindow, ipcMain, safeStorage, Notification, dialog, shell } = require('electron');
 const path = require('path');
 const fs = require('fs');
 const crypto = require('crypto');
+
+const FASTSPRING_CHECKOUT_URL = 'https://inneroutliner.test.onfastspring.com/inneroutlinerapp';
 
 // License public key for offline verification (RSA 2048-bit)
 const LICENSE_PUBLIC_KEY = `-----BEGIN PUBLIC KEY-----
@@ -204,6 +206,20 @@ const createWindow = () => {
     ipcMain.handle('license-remove', async () => {
       deleteLicenseFile();
       return { valid: false, message: 'License removed.'};
+    });
+
+    ipcMain.handle('open-checkout', async () => {
+      try {
+        const checkoutUrl = new URL(FASTSPRING_CHECKOUT_URL);
+        // only ever open FastSpring's own hosted checkout domain
+        if (!checkoutUrl.hostname.endsWith('.onfastspring.com')) {
+          return { success: false, message: 'Checkout URL is not configured correctly.' };
+        }
+        await shell.openExternal(checkoutUrl.toString());
+        return { success: true };
+      } catch (e) {
+        return { success: false, message: 'Failed to open checkout page.' };
+      }
     });
 
     ipcMain.on('show-notification', (event, { title, body }) => {
