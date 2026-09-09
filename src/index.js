@@ -3,7 +3,8 @@ const path = require('path');
 const fs = require('fs');
 const crypto = require('crypto');
 
-const FASTSPRING_CHECKOUT_URL = 'https://inneroutliner.test.onfastspring.com/inneroutlinerapp';
+const LICENSE_SITE_BASE_URL = 'https://inneroutliner.com';
+const LICENSE_SITE_LOCALE_PATTERN = /^[a-z]{2}(_[a-z]{2})?$/i;
 
 // License public key for offline verification (RSA 2048-bit)
 const LICENSE_PUBLIC_KEY = `-----BEGIN PUBLIC KEY-----
@@ -208,11 +209,12 @@ const createWindow = () => {
       return { valid: false, message: 'License removed.'};
     });
 
-    ipcMain.handle('open-checkout', async () => {
+    ipcMain.handle('open-checkout', async (event, locale) => {
       try {
-        const checkoutUrl = new URL(FASTSPRING_CHECKOUT_URL);
-        // only ever open FastSpring's own hosted checkout domain
-        if (!checkoutUrl.hostname.endsWith('.onfastspring.com')) {
+        const safeLocale = LICENSE_SITE_LOCALE_PATTERN.test(locale || '') ? locale : 'en';
+        const checkoutUrl = new URL(`${LICENSE_SITE_BASE_URL}/${safeLocale}/license/index.html`);
+        // only ever open our own site's hosted domain
+        if (checkoutUrl.hostname !== 'inneroutliner.com') {
           return { success: false, message: 'Checkout URL is not configured correctly.' };
         }
         await shell.openExternal(checkoutUrl.toString());

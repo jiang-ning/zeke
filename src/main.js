@@ -2304,7 +2304,9 @@ function initModalSettings() {
 
   if (btnBuyLicense && window.electronAPI && window.electronAPI.openCheckout) {
     btnBuyLicense.addEventListener('click', async () => {
-      await window.electronAPI.openCheckout();
+      const currentLanguage = localStorage.getItem('language') || 'en';
+      const siteLocale = (Languages[currentLanguage] && Languages[currentLanguage].locale) || currentLanguage;
+      await window.electronAPI.openCheckout(siteLocale);
     })
   }
 
