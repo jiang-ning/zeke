@@ -2301,6 +2301,58 @@ function initModalSettings() {
   const btnLicenseRemove = document.getElementById('btnLicenseRemove');
   const btnBuyLicense = document.getElementById('btnBuyLicense');
   const licenseInput = document.getElementById('license-input');
+  const checkForUpdatesBtn = document.getElementById('checkForUpdates');
+  const updateBtn = document.getElementById('update');
+  const checkForUpdatesStatus = document.getElementById('checkForUpdatesStatus');
+
+  if (updateBtn) {
+    updateBtn.style.display = 'none';
+  }
+
+  if (checkForUpdatesBtn && updateBtn && window.electronAPI && window.electronAPI.checkForUpdates) {
+    checkForUpdatesBtn.addEventListener('click', async () => {
+      checkForUpdatesBtn.disabled = true;
+      checkForUpdatesStatus.innerText = translate('__checking_for_updates__') || 'Checking for updates...';
+      const result = await window.electronAPI.checkForUpdates();
+      if (result.status === 'development') {
+        checkForUpdatesBtn.disabled = false;
+        checkForUpdatesStatus.innerText = translate('__update_check_development__') || 'Update checks are disabled in development mode.';
+      } else if (result.status === 'in-progress') {
+        checkForUpdatesStatus.innerText = translate('__update_check_in_progress__') || 'Already checking for updates...';
+      } else if (result.status === 'error') {
+        checkForUpdatesBtn.disabled = false;
+        checkForUpdatesStatus.innerText = translate('__update_check_failed__') || 'Failed to check for updates.';
+      }
+    });
+
+    window.electronAPI.onUpdateAvailable(() => {
+      checkForUpdatesBtn.disabled = true;
+      const version = info && info.version ? ` (v${info.version})` : '';
+      checkForUpdatesStatus.innerText = (translate('__update_available__') || 'New version found, downloading...') + version;
+    });
+
+    window.electronAPI.onUpdateNotAvailable(() => {
+      checkForUpdatesBtn.disabled = false;
+      checkForUpdatesStatus.innerText = translate('__no_update_available__') || 'Up to date';
+    });
+
+    window.electronAPI.onUpdateDownloaded((info) => {
+      checkForUpdatesBtn.disabled = false;
+      updateBtn.style.display = 'inline-block';
+      const version = info && info.version ? ` (v${info.version})` : '';
+      checkForUpdatesStatus.innerText = (translate('__update_ready__') || 'Update downloaded, ready to install.') + version;
+    });
+
+    window.electronAPI.onUpdateError(() => {
+      checkForUpdatesBtn.disabled = false;
+      checkForUpdatesStatus.innerText = translate('__update_check_failed__') || 'Failed to check for updates.';
+    });
+
+    updateBtn.addEventListener('click', async () => {
+      updateBtn.disabled = true;
+      await window.electronAPI.installUpdate();
+    });
+  }
 
   if (btnBuyLicense && window.electronAPI && window.electronAPI.openCheckout) {
     btnBuyLicense.addEventListener('click', async () => {

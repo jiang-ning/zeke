@@ -1,7 +1,9 @@
 const { app, BrowserWindow, ipcMain, safeStorage, Notification, dialog, shell } = require('electron');
+const { autoUpdater } = require('electron-updater');
 const path = require('path');
 const fs = require('fs');
 const crypto = require('crypto');
+const { version } = require('os');
 
 const LICENSE_SITE_BASE_URL = 'https://inneroutliner.com';
 const LICENSE_SITE_LOCALE_PATTERN = /^[a-z]{2}(_[a-z]{2})?$/i;
@@ -75,8 +77,54 @@ if (require('electron-squirrel-startup')) {
 }
 
 let mainWindow = null;
+let updateCheckInProgress = false;
+let updateDownloaded = false;
 
 const gotTheLock = app.requestSingleInstanceLock();
+
+function checkForUpdates() {
+  if (!app.isPackaged) {
+    return { status: 'development' };
+  }
+
+  autoUpdater.setFeedURL({
+    provider: 'github',
+    owner: 'jiang-ning',
+    name: 'inneroutliner'
+  });
+  autoUpdater.autoDownload = false;
+  autoUpdater.autoInstallOnAppQuit = false;
+  return autoUpdater.checkForUpdates();
+}
+
+function sendUpdateEvent(channel, payload) {
+  if (mainWindow && !mainWindow.isDestroyed()) {
+    mainWindow.webContents.send(channel, payload);
+  }
+}
+
+autoUpdater.on('update-available', (info) => {
+  sendUpdateEvent('update-available', { version: info.version });
+  autoUpdater.downloadUpdate().catch((error) => {
+    sendUpdateEvent('update-error', { message: error.message });
+  });
+});
+
+autoUpdater.on('update-not-available', () => {
+  updateCheckInProgress = false;
+  sendUpdateEvent('update-not-available');
+});
+
+autoUpdater.on('update-downloaded', (info) => {
+  updateCheckInProgress = false;
+  updateDownloaded = true;
+  sendUpdateEvent('update-downloaded', { version: info.version });
+});
+
+autoUpdater.on('error', (error) => {
+  updateCheckInProgress = false;
+  sendUpdateEvent('update-error', { message: error.message });
+});
 
 const createWindow = () => {
 
@@ -111,6 +159,33 @@ const createWindow = () => {
       const webContents = event.sender;
       const win = BrowserWindow.fromWebContents(webContents);
       win.setAlwaysOnTop(enable,'screen-saver');
+    });
+
+    ipcMain.handle('check-for-updates', async () => {
+      if (!app.isPackaged) {
+        return { status: 'development' };
+      }
+      if (updateCheckInProgress) {
+        return { status: 'in-progress' };
+      }
+
+      updateCheckInProgress = true;
+      updateDownloaded = false;
+      try {
+        await checkForUpdates();
+        return { status: 'checking' };
+      } catch (error) {
+        updateCheckInProgress = false;
+        return { status: 'error', message: error.message };
+      }
+    });
+
+    ipcMain.handle('install-update', () => {
+      if (!updateDownloaded) {
+        return { status: 'not-ready' };
+      }
+      autoUpdater.quitAndInstall();
+      return { status: 'installing' };
     });
 
     // ipcMain.on('is-always-on-top', async (event) => {

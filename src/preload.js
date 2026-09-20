@@ -26,4 +26,18 @@ contextBridge.exposeInMainWorld('electronAPI', {
   saveFile: (defaultName, content) => ipcRenderer.invoke('save-file', { defaultName, content }),
   saveTextFile: (defaultName, content, filters) => ipcRenderer.invoke('save-text-file', { defaultName, content, filters }),
   openTextFile: (filters) => ipcRenderer.invoke('open-text-file', { filters }),
+  checkForUpdates: () => ipcRenderer.invoke('check-for-updates'),
+  installUpdate: () => ipcRenderer.invoke('install-update'),
+  onUpdateAvailable: (callback) => {
+    ipcRenderer.on('update-available', (_event, info) => callback(info));
+  },
+  onUpdateNotAvailable: (callback) => {
+    ipcRenderer.on('update-not-available', () => callback());
+  },
+  onUpdateDownloaded: (callback) => {
+    ipcRenderer.on('update-downloaded', (_event, info) => callback(info));
+  },
+  onUpdateError: (callback) => {
+    ipcRenderer.on('update-error', (_event, error) => callback(error));
+  },
 });

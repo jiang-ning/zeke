@@ -1,11 +1,15 @@
 # Change Log
 
-### v1.12.2
+### v1.16.1
 ##### 2026-08-09
-- Improvement: Reminder
-- Improvement: Due Date
+- New Feature: Reminder
+- New Feature: Due Date
+- New Feature: Export to CSV
+- New Feature: Backup and Restore
+- New Feature: Check for Updates
+- New Feature: Light/Dark mode auto adjust based on OS settings
+- Improvement: Smoother UI update
 - Bug Fix: Sorting with high memory taken issue
-- Bug Fix: Smoothly UI updating
 
 ### v1.10.2
 ##### 2024-10-06
