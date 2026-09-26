@@ -234,6 +234,14 @@ function collapseIfDocked() {
   const edge = getDockedEdge(bounds, workArea);
   if (edge) {
     collapseToEdge(edge, workArea);
+    return;
+  }
+  if (autoHideState.expandedByHover) {
+    autoHideState.expandedByHover = false;
+    if (autoHideState.leaveTimer) {
+      clearTimeout(autoHideState.leaveTimer);
+      autoHideState.leaveTimer = null;
+    }
   }
 }
 
@@ -279,8 +287,14 @@ function checkAutoHide() {
       autoHideState.leaveTimer = null;
       const cursor = screen.getCursorScreenPoint();
       const bounds = mainWindow && !mainWindow.isDestroyed() ? mainWindow.getBounds() : null;
-      if (autoHideState.expandedByHover && autoHideState.workArea && bounds && !pointInRect(cursor, bounds)) {
-        collapseToEdge(autoHideState.edge, autoHideState.workArea);
+      if (!autoHideState.expandedByHover || !bounds || pointInRect(cursor, bounds)) {
+        return;
+      }
+      const workArea = screen.getDisplayMatching(bounds).workArea;
+      if (getDockedEdge(bounds, workArea) === autoHideState.edge) {
+        collapseToEdge(autoHideState.edge, workArea);
+      } else {
+        autoHideState.expandedByHover = false;
       }
     }, AUTO_HIDE_LEAVE_DELAY);
   }
