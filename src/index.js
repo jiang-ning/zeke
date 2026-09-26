@@ -1,9 +1,10 @@
-const { app, BrowserWindow, ipcMain, safeStorage, Notification, dialog, shell } = require('electron');
+const { app, BrowserWindow, ipcMain, safeStorage, Notification, dialog, shell, screen } = require('electron');
 const { autoUpdater } = require('electron-updater');
 const path = require('path');
 const fs = require('fs');
 const crypto = require('crypto');
 const { version } = require('os');
+const { setTimeout } = require('timers');
 
 const LICENSE_SITE_BASE_URL = 'https://inneroutliner.com';
 const LICENSE_SITE_LOCALE_PATTERN = /^[a-z]{2}(_[a-z]{2})?$/i;
@@ -80,6 +81,227 @@ let mainWindow = null;
 let updateCheckInProgress = false;
 let updateDownloaded = false;
 
+// --- Auto-hide near screen edge
+const AUTO_HIDE_MAGNET_GAP = 10; // px: edge snap and restored-window gap
+const AUTO_HIDE_SLIVER_SIZE = 4; // px: visible sliver when collapsed
+const AUTO_HIDE_HOVER_ZONE = 8; // px: hover trigger zone when collapsed
+const AUTO_HIDE_ANIM_DURATION = 220; // ms
+const AUTO_HIDE_ANIM_FPS = 60;
+const AUTO_HIDE_MOVE_SETTLE_DELAY = 150; // ms
+const AUTO_HIDE_LEAVE_DELAY = 250; // ms
+const autoHideState = {
+  collapsed: false,
+  animating: false,
+  edge: null, // 'left' | 'right' | 'top' | 'bottom'
+  expandedBounds: null,
+  workArea: null,
+  animTimer: null,
+  moveTimer: null,
+  leaveTimer: null,
+  ignoreMovesUntil: 0,
+  hoverArmed: false,
+  expandedByHover: false
+};
+
+function easeInOutQuad(t) {
+  return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+}
+
+function animateWindowBounds(from, to, onDone) {
+  if (autoHideState.animTimer) {
+    clearInterval(autoHideState.animTimer);
+    autoHideState.animTimer = null;
+  }
+  autoHideState.animating = true;
+  const stepMs = 1000 / AUTO_HIDE_ANIM_FPS;
+  const startTime = Date.now();
+
+  autoHideState.animTimer = setInterval(() => {
+    if (!mainWindow || mainWindow.isDestroyed()) {
+      clearInterval(autoHideState.animTimer);
+      autoHideState.animTimer = null;
+      autoHideState.animating = false;
+      return;
+    }
+    const elapsed = Date.now() - startTime;
+    const progress = Math.min(1, elapsed / AUTO_HIDE_ANIM_DURATION);
+    const eased = easeInOutQuad(progress);
+    mainWindow.setBounds({
+      x: Math.round(from.x + (to.x - from.x) * eased),
+      y: Math.round(from.y + (to.y - from.y) * eased),
+      width: Math.round(from.width + (to.width - from.width) * eased),
+      height: Math.round(from.height + (to.height - from.height) * eased)
+    });
+    if (progress >= 1) {
+      clearInterval(autoHideState.animTimer);
+      autoHideState.animTimer = null;
+      autoHideState.animating = false;
+      if (onDone) onDone();
+    }
+  }, stepMs);
+}
+
+function pointInRect(point, rect) {
+  return point.x >= rect.x && point.x <= rect.x + rect.width &&
+    point.y >= rect.y && point.y <= rect.y + rect.height;
+}
+
+function getDockedEdge(bounds, workArea) {
+  const edges = [];
+  if (Math.abs(bounds.x - workArea.x <= AUTO_HIDE_MAGNET_GAP)) edges.push('left');
+  if (Math.abs((bounds.x + bounds.width) - (workArea.x + workArea.width)) <= AUTO_HIDE_MAGNET_GAP) edges.push('right');
+  if (Math.abs(bounds.y - workArea.y) <= AUTO_HIDE_MAGNET_GAP) edges.push('top');
+  if (Math.abs((bounds.y + bounds.height) - (workArea.y + workArea.height)) <= AUTO_HIDE_MAGNET_GAP) edges.push('bottom');
+  return edges[0] || null;
+}
+
+function clamp(value, min, max) {
+  return Math.min(Math.max(value, min), Math.max(min, max));
+}
+
+function getExpandedBounds(bounds, workArea, edge) {
+  const expandedBounds = { ...bounds };
+  const minX = workArea.x + AUTO_HIDE_MAGNET_GAP;
+  const maxX = workArea.x + workArea.width - bounds.width - AUTO_HIDE_MAGNET_GAP;
+  const minY = workArea.y + AUTO_HIDE_MAGNET_GAP;
+  const maxY = workArea.y + workArea.height - bounds.height - AUTO_HIDE_MAGNET_GAP;
+
+  expandedBounds.x = clamp(bounds.x, minX, maxX);
+  expandedBounds.y = clamp(bounds.y, minY, maxY);
+  if (edge === 'left') expandedBounds.x = minX;
+  else if (edge === 'right') expandedBounds.x = maxX;
+  else if (edge === 'top') expandedBounds.y = minY;
+  else if (edge === 'bottom') expandedBounds.y = maxY;
+  return expandedBounds;
+}
+
+function getCollapsedBounds(bounds, workArea, edge) {
+  const collapsedBounds = { ...bounds };
+  if (edge === 'left') collapsedBounds.x = workArea.x - bounds.width + AUTO_HIDE_SLIVER_SIZE;
+  else if (edge === 'right') collapsedBounds.x = workArea.x + workArea.width - AUTO_HIDE_SLIVER_SIZE;
+  else if (edge === 'top') collapsedBounds.y = workArea.y - bounds.height + AUTO_HIDE_SLIVER_SIZE;
+  else if (edge === 'bottom') collapsedBounds.y = workArea.y + workArea.height - AUTO_HIDE_SLIVER_SIZE;
+  return collapsedBounds;
+}
+
+function collapseToEdge(edge, workArea) {
+  if (!mainWindow || mainWindow.isDestroyed() || autoHideState.animating) return;
+  const currentBounds = mainWindow.getBounds();
+  autoHideState.expandedBounds = getExpandedBounds(currentBounds, workArea, edge);
+  autoHideState.workArea = workArea;
+  autoHideState.edge = edge;
+  const bounds = autoHideState.expandedBounds;
+  const newBounds = getCollapsedBounds(bounds, workArea, edge);
+  autoHideState.collapsed = true;
+  autoHideState.hoverArmed = false;
+  autoHideState.expandedByHover = false;
+  if (autoHideState.leaveTimer) {
+    clearTimeout(autoHideState.leaveTimer);
+    autoHideState.leaveTimer = null;
+  }
+  autoHideState.ignoreMovesUntil = Date.now() + AUTO_HIDE_ANIM_DURATION + (AUTO_HIDE_MOVE_SETTLE_DELAY * 2);
+  animateWindowBounds(currentBounds, newBounds);
+}
+
+function expandFromEdge() {
+  if (!mainWindow || mainWindow.isDestroyed() || !autoHideState.expandedBounds || autoHideState.animating) return;
+  const from = mainWindow.getBounds();
+  const to = autoHideState.expandedBounds;
+  autoHideState.collapsed = false;
+  autoHideState.hoverArmed = false;
+  autoHideState.ignoreMovesUntil = Date.now() + AUTO_HIDE_ANIM_DURATION + (AUTO_HIDE_MOVE_SETTLE_DELAY * 2);
+  animateWindowBounds(from, to, () => {
+    autoHideState.expandedByHover = true;
+  });
+}
+
+function getHoverZoneRect(bounds, edge) {
+  switch (edge) {
+    case 'left': return { x: bounds.x + bounds.width - AUTO_HIDE_HOVER_ZONE, y: bounds.y, width: AUTO_HIDE_HOVER_ZONE, height: bounds.height };
+    case 'right': return { x: bounds.x, y: bounds.y, width: AUTO_HIDE_HOVER_ZONE, height: bounds.height };
+    case 'top': return { x: bounds.x, y: bounds.y + bounds.height - AUTO_HIDE_HOVER_ZONE, width: bounds.width, height: AUTO_HIDE_HOVER_ZONE };
+    case 'bottom': return { x: bounds.x, y: bounds.y, width: bounds.width, height: AUTO_HIDE_HOVER_ZONE };
+    default: return null;
+  }
+}
+
+function collapseIfDocked() {
+  if (autoHideState.animating || autoHideState.collapsed || Date.now() < autoHideState.ignoreMovesUntil) return;
+  if (!mainWindow || mainWindow.isDestroyed()) return;
+
+  const bounds = mainWindow.getBounds();
+  const workArea = screen.getDisplayMatching(bounds).workArea;
+  const edge = getDockedEdge(bounds, workArea);
+  if (edge) {
+    collapseToEdge(edge, workArea);
+    return;
+  }
+  if (autoHideState.expandedByHover) {
+    autoHideState.expandedByHover = false;
+    if (autoHideState.leaveTimer) {
+      clearTimeout(autoHideState.leaveTimer);
+      autoHideState.leaveTimer = null;
+    }
+  }
+}
+
+function handleWindowMoved() {
+  if (autoHideState.moveTimer) {
+    clearTimeout(autoHideState.moveTimer);
+  }
+  autoHideState.moveTimer = setTimeout(() => {
+    autoHideState.moveTimer = null;
+    collapseIfDocked();
+  }, AUTO_HIDE_MOVE_SETTLE_DELAY);
+}
+
+function checkAutoHide() {
+  if (!mainWindow || mainWindow.isDestroyed() || mainWindow.isMinimized()) return;
+
+  const cursor = screen.getCursorScreenPoint();
+  const currentBounds = mainWindow.getBounds();
+  if (autoHideState.collapsed) {
+    if (autoHideState.animating) return;
+    const hoverZone = getHoverZoneRect(currentBounds, autoHideState.edge);
+    if (!hoverZone) return;
+    if (!autoHideState.hoverArmed) {
+      autoHideState.hoverArmed = !pointInRect(cursor, hoverZone);
+      return;
+    }
+    if (pointInRect(cursor, hoverZone)) {
+      expandFromEdge();
+    }
+    return;
+  }
+
+  if (!autoHideState.expandedByHover || autoHideState.animating || Date.now() < autoHideState.ignoreMovesUntil) return;
+  if (pointInRect(cursor, currentBounds)) {
+    if (autoHideState.leaveTimer) {
+      clearTimeout(autoHideState.leaveTimer);
+      autoHideState.leaveTimer = null;
+    }
+    return;
+  }
+  if (!autoHideState.leaveTimer) {
+    autoHideState.leaveTimer = setTimeout(() => {
+      autoHideState.leaveTimer = null;
+      const cursor = screen.getCursorScreenPoint();
+      const bounds = mainWindow && !mainWindow.isDestroyed() ? mainWindow.getBounds() : null;
+      if (!autoHideState.expandedByHover || !bounds || pointInRect(cursor, bounds)) {
+        return;
+      }
+      const workArea = screen.getDisplayMatching(bounds).workArea;
+      if (getDockedEdge(bounds, workArea) === autoHideState.edge) {
+        collapseToEdge(autoHideState.edge, workArea);
+      } else {
+        autoHideState.expandedByHover = false;
+      }
+    }, AUTO_HIDE_LEAVE_DELAY);
+  }
+}
+
+setInterval(checkAutoHide, 150);
+
 const gotTheLock = app.requestSingleInstanceLock();
 
 function checkForUpdates() {
@@ -154,6 +376,9 @@ const createWindow = () => {
         mainWindow.focus();
       }
     });
+
+    mainWindow.on('move', handleWindowMoved);
+    mainWindow.on('moved', handleWindowMoved);
 
     ipcMain.on('set-always-on-top', (event, enable) => {
       const webContents = event.sender;
