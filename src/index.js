@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, safeStorage, Notification, dialog, shell } = require('electron');
+const { app, BrowserWindow, ipcMain, safeStorage, Notification, dialog, shell, screen } = require('electron');
 const { autoUpdater } = require('electron-updater');
 const path = require('path');
 const fs = require('fs');
@@ -80,6 +80,139 @@ let mainWindow = null;
 let updateCheckInProgress = false;
 let updateDownloaded = false;
 
+// --- Auto-hide near screen edge
+const AUTO_HIDE_EDGE_THRESHOLD = 10; // px: how close to an edge counts as "docked"
+const AUTO_HIDE_SLIVER_SIZE = 4; // px: visible sliver when collapsed
+const AUTO_HIDE_HOVER_ZONE = 8; // px: hover trigger zone when collapsed
+const AUTO_HIDE_HOVER_SUPPRESS = 500; // ms: ignore hover-to-expand right after collapsing, so the cursor can clear the sliver first
+const AUTO_HIDE_ANIM_DURATION = 220; // ms
+const AUTO_HIDE_ANIM_FPS = 60;
+const autoHideState = {
+  collapsed: false,
+  animating: false,
+  edge: null, // 'left' | 'right' | 'top' | 'bottom'
+  expandedBounds: null,
+  animTimer: null,
+  suppressHoverUntil: 0
+};
+
+function easeInOutQuad(t) {
+  return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+}
+
+function animateWindowBounds(from, to, onDone) {
+  if (autoHideState.animTimer) {
+    clearInterval(autoHideState.animTimer);
+    autoHideState.animTimer = null;
+  }
+  autoHideState.animating = true;
+  const stepMs = 1000 / AUTO_HIDE_ANIM_FPS;
+  const startTime = Date.now();
+
+  autoHideState.animTimer = setInterval(() => {
+    if (!mainWindow || mainWindow.isDestroyed()) {
+      clearInterval(autoHideState.animTimer);
+      autoHideState.animTimer = null;
+      autoHideState.animating = false;
+      return;
+    }
+    const elapsed = Date.now() - startTime;
+    const progress = Math.min(1, elapsed / AUTO_HIDE_ANIM_DURATION);
+    const eased = easeInOutQuad(progress);
+    mainWindow.setBounds({
+      x: Math.round(from.x + (to.x - from.x) * eased),
+      y: Math.round(from.y + (to.y - from.y) * eased),
+      width: Math.round(from.width + (to.width - from.width) * eased),
+      height: Math.round(from.height + (to.height - from.height) * eased)
+    });
+    if (progress >= 1) {
+      clearInterval(autoHideState.animTimer);
+      autoHideState.animTimer = null;
+      autoHideState.animating = false;
+      if (onDone) onDone();
+    }
+  }, stepMs);
+}
+
+function pointInRect(point, rect) {
+  return point.x >= rect.x && point.x <= rect.x + rect.width &&
+    point.y >= rect.y && point.y <= rect.y + rect.height;
+}
+
+function getDockedEdge(bounds, workArea) {
+  const distances = {
+    left: Math.abs(bounds.x - workArea.x),
+    right: Math.abs((workArea.x + workArea.width) - (bounds.x + bounds.width)),
+    top: Math.abs(bounds.y - workArea.y),
+    bottom: Math.abs((workArea.y + workArea.height) - (bounds.y + bounds.height))
+  };
+  const closest = Object.keys(distances).reduce((a, b) => distances[a] <= distances[b] ? a : b);
+  return distances[closest] <= AUTO_HIDE_EDGE_THRESHOLD ? closest : null;
+}
+
+function collapseToEdge(edge) {
+  if (!mainWindow || mainWindow.isDestroyed() || autoHideState.animating) return;
+  autoHideState.expandedBounds = mainWindow.getBounds();
+  autoHideState.edge = edge;
+  const bounds = autoHideState.expandedBounds;
+  let newBounds = { ...bounds };
+  if (edge === 'left') newBounds.x = bounds.x - bounds.width + AUTO_HIDE_SLIVER_SIZE;
+  else if (edge === 'right') newBounds.x = bounds.x + bounds.width - AUTO_HIDE_SLIVER_SIZE;
+  else if (edge === 'top') newBounds.y = bounds.y + bounds.height + AUTO_HIDE_SLIVER_SIZE;
+  else if (edge === 'bottom') newBounds.y = bounds.y + bounds.height - AUTO_HIDE_SLIVER_SIZE;
+  autoHideState.collapsed = true;
+  autoHideState.suppressHoverUntil = Date.now() + AUTO_HIDE_HOVER_SUPPRESS;
+  animateWindowBounds(bounds, newBounds);
+}
+
+function expandFromEdge() {
+  if (!mainWindow || mainWindow.isDestroyed() || !autoHideState.expandedBounds || autoHideState.animating) return;
+  const from = mainWindow.getBounds();
+  const to = autoHideState.expandedBounds;
+  autoHideState.collapsed = false;
+  animateWindowBounds(from, to);
+}
+
+function getHoverZoneRect(bounds, edge) {
+  switch (edge) {
+    case 'left': return { x: bounds.x, y: bounds.y, width: AUTO_HIDE_HOVER_ZONE, height: bounds.height };
+    case 'right': return { x: bounds.x + bounds.width - AUTO_HIDE_HOVER_ZONE, y: bounds.y, width: AUTO_HIDE_HOVER_ZONE, height: bounds.height };
+    case 'top': return { x: bounds.x, y: bounds.y, width: bounds.width, height: AUTO_HIDE_HOVER_ZONE };
+    case 'bottom': return { x: bounds.x, y: bounds.y + bounds.height - AUTO_HIDE_HOVER_ZONE, width: bounds.width, height: AUTO_HIDE_HOVER_ZONE };
+    default: return null;
+  }
+}
+
+// Triggered by the OS after the user finishes dragging the window (mouse released),
+// not for programmatic bounds changes such as our own collapse/expand animation.
+function handleWindowMoved() {
+  if (autoHideState.animating || autoHideState.collapsed) return;
+  if (!mainWindow || mainWindow.isDestroyed()) return;
+
+  const bounds = mainWindow.getBounds();
+  const workArea = screen.getDisplayMatching(bounds).workArea;
+  const edge = getDockedEdge(bounds, workArea);
+  if (edge) {
+    collapseToEdge(edge);
+  }
+}
+
+// Poll the cursor purely to detect hovering the collapsed sliver so it can expand back out.
+function checkAutoHide() {
+  if (!autoHideState.collapsed || autoHideState.animating) return;
+  if (!mainWindow || mainWindow.isDestroyed() || mainWindow.isMinimized()) return;
+  if (Date.now() < autoHideState.suppressHoverUntil) return;
+
+  const cursor = screen.getCursorScreenPoint();
+  const currentBounds = mainWindow.getBounds();
+  const hoverZone = getHoverZoneRect(currentBounds, autoHideState.edge);
+  if (hoverZone && pointInRect(cursor, hoverZone)) {
+    expandFromEdge();
+  }
+}
+
+setInterval(checkAutoHide, 150);
+
 const gotTheLock = app.requestSingleInstanceLock();
 
 function checkForUpdates() {
@@ -154,6 +287,8 @@ const createWindow = () => {
         mainWindow.focus();
       }
     });
+
+    mainWindow.on('moved', handleWindowMoved);
 
     ipcMain.on('set-always-on-top', (event, enable) => {
       const webContents = event.sender;
