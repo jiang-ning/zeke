@@ -82,21 +82,25 @@ let updateCheckInProgress = false;
 let updateDownloaded = false;
 
 // --- Auto-hide near screen edge
-const AUTO_HIDE_EDGE_THRESHOLD = 10; // px: how close to an edge counts as "docked"
+const AUTO_HIDE_MAGNET_GAP = 10; // px: edge snap and restored-window gap
 const AUTO_HIDE_SLIVER_SIZE = 4; // px: visible sliver when collapsed
 const AUTO_HIDE_HOVER_ZONE = 8; // px: hover trigger zone when collapsed
 const AUTO_HIDE_ANIM_DURATION = 220; // ms
 const AUTO_HIDE_ANIM_FPS = 60;
 const AUTO_HIDE_MOVE_SETTLE_DELAY = 150; // ms
+const AUTO_HIDE_LEAVE_DELAY = 250; // ms
 const autoHideState = {
   collapsed: false,
   animating: false,
   edge: null, // 'left' | 'right' | 'top' | 'bottom'
   expandedBounds: null,
+  workArea: null,
   animTimer: null,
   moveTimer: null,
+  leaveTimer: null,
   ignoreMovesUntil: 0,
-  hoverArmed: false
+  hoverArmed: false,
+  expandedByHover: false
 };
 
 function easeInOutQuad(t) {
@@ -143,14 +147,32 @@ function pointInRect(point, rect) {
 }
 
 function getDockedEdge(bounds, workArea) {
-  const distances = {
-    left: Math.abs(bounds.x - workArea.x),
-    right: Math.abs((workArea.x + workArea.width) - (bounds.x + bounds.width)),
-    top: Math.abs(bounds.y - workArea.y),
-    bottom: Math.abs((workArea.y + workArea.height) - (bounds.y + bounds.height))
-  };
-  const closest = Object.keys(distances).reduce((a, b) => distances[a] <= distances[b] ? a : b);
-  return distances[closest] <= AUTO_HIDE_EDGE_THRESHOLD ? closest : null;
+  const edges = [];
+  if (bounds.x <= workArea.x + AUTO_HIDE_MAGNET_GAP) edges.push('left');
+  if (bounds.x + bounds.width >= workArea.x + workArea.width - AUTO_HIDE_MAGNET_GAP) edges.push('right');
+  if (bounds.y <= workArea.y + AUTO_HIDE_MAGNET_GAP) edges.push('top');
+  if (bounds.y + bounds.height >= workArea.y + workArea.height - AUTO_HIDE_MAGNET_GAP) edges.push('bottom');
+  return edges[0] || null;
+}
+
+function clamp(value, min, max) {
+  return Math.min(Math.max(value, min), Math.max(min, max));
+}
+
+function getExpandedBounds(bounds, workArea, edge) {
+  const expandedBounds = { ...bounds };
+  const minX = workArea.x + AUTO_HIDE_MAGNET_GAP;
+  const maxX = workArea.x + workArea.width - bounds.width - AUTO_HIDE_MAGNET_GAP;
+  const minY = workArea.y + AUTO_HIDE_MAGNET_GAP;
+  const maxY = workArea.y + workArea.height - bounds.height - AUTO_HIDE_MAGNET_GAP;
+
+  expandedBounds.x = clamp(bounds.x, minX, maxX);
+  expandedBounds.y = clamp(bounds.y, minY, maxY);
+  if (edge === 'left') expandedBounds.x = minX;
+  else if (edge === 'right') expandedBounds.x = maxX;
+  else if (edge === 'top') expandedBounds.y = minY;
+  else if (edge === 'bottom') expandedBounds.y = maxY;
+  return expandedBounds;
 }
 
 function getCollapsedBounds(bounds, workArea, edge) {
@@ -164,14 +186,21 @@ function getCollapsedBounds(bounds, workArea, edge) {
 
 function collapseToEdge(edge, workArea) {
   if (!mainWindow || mainWindow.isDestroyed() || autoHideState.animating) return;
-  autoHideState.expandedBounds = mainWindow.getBounds();
+  const currentBounds = mainWindow.getBounds();
+  autoHideState.expandedBounds = getExpandedBounds(currentBounds, workArea, edge);
+  autoHideState.workArea = workArea;
   autoHideState.edge = edge;
   const bounds = autoHideState.expandedBounds;
   const newBounds = getCollapsedBounds(bounds, workArea, edge);
   autoHideState.collapsed = true;
   autoHideState.hoverArmed = false;
+  autoHideState.expandedByHover = false;
+  if (autoHideState.leaveTimer) {
+    clearTimeout(autoHideState.leaveTimer);
+    autoHideState.leaveTimer = null;
+  }
   autoHideState.ignoreMovesUntil = Date.now() + AUTO_HIDE_ANIM_DURATION + (AUTO_HIDE_MOVE_SETTLE_DELAY * 2);
-  animateWindowBounds(bounds, newBounds);
+  animateWindowBounds(currentBounds, newBounds);
 }
 
 function expandFromEdge() {
@@ -181,7 +210,9 @@ function expandFromEdge() {
   autoHideState.collapsed = false;
   autoHideState.hoverArmed = false;
   autoHideState.ignoreMovesUntil = Date.now() + AUTO_HIDE_ANIM_DURATION + (AUTO_HIDE_MOVE_SETTLE_DELAY * 2);
-  animateWindowBounds(from, to);
+  animateWindowBounds(from, to, () => {
+    autoHideState.expandedByHover = true;
+  });
 }
 
 function getHoverZoneRect(bounds, edge) {
@@ -217,19 +248,41 @@ function handleWindowMoved() {
 }
 
 function checkAutoHide() {
-  if (!autoHideState.collapsed || autoHideState.animating) return;
   if (!mainWindow || mainWindow.isDestroyed() || mainWindow.isMinimized()) return;
 
   const cursor = screen.getCursorScreenPoint();
   const currentBounds = mainWindow.getBounds();
-  const hoverZone = getHoverZoneRect(currentBounds, autoHideState.edge);
-  if (!hoverZone) return;
-  if (!autoHideState.hoverArmed) {
-    autoHideState.hoverArmed = !pointInRect(cursor, hoverZone);
+  if (autoHideState.collapsed) {
+    if (autoHideState.animating) return;
+    const hoverZone = getHoverZoneRect(currentBounds, autoHideState.edge);
+    if (!hoverZone) return;
+    if (!autoHideState.hoverArmed) {
+      autoHideState.hoverArmed = !pointInRect(cursor, hoverZone);
+      return;
+    }
+    if (pointInRect(cursor, hoverZone)) {
+      expandFromEdge();
+    }
     return;
   }
-  if (pointInRect(cursor, hoverZone)) {
-    expandFromEdge();
+
+  if (!autoHideState.expandedByHover || autoHideState.animating || Date.now() < autoHideState.ignoreMovesUntil) return;
+  if (pointInRect(cursor, currentBounds)) {
+    if (autoHideState.leaveTimer) {
+      clearTimeout(autoHideState.leaveTimer);
+      autoHideState.leaveTimer = null;
+    }
+    return;
+  }
+  if (!autoHideState.leaveTimer) {
+    autoHideState.leaveTimer = setTimeout(() => {
+      autoHideState.leaveTimer = null;
+      const cursor = screen.getCursorScreenPoint();
+      const bounds = mainWindow && !mainWindow.isDestroyed() ? mainWindow.getBounds() : null;
+      if (autoHideState.expandedByHover && autoHideState.workArea && bounds && !pointInRect(cursor, bounds)) {
+        collapseToEdge(autoHideState.edge, autoHideState.workArea);
+      }
+    }, AUTO_HIDE_LEAVE_DELAY);
   }
 }
 
