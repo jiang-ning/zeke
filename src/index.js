@@ -1,76 +1,7 @@
-const { app, BrowserWindow, ipcMain, safeStorage, Notification, dialog, shell, screen } = require('electron');
-const { autoUpdater } = require('electron-updater');
+const { app, BrowserWindow, ipcMain, Notification, dialog, screen } = require('electron');
 const path = require('path');
 const fs = require('fs');
-const crypto = require('crypto');
-const { version } = require('os');
 const { setTimeout } = require('timers');
-
-const LICENSE_SITE_BASE_URL = 'https://inneroutliner.com';
-const LICENSE_SITE_LOCALE_PATTERN = /^[a-z]{2}(_[a-z]{2})?$/i;
-
-// License public key for offline verification (RSA 2048-bit)
-const LICENSE_PUBLIC_KEY = `-----BEGIN PUBLIC KEY-----
-MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAkGXZXMe245QkCyydlCja
-99OnzXAbgIyRmorBD12O0YFY3D88iT33MeO2lVmvxb5QxxUxuMDi4ZNWM+vqF1yB
-qgEWLGl2SNTk8nOO6xq5r/c9fcpOMM8pDCex6uxHQl5uHsrZvVKsJFgj13V9tCb9
-j8TDqs/LRzJcMSjtN9vRAITJcqaGjI1a7dQ1UXoSV8GNaWySc+FIhI8Wplgl+p1v
-DamBaKRaWjtXchCPAQSffjDcMeDrPAfVk4WJ+fzRD20igxkmbFIs5TiS10l6AVwo
-OO4MfFx18ATCO6q6jsrvilRXpQUIg1tD1WjLru5mMe6r45T5p/w/qkIRi7EDxVcC
-lwIDAQAB
------END PUBLIC KEY-----
-`;
-
-const LICENSE_FILE_PATH = path.join(app.getPath('userData'), 'license.dat');
-
-function saveLicenseToFile(encryptedBuffer) {
-  fs.writeFileSync(LICENSE_FILE_PATH, encryptedBuffer);
-}
-
-function loadLicenseFromFile() {
-  if (fs.existsSync(LICENSE_FILE_PATH)) {
-    return fs.readFileSync(LICENSE_FILE_PATH);
-  }
-  return null;
-}
-
-function deleteLicenseFile() {
-  if (fs.existsSync(LICENSE_FILE_PATH)) {
-    fs.unlinkSync(LICENSE_FILE_PATH);
-  }
-}
-
-function verifyLicense(licenseKey) {
-  try {
-    // License format: base64(JSON{name, email}) + '.' + base64(signature)
-    const parts = licenseKey.trim().split('.');
-    if (parts.length !== 2) {
-      return { valid: false, message: 'Invalid license format.'};
-    }
-
-    const payload = Buffer.from(parts[0], 'base64').toString('utf8');
-    const signature = Buffer.from(parts[1], 'base64');
-
-    const parsed = JSON.parse(payload);
-    if (!parsed.name || !parsed.email) {
-      return { valid: false, message: 'License missing required fields.'};
-    }
-
-    const verifier = crypto.createVerify('SHA256');
-    verifier.update(payload);
-    verifier.end();
-
-    const isValid = verifier.verify(LICENSE_PUBLIC_KEY, signature);
-
-    if (isValid) {
-      return { valid: true, name: parsed.name, email: parsed.email, message: 'License activated successfully.'};
-    } else {
-      return { valid: false, message: 'License signature verification failed.'};
-    }
-  } catch (e) {
-    return { valid: false, message: 'Invalid license key.'};
-  }
-}
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -78,8 +9,6 @@ if (require('electron-squirrel-startup')) {
 }
 
 let mainWindow = null;
-let updateCheckInProgress = false;
-let updateDownloaded = false;
 
 // --- Auto-hide near screen edge
 const AUTO_HIDE_MAGNET_GAP = 10; // px: edge snap and restored-window gap
@@ -304,50 +233,6 @@ setInterval(checkAutoHide, 150);
 
 const gotTheLock = app.requestSingleInstanceLock();
 
-function checkForUpdates() {
-  if (!app.isPackaged) {
-    return { status: 'development' };
-  }
-
-  autoUpdater.setFeedURL({
-    provider: 'github',
-    owner: 'jiang-ning',
-    name: 'inneroutliner'
-  });
-  autoUpdater.autoDownload = false;
-  autoUpdater.autoInstallOnAppQuit = false;
-  return autoUpdater.checkForUpdates();
-}
-
-function sendUpdateEvent(channel, payload) {
-  if (mainWindow && !mainWindow.isDestroyed()) {
-    mainWindow.webContents.send(channel, payload);
-  }
-}
-
-autoUpdater.on('update-available', (info) => {
-  sendUpdateEvent('update-available', { version: info.version });
-  autoUpdater.downloadUpdate().catch((error) => {
-    sendUpdateEvent('update-error', { message: error.message });
-  });
-});
-
-autoUpdater.on('update-not-available', () => {
-  updateCheckInProgress = false;
-  sendUpdateEvent('update-not-available');
-});
-
-autoUpdater.on('update-downloaded', (info) => {
-  updateCheckInProgress = false;
-  updateDownloaded = true;
-  sendUpdateEvent('update-downloaded', { version: info.version });
-});
-
-autoUpdater.on('error', (error) => {
-  updateCheckInProgress = false;
-  sendUpdateEvent('update-error', { message: error.message });
-});
-
 const createWindow = () => {
 
   if(!gotTheLock) {
@@ -384,33 +269,6 @@ const createWindow = () => {
       const webContents = event.sender;
       const win = BrowserWindow.fromWebContents(webContents);
       win.setAlwaysOnTop(enable,'screen-saver');
-    });
-
-    ipcMain.handle('check-for-updates', async () => {
-      if (!app.isPackaged) {
-        return { status: 'development' };
-      }
-      if (updateCheckInProgress) {
-        return { status: 'in-progress' };
-      }
-
-      updateCheckInProgress = true;
-      updateDownloaded = false;
-      try {
-        await checkForUpdates();
-        return { status: 'checking' };
-      } catch (error) {
-        updateCheckInProgress = false;
-        return { status: 'error', message: error.message };
-      }
-    });
-
-    ipcMain.handle('install-update', () => {
-      if (!updateDownloaded) {
-        return { status: 'not-ready' };
-      }
-      autoUpdater.quitAndInstall();
-      return { status: 'installing' };
     });
 
     // ipcMain.on('is-always-on-top', async (event) => {
@@ -468,60 +326,6 @@ const createWindow = () => {
       const webContents = event.sender;
       const win = BrowserWindow.fromWebContents(webContents);
       win.close();
-    });
-
-    // License IPC handlers
-    ipcMain.handle('license-activate', async (event, licenseKey) => {
-      const result = verifyLicense(licenseKey);
-      if (result.valid) {
-        // Encrypt and store license using OS-level encryption
-        if (safeStorage.isEncryptionAvailable()) {
-          const encrypted = safeStorage.encryptString(licenseKey);
-          saveLicenseToFile(encrypted);
-        } else {
-          // Fallback: store as-is (less secure but functional)
-          saveLicenseToFile(Buffer.from(licenseKey, 'utf8'));
-        }
-      }
-      return result;
-    });
-
-    ipcMain.handle('license-get', async () => {
-      const fileData = loadLicenseFromFile();
-      if (!fileData) {
-        return { valid: false, message: 'No license found.' };
-      }
-      try {
-        let licenseKey;
-        if (safeStorage.isEncryptionAvailable()) {
-          licenseKey = safeStorage.decryptString(fileData);
-        } else {
-          licenseKey = fileData.toString('uft8');
-        }
-        return verifyLicense(licenseKey);
-      } catch (e) {
-        return { valid: false, message: 'Failed to read stored license.' };
-      }
-    });
-
-    ipcMain.handle('license-remove', async () => {
-      deleteLicenseFile();
-      return { valid: false, message: 'License removed.'};
-    });
-
-    ipcMain.handle('open-checkout', async (event, locale) => {
-      try {
-        const safeLocale = LICENSE_SITE_LOCALE_PATTERN.test(locale || '') ? locale : 'en';
-        const checkoutUrl = new URL(`${LICENSE_SITE_BASE_URL}/${safeLocale}/license/index.html`);
-        // only ever open our own site's hosted domain
-        if (checkoutUrl.hostname !== 'inneroutliner.com') {
-          return { success: false, message: 'Checkout URL is not configured correctly.' };
-        }
-        await shell.openExternal(checkoutUrl.toString());
-        return { success: true };
-      } catch (e) {
-        return { success: false, message: 'Failed to open checkout page.' };
-      }
     });
 
     ipcMain.on('show-notification', (event, { title, body }) => {

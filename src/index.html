@@ -50,17 +50,10 @@
                   <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
                 </svg>
               </span>
-              <span class="badgePro btnNewList" title="The standard version limits the number of lists to 3, upgrade to the Pro version to unlock unlimited lists" data-lang-title="__badgePro_btnNewList_desc__">Pro</span>
               <input id="listAddName">
             </div>
           </div>
-          <div id="areaSettings" class="">
-            <div id="btnSettings_SE" title="Settings" data-lang-title="__settings__">
-              <svg xmlns="http://www.w3.org/2000/svg" class="settingsIcon_SE" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                <path d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 0 1 2.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 0 1 2.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 0 1 .872-2.105l.34-.1c1.4-.413 1.4-2.397 0-2.81l-.34-.1a1.464 1.464 0 0 1-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872l-.1-.34zM8 10.93a2.929 2.929 0 1 1 0-5.86 2.929 2.929 0 0 1 0 5.858z"/>
-              </svg>
-            </div>
-          </div>
+          <div id="areaSettings" class=""></div>
           <div id="btnSwitchNavbar" class="" title="Show / Hide Side Navigation" data-lang-title="__show_hide_side_nav__">
             <svg xmlns="http://www.w3.org/2000/svg" class="switcherIcon" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
               <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
@@ -123,7 +116,6 @@
                 <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
               </svg>
             </span>
-            <span class="badgePro btnNew" title="The standard version limits the number of tasks to 10, upgrade to the Pro version to unlock unlimited tasks" data-lang-title="__badgePro_btnNew_desc__">Pro</span>
           </div>
           <div id="areaPinNotes">
             <ul></ul>
@@ -137,17 +129,6 @@
               <div class="modal-section">
                 <div class="brand-container">
                   <span class="brand">InnerOutliner</span>
-                  <span class="edition">SE</span>
-                </div>
-                <div>
-                  <span>[ </span><span id="editionUpgrade" data-lang-innertext="__license__">LICENSE</span><span> ]</span>
-                  <div id="license-section" class="license-section">
-                    <textarea id="license-input" rows="3" data-lang-placeholder="__paste_license_key_here__" placeholder="Paste license key here ..."></textarea>
-                    <button id="btnBuyLicense" data-lang-innertext="__buy_license__">Buy License</button>
-                    <button id="btnLicenseActive" data-lang-innertext="__activate__">Activate</button>
-                    <button id="btnLicenseRemove" data-lang-innertext="__remove__">Remove</button>
-                    <div id="license-activate-message" style="display: none;"></div>
-                  </div>
                 </div>
               </div>
               <div class="modal-section">
@@ -211,18 +192,16 @@
                 <div class="modal-section-title" data-lang-innertext="__data_export__">Data Export</div>
                 <div class="modal-section-desc">
                   <span data-lang-innertext="__data_export_desc__">Click button to export all data into a CSV file.</span>
-                  <span class="badgePro" title="Upgrade to the Pro version to unlock this feature" data-lang-title="__badgePro_desc__">Pro</span>
                 </div>
-                <button id="btnExport" data-lang-innertext="__export__" disabled>Export</button>
+                <button id="btnExport" data-lang-innertext="__export__">Export</button>
               </div>
               <div class="modal-section">
                 <div class="modal-section-title" data-lang-innertext="__backup_and_restore__">Backup and Restore</div>
                 <div class="modal-section-desc">
                   <span data-lang-innertext="__backup_and_restore_desc__">Click button to backup and restore data.</span>
-                  <span class="badgePro" title="Upgrade to the Pro version to unlock this feature" data-lang-title="__badgePro_desc__">Pro</span>
                 </div>
-                <button id="btnBackup" data-lang-innertext="__backup__" disabled>Backup</button>
-                <button id="btnRestore" data-lang-innertext="__restore__" disabled>Restore</button>
+                <button id="btnBackup" data-lang-innertext="__backup__">Backup</button>
+                <button id="btnRestore" data-lang-innertext="__restore__">Restore</button>
                 <div id="restoreModeModal" class="restore-mode-modal" aria-live="polite">
                   <div class="restore-mode-dialog">
                     <div class="restore-mode-desc" data-lang-innertext="__restore_mode_desc__">Select how to apply imported backup data.</div>
@@ -245,10 +224,7 @@
               </div>
               <div class="modal-section">
                 <div class="modal-section-title" data-lang-innertext="__version__">Version</div>
-                <div class="modal-section-desc">1.17.0</div>
-                <div class="modal-section-desc" id="checkForUpdatesStatus" data-lang-innertext="__check_for_updates_desc__">Click button to check updates</div>
-                <button id="checkForUpdates" data-lang-innertext="__check_for_updates__">Check for Updates</button>
-                <button id="update" data-lang-innertext="__update__" style="display: none;">Update</button>
+                <div class="modal-section-desc">1.18.0</div>
               </div>
             </div>
           </div>

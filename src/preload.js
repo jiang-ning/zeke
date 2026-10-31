@@ -14,10 +14,6 @@ contextBridge.exposeInMainWorld('electronAPI', {
   close: () => ipcRenderer.send('close'),
   getBounds: () => ipcRenderer.invoke('get-bounds'),
   setBounds: (bounds) => ipcRenderer.send('set-bounds', bounds),
-  licenseActivate: (licenseKey) => ipcRenderer.invoke('license-activate', licenseKey),
-  licenseGet: () => ipcRenderer.invoke('license-get'),
-  licenseRemove: () => ipcRenderer.invoke('license-remove'),
-  openCheckout: (locale) => ipcRenderer.invoke('open-checkout', locale),
   showNotification: (title, body) => ipcRenderer.send('show-notification', { title, body }),
   syncReminders: (reminders) => ipcRenderer.send('sync-reminders', reminders),
   onReminderFired: (callback) => {
@@ -26,18 +22,4 @@ contextBridge.exposeInMainWorld('electronAPI', {
   saveFile: (defaultName, content) => ipcRenderer.invoke('save-file', { defaultName, content }),
   saveTextFile: (defaultName, content, filters) => ipcRenderer.invoke('save-text-file', { defaultName, content, filters }),
   openTextFile: (filters) => ipcRenderer.invoke('open-text-file', { filters }),
-  checkForUpdates: () => ipcRenderer.invoke('check-for-updates'),
-  installUpdate: () => ipcRenderer.invoke('install-update'),
-  onUpdateAvailable: (callback) => {
-    ipcRenderer.on('update-available', (_event, info) => callback(info));
-  },
-  onUpdateNotAvailable: (callback) => {
-    ipcRenderer.on('update-not-available', () => callback());
-  },
-  onUpdateDownloaded: (callback) => {
-    ipcRenderer.on('update-downloaded', (_event, info) => callback(info));
-  },
-  onUpdateError: (callback) => {
-    ipcRenderer.on('update-error', (_event, error) => callback(error));
-  },
 });

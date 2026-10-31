@@ -11,55 +11,6 @@ var Zeke = {
 var Zeke_ChartTimeline;
 var sortableInstances = [];
 var neonoteDb = null;
-const SE_MAX_LISTS = 3;
-const SE_MAX_NOTES = 10;
-
-function isProEdition() {
-  return document.querySelector('.edition')?.innerText === 'Pro';
-}
-
-function updateSeNoteCreationState() {
-  const btnNew = document.getElementById('btnNew');
-  const txtNew = document.getElementById('txtNew');
-  const btnNewBadgePro = document.querySelector('.badgePro.btnNew');
-  const totalNotes = document.querySelectorAll('#areaPinNotes ul li, #areaListNotes ul li, #areaListNotes .noteSubList li, #areaPinNotes .noteSubList li').length;
-  const isSeMaxNotesReached = !isProEdition() && totalNotes >= SE_MAX_NOTES;
-
-  if (btnNew) {
-    btnNew.style.display = isSeMaxNotesReached ? 'none' : '';
-  }
-  if (txtNew) {
-    txtNew.disabled = isSeMaxNotesReached;
-  }
-  if (btnNewBadgePro) {
-    btnNewBadgePro.style.display = isSeMaxNotesReached ? '' : 'none';
-  }
-
-  return isSeMaxNotesReached;
-}
-
-function updateSeListCreationState() {
-  const listAddNameInput = document.getElementById('listAddName');
-  const btnNewList = document.getElementById('btnNewList');
-  const btnNewListBadgePro = document.querySelector('.badgePro.btnNewList');
-  const currentListCount = document.querySelectorAll('#areaListLists ul li').length;
-  const isSeMaxListReached = !isProEdition() && currentListCount >= SE_MAX_LISTS;
-
-  if (isSeMaxListReached && listAddNameInput && btnNewList) {
-    listAddNameInput.classList.remove('active');
-    listAddNameInput.value = '';
-    listAddNameInput.blur();
-    btnNewList.classList.add('hide');
-  } else if (btnNewList) {
-    btnNewList.classList.remove('hide');
-  }
-
-  if (btnNewListBadgePro) {
-    btnNewListBadgePro.style.display = isSeMaxListReached ? '' : 'none';
-  }
-
-  return isSeMaxListReached;
-}
 
 // Create object store and define its structure
 request.onupgradeneeded = function(event) {
@@ -204,7 +155,6 @@ request.onsuccess = async function(event) {
       // calculate usage
       const usage = (JSON.stringify(notes).length / 1024).toFixed(2);
       document.getElementById('db-usage').innerText = usage;
-      updateSeNoteCreationState();
     };
     
     request.onerror = function() {
@@ -280,7 +230,6 @@ request.onsuccess = async function(event) {
       currentOrder ? currentOrder = currentOrder.split(',') : currentOrder = [];
       currentOrder.push(newList.target.result);
       localStorage.setItem('listOrder', currentOrder);
-      updateSeListCreationState();
       console.log('List added successfully');
     };
     
@@ -337,7 +286,6 @@ request.onsuccess = async function(event) {
         }
 
         initListDnD();
-        updateSeListCreationState();
       }
     };
     
@@ -362,9 +310,6 @@ request.onsuccess = async function(event) {
   }
 
   function addNewList() {
-    if (updateSeListCreationState()) {
-      return;
-    }
     const listName = document.getElementById('listAddName').value.trim();
     if(listName) {
       addList({name: listName});
@@ -454,7 +399,6 @@ request.onsuccess = async function(event) {
         localStorage.setItem('listOrder', newOrder);
         console.log(newOrder);
         listItem.remove();
-        updateSeListCreationState();
         deleteList(id);
       }
     });
@@ -737,7 +681,6 @@ request.onsuccess = async function(event) {
       noteItem.remove();
       updateSortIndexes(area);
       deleteNote(targetId);
-      updateSeNoteCreationState();
     });
 
     noteCollapse.addEventListener('click', (e) => {
@@ -941,7 +884,6 @@ request.onsuccess = async function(event) {
       subNoteItem.remove();
       updateSortIndexes(area);
       deleteNote(targetId);
-      updateSeNoteCreationState();
 
       // If parent has no more subnotes, hide collapse icon and remove parent status
       const parentEl = document.querySelector(`#panelNote li[data-id="${subnote.parent}"]`);
@@ -1613,10 +1555,6 @@ request.onsuccess = async function(event) {
   }
 
   document.getElementById('btnNewList').addEventListener('click', () => {
-    if (updateSeListCreationState()) {
-      return;
-    }
-
     document.getElementById('btnNewList').classList.add('hide');
     document.getElementById('listAddName').classList.add('active');
     document.getElementById('listAddName').value = '';
@@ -1632,7 +1570,6 @@ request.onsuccess = async function(event) {
     document.getElementById('btnNewList').classList.remove('hide');
     document.getElementById('listAddName').classList.remove('active');
     document.getElementById('listAddName').value = '';
-    updateSeListCreationState();
   }, true);
   document.getElementById('panelsContainer').addEventListener('click', (e) => {
     if(e.target.readOnly || e.target.nodeName !== 'INPUT') {
@@ -1677,45 +1614,24 @@ request.onsuccess = async function(event) {
 
 };
 
-function restructureGrid(pro = false) {
-  const panelContainer = document.getElementById('panelsContainer');
-  const rememberedGrid = localStorage.getItem('grid-template-columns') || (pro ? '50px 100px 10px 1fr' : '0 100px 10px 1fr');
+function restructureGrid() {
+  const panelsContainer = document.getElementById('panelsContainer');
+  const rememberedGrid = localStorage.getItem('grid-template-columns') || '50px 100px 10px 1fr';
   const listOpened = JSON.parse(localStorage.getItem('listOpened'));
   let rememberedGridArray = rememberedGrid.split(' ');
 
-  // comtiability with old version
+  // compatibility with old version
   if (rememberedGridArray.length < 4) {
-    rememberedGridArray.unshift(pro ? '50px' : '0');
-  }
-  if (!pro && (rememberedGridArray[0] !== '0px' || rememberedGridArray[0] !== '0')) {
-    rememberedGridArray[0] = '0';
+    rememberedGridArray.unshift('50px');
   }
 
   panelsContainer.style.gridTemplateColumns = rememberedGridArray[0] + ' ' + (listOpened ? rememberedGridArray[1] + ' 10px' : '0 0') + ' 1fr';
   localStorage.setItem('grid-template-columns', rememberedGridArray[0] + ' ' + rememberedGridArray[1] + ' 10px 1fr');
-
-  if (pro) {
-    btnSwitchNavbar.style.display = 'block';
-    btnSettings_SE.style.display = 'none';
-  } else {
-    btnSwitchNavbar.style.display = 'none';
-    btnSettings_SE.style.display = 'block';
-  }
 }
 
 function initGrid() {
 
-  let isPro = false;
-
-  // Check license status and adjust grid accordingly
-  if (window.electronAPI && window.electronAPI.licenseGet) {
-    window.electronAPI.licenseGet().then(result => {
-      restructureGrid(result.valid);
-      isPro = result.valid;
-    });
-  } else {
-    restructureGrid(isPro);
-  }
+  restructureGrid();
 
   const gutter = document.getElementById('gutter');
   const panelList = document.getElementById('panelList');
@@ -1781,7 +1697,6 @@ function initModalSettings() {
   const themes = document.querySelectorAll('.themeSelection');
   const modes = document.querySelectorAll('.modeSelection');
   const btnSettings = document.getElementById('btnSettings');
-  const btnSettings_SE = document.getElementById('btnSettings_SE');
   const btnReport = document.getElementById('btnReport');
   const btnTask = document.getElementById('btnTask');
   const panelNote = document.getElementById('panelNote');
@@ -1792,7 +1707,6 @@ function initModalSettings() {
   const btnExport = document.getElementById('btnExport');
   const btnReset = document.getElementById('btnReset');
   const clear = document.getElementById('clear');
-  const txtUpgrade = document.getElementById('editionUpgrade');
   const opacity = localStorage.getItem('opacity') || '100';
   const rememberedLanguage = localStorage.getItem('language') || 'en';
   const btnBackup = document.getElementById('btnBackup');
@@ -1803,11 +1717,6 @@ function initModalSettings() {
   const restoreModeReplace = document.getElementById('restoreModeReplace');
   const restoreModeCancel = document.getElementById('restoreModeCancel');
   const rememberedTheme = localStorage.getItem('theme') || 'origin-theme-light';
-
-  btnExport.disabled = true;
-  btnBackup.disabled = true;
-  btnRestore.disabled = true;
-  setBadgeProVisibility(true);
 
   btnSettings.addEventListener('click', () => {
     const activedList = document.querySelector('#areaListLists input.active');
@@ -1832,27 +1741,6 @@ function initModalSettings() {
       activedList.classList.add('hidden');
       btnSettings.classList.add('active');
       panelsContainer.style.gridTemplateColumns = '50px 0 0 1fr';
-    }
-  });
-
-  btnSettings_SE.addEventListener('click', () => {
-    const activedList = document.querySelector('#areaListLists input.active');
-
-    if(modalSettings.classList.contains('open')) {
-      panelNote.classList.remove('showModal');
-      modalSettings.classList.remove('open');
-      activedList.classList.remove('hidden');
-      btnSettings_SE.classList.remove('active');
-      btnTask.classList.add('active');
-      activedList.click();
-    } else {
-      if(!modalReport.classList.contains('open')) {
-        btnTask.classList.add('active');
-      }
-      panelNote.classList.add('showModal');
-      modalSettings.classList.add('open');
-      activedList.classList.add('hidden');
-      btnSettings_SE.classList.add('active');
     }
   });
 
@@ -2095,18 +1983,6 @@ function initModalSettings() {
     });
   }
 
-  function setBadgeProVisibility(isPro) {
-    document.querySelectorAll('.badgePro').forEach((badge) => {
-      if (badge.classList.contains('btnNewList') || badge.classList.contains('btnNew')) {
-        return;
-      }
-      badge.style.display = isPro ? 'none' : '';
-    });
-
-    updateSeListCreationState();
-    updateSeNoteCreationState();
-  }
-
   btnExport.addEventListener('click', (e) => {
     const dbRequest = indexedDB.open('neonote', 1);
     dbRequest.onsuccess = function(event) {
@@ -2291,178 +2167,6 @@ function initModalSettings() {
     window.indexedDB.deleteDatabase('neonote');
     location.reload();
   });
-
-  txtUpgrade.addEventListener('click', () => {
-    document.getElementById('license-section').classList.toggle('show');
-  });
-
-  // License activation
-  const btnLicenseActive = document.getElementById('btnLicenseActive');
-  const btnLicenseRemove = document.getElementById('btnLicenseRemove');
-  const btnBuyLicense = document.getElementById('btnBuyLicense');
-  const licenseInput = document.getElementById('license-input');
-  const checkForUpdatesBtn = document.getElementById('checkForUpdates');
-  const updateBtn = document.getElementById('update');
-  const checkForUpdatesStatus = document.getElementById('checkForUpdatesStatus');
-
-  if (updateBtn) {
-    updateBtn.style.display = 'none';
-  }
-
-  if (checkForUpdatesBtn && updateBtn && window.electronAPI && window.electronAPI.checkForUpdates) {
-    checkForUpdatesBtn.addEventListener('click', async () => {
-      checkForUpdatesBtn.disabled = true;
-      checkForUpdatesStatus.innerText = translate('__checking_for_updates__') || 'Checking for updates...';
-      const result = await window.electronAPI.checkForUpdates();
-      if (result.status === 'development') {
-        checkForUpdatesBtn.disabled = false;
-        checkForUpdatesStatus.innerText = translate('__update_check_development__') || 'Update checks are disabled in development mode.';
-      } else if (result.status === 'in-progress') {
-        checkForUpdatesStatus.innerText = translate('__update_check_in_progress__') || 'Already checking for updates...';
-      } else if (result.status === 'error') {
-        checkForUpdatesBtn.disabled = false;
-        checkForUpdatesStatus.innerText = translate('__update_check_failed__') || 'Failed to check for updates.';
-      }
-    });
-
-    window.electronAPI.onUpdateAvailable(() => {
-      checkForUpdatesBtn.disabled = true;
-      const version = info && info.version ? ` (v${info.version})` : '';
-      checkForUpdatesStatus.innerText = (translate('__update_available__') || 'New version found, downloading...') + version;
-    });
-
-    window.electronAPI.onUpdateNotAvailable(() => {
-      checkForUpdatesBtn.disabled = false;
-      checkForUpdatesStatus.innerText = translate('__no_update_available__') || 'Up to date';
-    });
-
-    window.electronAPI.onUpdateDownloaded((info) => {
-      checkForUpdatesBtn.disabled = false;
-      updateBtn.style.display = 'inline-block';
-      const version = info && info.version ? ` (v${info.version})` : '';
-      checkForUpdatesStatus.innerText = (translate('__update_ready__') || 'Update downloaded, ready to install.') + version;
-    });
-
-    window.electronAPI.onUpdateError(() => {
-      checkForUpdatesBtn.disabled = false;
-      checkForUpdatesStatus.innerText = translate('__update_check_failed__') || 'Failed to check for updates.';
-    });
-
-    updateBtn.addEventListener('click', async () => {
-      updateBtn.disabled = true;
-      await window.electronAPI.installUpdate();
-    });
-  }
-
-  if (btnBuyLicense && window.electronAPI && window.electronAPI.openCheckout) {
-    btnBuyLicense.addEventListener('click', async () => {
-      const currentLanguage = localStorage.getItem('language') || 'en';
-      const siteLocale = (Languages[currentLanguage] && Languages[currentLanguage].locale) || currentLanguage;
-      await window.electronAPI.openCheckout(siteLocale);
-    })
-  }
-
-  // Load stored license on startup
-  if (window.electronAPI && window.electronAPI.licenseGet) {
-    window.electronAPI.licenseGet().then(result => {
-      if (result.valid) {
-        document.querySelector('.edition').innerText = 'Pro';
-        licenseInput.value = '';
-        licenseInput.placeholder = 'Licensed to ' + result.name + ' (' + result.email + ')';
-        btnLicenseActive.style.display = 'none';
-        btnLicenseRemove.style.display = 'inline-block';
-        if (btnBuyLicense) btnBuyLicense.style.display = 'none';
-        btnExport.disabled = false;
-        btnBackup.disabled = false;
-        btnRestore.disabled = false;
-        setBadgeProVisibility(true);
-        restructureGrid(true);
-      } else {
-        document.querySelector('.edition').innerText = 'SE';
-        btnLicenseActive.style.display = 'inline-block';
-        btnLicenseRemove.style.display = 'none';
-        if (btnBuyLicense) btnBuyLicense.style.display = 'inline-block';
-        btnExport.disabled = true;
-        btnBackup.disabled = true;
-        btnRestore.disabled = true;
-        setBadgeProVisibility(false);
-        restructureGrid(false);
-      }
-    });
-
-    btnLicenseActive.addEventListener('click', async () => {
-      const licenseKey = licenseInput.value.trim();
-      const activateMessage = document.getElementById('license-activate-message');
-      if (!licenseKey) {
-        return;
-      }
-      const result = await window.electronAPI.licenseActivate(licenseKey);
-      if (result.valid) {
-        const rememberedGrid = localStorage.getItem('grid-template-columns') || '50px 100px 10px 1fr';
-        const rememberedGridArray = rememberedGrid.split(' ');
-
-        document.querySelector('.edition').innerText = 'Pro';
-        licenseInput.value = '';
-        licenseInput.placeholder = 'Licensed to ' + result.name + ' (' + result.email + ')';
-        btnLicenseActive.style.display = 'none';
-        btnLicenseRemove.style.display = 'inline-block';
-        if (btnBuyLicense) btnBuyLicense.style.display = 'none';
-        btnExport.disabled = false;
-        btnBackup.disabled = false;
-        btnRestore.disabled = false;
-        btnSettings_SE.style.display = 'none';
-        btnSwitchNavbar.style.display = 'block';
-        setBadgeProVisibility(true);
-
-        if (rememberedGridArray[0] === '0px' || rememberedGridArray[0] === '0') {
-          // first time activation from SE to Pro, open the navbar
-          rememberedGridArray[0] = '50px';
-          const newGrid = rememberedGridArray.join(' ');
-          panelsContainer.style.gridTemplateColumns = newGrid;
-          localStorage.setItem('grid-template-columns', newGrid);
-        } else {
-          restructureGrid(true);
-        }
-
-        activateMessage.innerText = translate('__license_activation_success__');
-        activateMessage.classList.remove('error');
-        activateMessage.classList.add('success');
-        activateMessage.style.display = 'block';
-        
-      } else {
-        activateMessage.innerText = result.message || translate('__license_activation_failed__');
-        activateMessage.classList.remove('success');
-        activateMessage.classList.add('error');
-        activateMessage.style.display = 'block';
-      }
-    });
-
-    btnLicenseRemove.addEventListener('click', async () => {
-      const result = await window.electronAPI.licenseRemove();
-      document.querySelector('.edition').innerText = 'SE';
-      licenseInput.placeholder = 'Paste License Key Here ...';
-      btnLicenseActive.style.display = 'inline-block';
-      btnLicenseRemove.style.display = 'none';
-      if (btnBuyLicense) btnBuyLicense.style.display = 'inline-block';
-      btnExport.disabled = true;
-      btnBackup.disabled = true;
-      btnRestore.disabled = true;
-      setBadgeProVisibility(false);
-      restructureGrid(false);
-    });
-  } else {
-    // No electronAPI available, treat as unlicensed
-    document.querySelector('.edition').innerText = 'SE';
-    btnLicenseActive.style.display = 'inline-block';
-    btnLicenseRemove.style.display = 'none';
-    if (btnBuyLicense) btnBuyLicense.style.display = 'inline-block';
-    btnExport.disabled = true;
-    btnBackup.disabled = true;
-    btnRestore.disabled = true;
-    setBadgeProVisibility(false);
-    restructureGrid(false);
-  }
-  
 }
 
 function initModalReport() {
@@ -2649,28 +2353,14 @@ function initTitlebar() {
   btnSidebar.addEventListener('click', (e) => {
     let panelsContainer = document.getElementById('panelsContainer');
     const currentGrid = panelsContainer.style.gridTemplateColumns.split(' ');
-    const proEdition = document.querySelector('.edition').innerText === 'Pro' ? true : false;
-    const rememberedGrid = localStorage.getItem('grid-template-columns') || (proEdition ? '50px 100px 10px 1fr' : '0 100px 10px 1fr');
-    const rememberedGridArray = rememberedGrid.split(' ');
+    const rememberedGrid = localStorage.getItem('grid-template-columns') || '50px 100px 10px 1fr';
     let currentListGrid = currentGrid[1];
-
-    // Update legacy se edition
-    if (rememberedGridArray.length === 3) {
-      currentListGrid = currentGrid[0];
-      rememberedGridArray.unshift('0px');
-      localStorage.setItem('grid-template-columns', rememberedGridArray.join(' '));
-    }
-
-    // Update legacy pro edition
-    if (!proEdition && rememberedGridArray.length === 4 && (currentGrid[0] !== '0px' || currentGrid[0] !== '0')) {
-      rememberedGrid[0] = '0px';
-    }
 
     if(currentListGrid == '0px') {
       panelsContainer.style.gridTemplateColumns = rememberedGrid;
       localStorage.setItem('listOpened', true);
     } else {
-      panelsContainer.style.gridTemplateColumns = proEdition ? currentGrid[0] + ' 0px 0px 1fr' : '0 0px 0px 1fr';
+      panelsContainer.style.gridTemplateColumns = currentGrid[0] + ' 0px 0px 1fr';
       localStorage.setItem('grid-template-columns', rememberedGrid); // remember previouse size
       localStorage.setItem('listOpened', false);
     }
