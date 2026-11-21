@@ -1,6 +1,6 @@
 # Change Log
 
-### v1.18.0
+### v1.19.0
 ##### 2026-11-21
 - New Feature: Board
 - Improvement: New brand logo
