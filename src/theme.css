@@ -8,7 +8,9 @@
 [class^="theme"] input[type='checkbox'],
 [class^="theme"] #areaListNotes input[type='text'],
 [class^="theme"] #areaPinNotes input[type='text'],
-[class^="theme"] .modal {
+[class^="theme"] .modal,
+[class^="theme"] #areaListLists,
+[class^="theme"] #areaBoard {
   background-color: transparent;
 }
 [class^="theme"] #panelList li.sortable-fallback,
@@ -72,7 +74,6 @@
 }
 
 /* mode-dark */
-/* .theme-dark #titlebar, */
 .theme-dark .panelsContainer,
 .theme-dark #panelNav,
 .theme-dark #panelList,
@@ -82,6 +83,12 @@
 .theme-dark .report .filterButton.active,
 .theme-dark .report .filterButton:hover {
   background-color: var(--dark);
+}
+.theme-dark .boardList {
+  background-color: var(--dark-66);
+}
+.theme-dark .boardTasks > li {
+  background-color: var(--dark-cc);
 }
 .theme-dark #panelList .sortable-chosen,
 .theme-dark #panelNote .sortable-chosen,
@@ -104,6 +111,7 @@
 .theme-dark button:hover {
   background-color: #00000066;
 }
+.theme-dark #titlebar,
 .theme-dark .custom-select-trigger,
 .theme-dark .custom-select-options {
   background-color: #1c1c1c;
@@ -198,6 +206,10 @@
 .theme-dark .modal-section button:disabled {
   color: #ffffff33;
 }
+.theme-dark #titlebar,
+.theme-dark #filterbar.active {
+  border-color: var(--dark);
+}
 .theme-dark,
 .theme-dark #areaNew,
 .theme-dark #panelNav,
@@ -210,16 +222,24 @@
 .theme-dark #areaPinNotes li:last-child {
   border-color: #ffffff66;
 }
-.theme-dark #titlebar,
-.theme-dark #filterbar.active,
 .theme-dark input[type='checkbox'],
 .theme-dark #areaListNotes li.edit > input[type='text'], 
-.theme-dark #areaPinNotes li.edit > input[type='text'] {
+.theme-dark #areaPinNotes li.edit > input[type='text'],
+.theme-dark .boardTasks > li {
   border-color: #666;
 }
 .theme-dark #areaPinNotes li:hover input[type='checkbox'],
 .theme-dark #areaListNotes li:hover input[type='checkbox'] {
   border-color: #999;
+}
+.theme-dark #areaBoard {
+  color: #ffffff99;
+}
+.theme.dark .boardList.edit .boardListName,
+.theme.dark .boardTaskEdit,
+.theme.dark .boardTaskAdd:focus {
+  background-color: #00000099;
+  border-color: #666;
 }
 .theme-dark #areaListLists input.active {
   border-left-color: #66666699;
