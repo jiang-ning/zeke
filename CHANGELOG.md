@@ -1,5 +1,10 @@
 # Change Log
 
+### v1.18.0
+##### 2026-11-21
+- New Feature: Board
+- Improvement: New brand logo
+
 ### v1.17.0
 ##### 2026-09-26
 - New Feature: Snap and collapse when drag app to the edge of the screen
