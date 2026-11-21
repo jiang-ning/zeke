@@ -10,8 +10,14 @@
 [class^="theme"] #areaPinNotes input[type='text'],
 [class^="theme"] .modal,
 [class^="theme"] #areaListLists,
-[class^="theme"] #areaBoard {
+[class^="theme"] #areaBoard,
+[class^="theme"] #titlebar {
   background-color: transparent;
+}
+[class^="theme"] .boardTasks li.editing,
+[class^="theme"] .boardTaskEdit {
+  background-color: #ffffff;
+  transition: none;
 }
 [class^="theme"] #panelList li.sortable-fallback,
 [class^="theme"] #panelNote li.sortable-fallback,
@@ -27,7 +33,8 @@
 [class^="theme"] #gutter,
 [class^="theme"] #areaListLists .listRemove:hover,
 [class^="theme"] span.appIcon:hover,
-[class^="theme"] #areaNew:has(#txtNew:focus) {
+[class^="theme"] #areaNew:has(#txtNew:focus),
+[class^="theme"] .boardTasks li {
   background-color: #ffffff66;
 }
 [class^="theme"] #panelList .sortable-chosen,
@@ -235,11 +242,14 @@
 .theme-dark #areaBoard {
   color: #ffffff99;
 }
-.theme.dark .boardList.edit .boardListName,
-.theme.dark .boardTaskEdit,
-.theme.dark .boardTaskAdd:focus {
+.theme-dark .boardList.edit .boardListName,
+.theme-dark .boardTaskAdd:focus {
   background-color: #00000099;
   border-color: #666;
+}
+.theme-dark .boardTasks li.editing,
+.theme-dark .boardTaskEdit {
+  background-color: #181818;
 }
 .theme-dark #areaListLists input.active {
   border-left-color: #66666699;
@@ -346,7 +356,8 @@
 }
 .theme-blue .report .filterButton.active,
 .theme-blue .report tr:nth-child(even),
-.theme-blue #filterbar.active {
+.theme-blue #filterbar.active,
+.theme-blue .boardList {
   background-color: var(--blue-66);
 }
 .theme-blue #btnFilter.active,
@@ -355,10 +366,12 @@
 .theme-blue #txtNew:focus + #btnNew:hover,
 .theme-blue #areaListNotes li.completed input[type="checkbox"]::before,
 .theme-blue #areaPinNotes li.completed input[type="checkbox"]::before,
-.theme-blue .badgePro {
+.theme-blue .badgePro,
+.theme-blue .boardTasks li.completed > input.boardTaskCheck::before {
   background-color: var(--blue-stroke-66);
 }
-.theme-blue {
+.theme-blue,
+.theme-blue .boardTasks li {
   border-color: var(--blue);
 }
 .theme-blue input[type='checkbox'] {
@@ -389,7 +402,9 @@
 .theme-blue .edition,
 .theme-blue li.completed input[type='checkbox'],
 .theme-blue #areaPinNotes li.completed:hover input[type='checkbox'],
-.theme-blue #areaListNotes li.completed:hover input[type='checkbox'] {
+.theme-blue #areaListNotes li.completed:hover input[type='checkbox'],
+.theme-blue .boardList,
+.theme-blue .boardTaskAdd {
   border-color: var(--blue-stroke-66);
 }
 .theme-blue #btnNewList:hover,
@@ -444,7 +459,8 @@
 .theme-blue #areaPinNotes li.edit .noteReminder:hover,
 .theme-blue #areaListNotes li.edit .noteReminder:hover,
 .theme-blue #areaPinNotes li.edit .noteDueDate:hover,
-.theme-blue #areaListNotes li.edit .noteDueDate:hover {
+.theme-blue #areaListNotes li.edit .noteDueDate:hover,
+.theme-blue .boardTaskProgress {
   color: var(--blue-stroke);
 }
 .theme-blue .noteReminder,
@@ -493,7 +509,8 @@
 }
 .theme-red .report .filterButton.active,
 .theme-red .report tr:nth-child(even),
-.theme-red #filterbar.active {
+.theme-red #filterbar.active,
+.theme-red .boardList {
   background-color: var(--red-66);
 }
 .theme-red #btnFilter.active,
@@ -502,10 +519,12 @@
 .theme-red #txtNew:focus + #btnNew:hover,
 .theme-red #areaListNotes li.completed input[type="checkbox"]::before,
 .theme-red #areaPinNotes li.completed input[type="checkbox"]::before,
-.theme-red .badgePro  {
+.theme-red .badgePro,
+.theme-red .boardTasks li.completed > input.boardTaskCheck::before  {
   background-color: var(--red-stroke-66);
 }
-.theme-red {
+.theme-red,
+.theme-red .boardTasks li {
   border-color: var(--red);
 }
 .theme-red input[type='checkbox'] {
@@ -536,7 +555,9 @@
 .theme-red .edition,
 .theme-red li.completed input[type='checkbox'],
 .theme-red #areaPinNotes li.completed:hover input[type='checkbox'],
-.theme-red #areaListNotes li.completed:hover input[type='checkbox'] {
+.theme-red #areaListNotes li.completed:hover input[type='checkbox'],
+.theme-red .boardList,
+.theme-red .boardTaskAdd {
   border-color: var(--red-stroke-66);
 }
 .theme-red #btnNewList:hover,
@@ -590,7 +611,8 @@
 .theme-red #areaPinNotes li.edit .noteReminder:hover,
 .theme-red #areaListNotes li.edit .noteReminder:hover,
 .theme-red #areaPinNotes li.edit .noteDueDate:hover,
-.theme-red #areaListNotes li.edit .noteDueDate:hover {
+.theme-red #areaListNotes li.edit .noteDueDate:hover,
+.theme-red .boardTaskProgress {
   color: var(--red-stroke);
 }
 .theme-red .noteReminder,
@@ -639,7 +661,8 @@
 }
 .theme-orange .report .filterButton.active,
 .theme-orange .report tr:nth-child(even),
-.theme-orange #filterbar.active {
+.theme-orange #filterbar.active,
+.theme-orange .boardList {
   background-color: var(--orange-66);
 }
 .theme-orange #btnFilter.active,
@@ -648,10 +671,12 @@
 .theme-orange #txtNew:focus + #btnNew:hover,
 .theme-orange #areaListNotes li.completed input[type="checkbox"]::before,
 .theme-orange #areaPinNotes li.completed input[type="checkbox"]::before,
-.theme-orange .badgePro {
+.theme-orange .badgePro,
+.theme-orange .boardTasks li.completed > input.boardTaskCheck::before {
   background-color: var(--orange-stroke-66);
 }
-.theme-orange {
+.theme-orange,
+.theme-orange .boardTasks li {
   border-color: var(--orange);
 }
 .theme-orange input[type='checkbox'] {
@@ -682,7 +707,9 @@
 .theme-orange .edition,
 .theme-orange li.completed input[type='checkbox'],
 .theme-orange #areaPinNotes li.completed:hover input[type='checkbox'],
-.theme-orange #areaListNotes li.completed:hover input[type='checkbox'] {
+.theme-orange #areaListNotes li.completed:hover input[type='checkbox'],
+.theme-orange .boardList,
+.theme-orange .boardTaskAdd {
   border-color: var(--orange-stroke-66);
 }
 .theme-orange #btnNewList:hover,
@@ -736,7 +763,8 @@
 .theme-orange #areaPinNotes li.edit .noteReminder:hover,
 .theme-orange #areaListNotes li.edit .noteReminder:hover,
 .theme-orange #areaPinNotes li.edit .noteDueDate:hover,
-.theme-orange #areaListNotes li.edit .noteDueDate:hover {
+.theme-orange #areaListNotes li.edit .noteDueDate:hover,
+.theme-orange .boardTaskProgress {
   color: var(--orange-stroke);
 }
 .theme-orange .noteReminder,
@@ -785,7 +813,8 @@
 }
 .theme-amber .report .filterButton.active,
 .theme-amber .report tr:nth-child(even),
-.theme-amber #filterbar.active {
+.theme-amber #filterbar.active,
+.theme-amber .boardList {
   background-color: var(--amber-66);
 }
 .theme-amber #btnFilter.active,
@@ -796,10 +825,12 @@
 }
 .theme-amber #areaListNotes li.completed input[type="checkbox"]::before,
 .theme-amber #areaPinNotes li.completed input[type="checkbox"]::before,
-.theme-amber .badgePro {
+.theme-amber .badgePro,
+.theme-amber .boardTasks li.completed > input.boardTaskCheck::before {
   background-color: var(--amber-stroke-cc);
 }
-.theme-amber {
+.theme-amber,
+.theme-amber .boardTasks li {
   border-color: var(--amber);
 }
 .theme-amber input[type='checkbox'] {
@@ -830,7 +861,9 @@
 .theme-amber .edition,
 .theme-amber li.completed input[type='checkbox'],
 .theme-amber #areaPinNotes li.completed:hover input[type='checkbox'],
-.theme-amber #areaListNotes li.completed:hover input[type='checkbox'] {
+.theme-amber #areaListNotes li.completed:hover input[type='checkbox'],
+.theme-amber .boardList,
+.theme-amber .boardTaskAdd {
   border-color: var(--amber-stroke-66);
 }
 .theme-amber #btnNewList:hover,
@@ -884,7 +917,8 @@
 .theme-amber #areaPinNotes li.edit .noteReminder:hover,
 .theme-amber #areaListNotes li.edit .noteReminder:hover,
 .theme-amber #areaPinNotes li.edit .noteDueDate:hover,
-.theme-amber #areaListNotes li.edit .noteDueDate:hover {
+.theme-amber #areaListNotes li.edit .noteDueDate:hover,
+.theme-amber .boardTaskProgress {
   color: var(--amber-stroke);
 }
 .theme-amber .noteReminder,
@@ -933,7 +967,8 @@
 }
 .theme-green .report .filterButton.active,
 .theme-green .report tr:nth-child(even),
-.theme-green #filterbar.active {
+.theme-green #filterbar.active,
+.theme-green .boardList {
   background-color: var(--green-66);
 }
 .theme-green #btnFilter.active,
@@ -942,10 +977,12 @@
 .theme-green #txtNew:focus + #btnNew:hover,
 .theme-green #areaListNotes li.completed input[type="checkbox"]::before,
 .theme-green #areaPinNotes li.completed input[type="checkbox"]::before,
-.theme-green .badgePro {
+.theme-green .badgePro,
+.theme-green .boardTasks li.completed > input.boardTaskCheck::before {
   background-color: var(--green-stroke-66);
 }
-.theme-green {
+.theme-green,
+.theme-green .boardTasks li {
   border-color: var(--green);
 }
 .theme-green input[type='checkbox'] {
@@ -976,7 +1013,9 @@
 .theme-green .edition,
 .theme-green li.completed input[type='checkbox'],
 .theme-green #areaPinNotes li.completed:hover input[type='checkbox'],
-.theme-green #areaListNotes li.completed:hover input[type='checkbox'] {
+.theme-green #areaListNotes li.completed:hover input[type='checkbox'],
+.theme-green .boardList,
+.theme-green .boardTaskAdd {
   border-color: var(--green-stroke-66);
 }
 .theme-green #btnNewList:hover,
@@ -1030,7 +1069,8 @@
 .theme-green #areaPinNotes li.edit .noteReminder:hover,
 .theme-green #areaListNotes li.edit .noteReminder:hover,
 .theme-green #areaPinNotes li.edit .noteDueDate:hover,
-.theme-green #areaListNotes li.edit .noteDueDate:hover {
+.theme-green #areaListNotes li.edit .noteDueDate:hover,
+.theme-green .boardTaskProgress {
   color: var(--green-stroke);
 }
 .theme-green .noteReminder,
@@ -1079,7 +1119,8 @@
 }
 .theme-teal .report .filterButton.active,
 .theme-teal .report tr:nth-child(even),
-.theme-teal #filterbar.active {
+.theme-teal #filterbar.active,
+.theme-teal .boardList {
   background-color: var(--teal-66);
 }
 .theme-teal #btnFilter.active,
@@ -1088,10 +1129,12 @@
 .theme-teal #txtNew:focus + #btnNew:hover,
 .theme-teal #areaListNotes li.completed input[type="checkbox"]::before,
 .theme-teal #areaPinNotes li.completed input[type="checkbox"]::before,
-.theme-teal .badgePro {
+.theme-teal .badgePro,
+.theme-teal .boardTasks li.completed > input.boardTaskCheck::before {
   background-color: var(--teal-stroke-66);
 }
-.theme-teal {
+.theme-teal,
+.theme-teal .boardTasks li {
   border-color: var(--teal);
 }
 .theme-teal input[type='checkbox'] {
@@ -1122,7 +1165,9 @@
 .theme-teal .edition,
 .theme-teal li.completed input[type='checkbox'],
 .theme-teal #areaPinNotes li.completed:hover input[type='checkbox'],
-.theme-teal #areaListNotes li.completed:hover input[type='checkbox'] {
+.theme-teal #areaListNotes li.completed:hover input[type='checkbox'],
+.theme-teal .boardList,
+.theme-teal .boardTaskAdd {
   border-color: var(--teal-stroke-66);
 }
 .theme-teal #btnNewList:hover,
@@ -1176,7 +1221,8 @@
 .theme-teal #areaPinNotes li.edit .noteReminder:hover,
 .theme-teal #areaListNotes li.edit .noteReminder:hover,
 .theme-teal #areaPinNotes li.edit .noteDueDate:hover,
-.theme-teal #areaListNotes li.edit .noteDueDate:hover {
+.theme-teal #areaListNotes li.edit .noteDueDate:hover,
+.theme-teal .boardTaskProgress {
   color: var(--teal-stroke);
 }
 .theme-teal .noteReminder,
@@ -1225,7 +1271,8 @@
 }
 .theme-violet .report .filterButton.active,
 .theme-violet .report tr:nth-child(even),
-.theme-violet #filterbar.active {
+.theme-violet #filterbar.active,
+.theme-violet .boardList {
   background-color: var(--violet-66);
 }
 .theme-violet #btnFilter.active,
@@ -1234,10 +1281,12 @@
 .theme-violet #txtNew:focus + #btnNew:hover,
 .theme-violet #areaListNotes li.completed input[type="checkbox"]::before,
 .theme-violet #areaPinNotes li.completed input[type="checkbox"]::before,
-.theme-violet .badgePro {
+.theme-violet .badgePro,
+.theme-violet .boardTasks li.completed > input.boardTaskCheck::before {
   background-color: var(--violet-stroke-66);
 }
-.theme-violet {
+.theme-violet,
+.theme-violet .boardTasks li {
   border-color: var(--violet);
 }
 .theme-violet input[type='checkbox'] {
@@ -1268,7 +1317,9 @@
 .theme-violet .edition,
 .theme-violet li.completed input[type='checkbox'],
 .theme-violet #areaPinNotes li.completed:hover input[type='checkbox'],
-.theme-violet #areaListNotes li.completed:hover input[type='checkbox'] {
+.theme-violet #areaListNotes li.completed:hover input[type='checkbox'],
+.theme-violet .boardList,
+.theme-violet .boardTaskAdd {
   border-color: var(--violet-stroke-66);
 }
 .theme-violet #btnNewList:hover,
@@ -1322,7 +1373,8 @@
 .theme-violet #areaPinNotes li.edit .noteReminder:hover,
 .theme-violet #areaListNotes li.edit .noteReminder:hover,
 .theme-violet #areaPinNotes li.edit .noteDueDate:hover,
-.theme-violet #areaListNotes li.edit .noteDueDate:hover {
+.theme-violet #areaListNotes li.edit .noteDueDate:hover,
+.theme-violet .boardTaskProgress {
   color: var(--violet-stroke);
 }
 .theme-violet .noteReminder,
@@ -1371,7 +1423,8 @@
 }
 .theme-purple .report .filterButton.active,
 .theme-purple .report tr:nth-child(even),
-.theme-purple #filterbar.active {
+.theme-purple #filterbar.active,
+.theme-purple .boardList {
   background-color: var(--purple-66);
 }
 .theme-purple #btnFilter.active,
@@ -1380,10 +1433,12 @@
 .theme-purple #txtNew:focus + #btnNew:hover,
 .theme-purple #areaListNotes li.completed input[type="checkbox"]::before,
 .theme-purple #areaPinNotes li.completed input[type="checkbox"]::before,
-.theme-purple .badgePro {
+.theme-purple .badgePro,
+.theme-purple .boardTasks li.completed > input.boardTaskCheck::before {
   background-color: var(--purple-stroke-66);
 }
-.theme-purple {
+.theme-purple,
+.theme-purple .boardTasks li {
   border-color: var(--purple);
 }
 .theme-purple input[type='checkbox'] {
@@ -1414,7 +1469,9 @@
 .theme-purple .edition,
 .theme-purple li.completed input[type='checkbox'],
 .theme-purple #areaPinNotes li.completed:hover input[type='checkbox'],
-.theme-purple #areaListNotes li.completed:hover input[type='checkbox'] {
+.theme-purple #areaListNotes li.completed:hover input[type='checkbox'],
+.theme-purple .boardList,
+.theme-purple .boardTaskAdd {
   border-color: var(--purple-stroke-66);
 }
 .theme-purple #btnNewList:hover,
@@ -1468,7 +1525,8 @@
 .theme-purple #areaPinNotes li.edit .noteReminder:hover,
 .theme-purple #areaListNotes li.edit .noteReminder:hover,
 .theme-purple #areaPinNotes li.edit .noteDueDate:hover,
-.theme-purple #areaListNotes li.edit .noteDueDate:hover {
+.theme-purple #areaListNotes li.edit .noteDueDate:hover,
+.theme-purple .boardTaskProgress {
   color: var(--purple-stroke);
 }
 .theme-purple .noteReminder,
@@ -1517,7 +1575,8 @@
 }
 .theme-pink .report .filterButton.active,
 .theme-pink .report tr:nth-child(even),
-.theme-pink #filterbar.active {
+.theme-pink #filterbar.active,
+.theme-pink .boardList {
   background-color: var(--pink-66);
 }
 .theme-pink #btnFilter.active,
@@ -1526,10 +1585,12 @@
 .theme-pink #txtNew:focus + #btnNew:hover,
 .theme-pink #areaListNotes li.completed input[type="checkbox"]::before,
 .theme-pink #areaPinNotes li.completed input[type="checkbox"]::before,
-.theme-pink .badgePro {
+.theme-pink .badgePro,
+.theme-pink .boardTasks li.completed > input.boardTaskCheck::before {
   background-color: var(--pink-stroke-66);
 }
-.theme-pink {
+.theme-pink,
+.theme-pink .boardTasks li {
   border-color: var(--pink);
 }
 .theme-pink input[type='checkbox'] {
@@ -1560,7 +1621,9 @@
 .theme-pink .edition,
 .theme-pink li.completed input[type='checkbox'],
 .theme-pink #areaPinNotes li.completed:hover input[type='checkbox'],
-.theme-pink #areaListNotes li.completed:hover input[type='checkbox'] {
+.theme-pink #areaListNotes li.completed:hover input[type='checkbox'],
+.theme-pink .boardList,
+.theme-pink .boardTaskAdd {
   border-color: var(--pink-stroke-66);
 }
 .theme-pink #btnNewList:hover,
@@ -1614,7 +1677,8 @@
 .theme-pink #areaPinNotes li.edit .noteReminder:hover,
 .theme-pink #areaListNotes li.edit .noteReminder:hover,
 .theme-pink #areaPinNotes li.edit .noteDueDate:hover,
-.theme-pink #areaListNotes li.edit .noteDueDate:hover {
+.theme-pink #areaListNotes li.edit .noteDueDate:hover,
+.theme-pink .boardTaskProgress {
   color: var(--pink-stroke);
 }
 .theme-pink .noteReminder,

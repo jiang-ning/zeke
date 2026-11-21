@@ -389,10 +389,13 @@ select:hover {
   white-space: nowrap;
 }
 .boardTaskEdit {
+  display: block;
   width: 100%;
   box-sizing: border-box;
-  padding: 2px 4px;
-  border: 1px solid #ccc;
+  height: 36px;
+  margin: -8px 0;
+  padding: 0 4px;
+  border: none;
   border-radius: 4px;
   background-color: #ffffff99;
   color: inherit;
