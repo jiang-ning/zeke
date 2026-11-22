@@ -1612,6 +1612,479 @@ request.onsuccess = async function(event) {
     renderNotes(parseInt(localStorage.getItem('listActive')));
   });
 
+  // ---------- Board view ----------
+  const areaBoard = document.getElementById('areaBoard');
+  const btnBoard = document.getElementById('btnBoard');
+  const panelNoteEl = document.getElementById('panelNote');
+
+  function isTopLevelNote(note) {
+    return note.parent == 0 || note.parent === true || note.parent == undefined;
+  }
+
+  // Mirrors the order used by renderNotes: pinned first, then unordered (ascending id), then user-ordered
+  function getBoardOrderedNotes(listId, notes) {
+    const parents = notes.filter(isTopLevelNote);
+    const byId = new Map(parents.map(n => [n.id, n]));
+    const pinIds = (Zeke.orderedPinNoteIds[listId] || []).map(id => parseInt(id));
+    const pinSet = new Set(pinIds);
+    const pinned = [
+      ...pinIds.map(id => byId.get(id)).filter(n => n && n.pin),
+      ...parents.filter(n => n.pin && !pinSet.has(n.id))
+    ];
+    const savedIds = (Zeke.orderedNoteIds[listId] || []).map(id => parseInt(id));
+    const savedSet = new Set(savedIds);
+    const unordered = parents.filter(n => !n.pin && !savedSet.has(n.id)).sort((a, b) => a.id - b.id);
+    const ordered = savedIds.map(id => byId.get(id)).filter(n => n && !n.pin);
+    return [...pinned, ...unordered, ...ordered];
+  }
+
+  function saveBoardListOrder(taskList) {
+    const listId = parseInt(taskList.dataset.listId);
+    const ids = Array.from(taskList.children).map(li => parseInt(li.dataset.id));
+    const notesById = new Map(Zeke.notes.map(n => [n.id, n]));
+    const idSet = new Set(ids);
+    // Keep existing subtask ids so the task view preserves subtask ordering
+    const keepSubIds = (saved) => (saved || []).map(id => parseInt(id)).filter(id => {
+      const n = notesById.get(id);
+      return !idSet.has(id) && n && n.list === listId && !isTopLevelNote(n);
+    });
+    const pinned = ids.filter(id => notesById.get(id)?.pin);
+    const unpinned = ids.filter(id => !notesById.get(id)?.pin);
+    const areaPinNotes = [...pinned, ...keepSubIds(Zeke.orderedPinNoteIds[listId])];
+    const areaListNotes = [...unpinned, ...keepSubIds(Zeke.orderedNoteIds[listId])];
+    Zeke.orderedPinNoteIds[listId] = areaPinNotes;
+    Zeke.orderedNoteIds[listId] = areaListNotes;
+    dbUpdate('list', listId, { areaPinNotes, areaListNotes });
+  }
+
+  function moveTaskToList(noteId, listId) {
+    const note = Zeke.notes.find(n => n.id === noteId);
+    const update = { list: listId };
+    if (note) {
+      note.list = listId;
+      if (note.pin) {
+        // pin order is per list, so unpin to keep it visible in the target list
+        note.pin = false;
+        update.pin = false;
+      }
+    }
+    dbUpdate('note', noteId, update);
+    Zeke.notes.filter(n => n.parent === noteId).forEach(sub => {
+      sub.list = listId;
+      dbUpdate('note', sub.id, { list: listId });
+    });
+  }
+
+  function generateBoardTask(note, notes) {
+    const item = document.createElement('li');
+    const checkbox = createBoardCheckbox(note);
+    const content = document.createElement('span');
+    item.dataset.id = note.id;
+    if (note.completed) item.classList.add('completed');
+    content.className = 'boardTaskContent';
+    content.textContent = note.content;
+    item.append(checkbox, content);
+    enableBoardTaskEdit(content, note);
+
+    const subNotes = notes.filter(n => n.parent === note.id);
+    if (subNotes.length > 0) {
+      const doneCount = subNotes.filter(n => n.completed).length;
+      const progress = document.createElement('span');
+      progress.className = 'boardTaskProgress';
+      progress.textContent = `${doneCount}/${subNotes.length}`;
+      item.append(progress);
+
+      if (!note.completed) {
+        const stroke = getCurrentThemeColor(true);
+        checkbox.classList.add('has-progress');
+        checkbox.style.setProperty('--completion', `${(doneCount / subNotes.length * 100).toFixed()}%`);
+        checkbox.style.setProperty('--fill-color', stroke ? stroke + '66' : '#cccccccc');
+      }
+    }
+
+    // Always present (even when empty) so any task can receive dropped subtasks
+    const subList = document.createElement('ul');
+    subList.className = 'boardSubTasks';
+    subList.dataset.parentId = note.id;
+    const savedIds = note.pin ? Zeke.orderedPinNoteIds[note.list] : Zeke.orderedNoteIds[note.list];
+    getOrderedSubNotes(subNotes, savedIds).forEach(sub => {
+      const subItem = document.createElement('li');
+      const subContent = document.createElement('span');
+      subItem.dataset.id = sub.id;
+      subContent.className = 'boardTaskContent';
+      subContent.textContent = sub.content;
+      subItem.append(createBoardCheckbox(sub), subContent);
+      if (sub.completed) subItem.classList.add('completed');
+      subList.append(subItem);
+      enableBoardTaskEdit(subContent, sub);
+    });
+    item.append(subList);
+    subList.sortable = Sortable.create(subList, boardSortableOptions());
+
+    return item;
+  }
+
+  function createBoardCheckbox(note) {
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.className = 'boardTaskCheck';
+    checkbox.checked = !!note.completed;
+    checkbox.addEventListener('change', () => setBoardTaskCompleted(note, checkbox.checked));
+    return checkbox;
+  }
+
+  // Same rules as the task view: parents cascade to subtasks, subtasks drive parent completion
+  function setBoardTaskCompleted(note, completed) {
+    const apply = (n, state) => {
+      n.completed = state;
+      n.dateCompleted = state ? Date.now() : null;
+      dbUpdate('note', n.id, { completed: state, dateCompleted: n.dateCompleted });
+    };
+    apply(note, completed);
+    if (isTopLevelNote(note)) {
+      Zeke.notes.filter(n => n.parent === note.id && n.completed !== completed).forEach(n => apply(n, completed));
+    } else {
+      const parent = Zeke.notes.find(n => n.id === note.parent);
+      const allDone = Zeke.notes.filter(n => n.parent === note.parent).every(n => n.completed);
+      if (parent && parent.completed !== allDone) apply(parent, allDone);
+    }
+    renderBoard();
+  }
+
+  function enableBoardTaskEdit(contentEl, note) {
+    contentEl.addEventListener('dblclick', (e) => {
+      e.stopPropagation();
+      if (contentEl.querySelector('input')) return;
+      const item = contentEl.closest('li');
+      const input = document.createElement('input');
+      let done = false;
+      input.className = 'boardTaskEdit';
+      input.value = note.content;
+      contentEl.textContent = '';
+      contentEl.append(input);
+      item.classList.add('editing');
+      input.focus();
+      input.select();
+
+      const finish = (save) => {
+        if (done) return;
+        done = true;
+        const newVal = input.value.trim();
+        if (save && newVal && newVal !== note.content) {
+          note.content = newVal;
+          dbUpdate('note', note.id, { content: newVal });
+        }
+        item.classList.remove('editing');
+        contentEl.textContent = note.content;
+      };
+      input.addEventListener('keydown', (ev) => {
+        if (ev.key === 'Enter') {
+          ev.preventDefault();
+          finish(true);
+        } else if (ev.key === 'Escape') {
+          finish(false);
+        }
+      });
+      input.addEventListener('blur', () => finish(true));
+    });
+  }
+
+  function boardSortableOptions() {
+    return {
+      group: 'board',
+      animation: 150,
+      fallbackOnBody: true,
+      swapThreshold: 0.65,
+      invertSwap: true,
+      ghostClass: 'sortable-ghost',
+      chosenClass: 'sortable-chosen',
+      dragClass: 'sortable-drag',
+      filter: '.editing, .boardTaskCheck',
+      preventOnFilter: false,
+      onStart: (evt) => {
+        // Only one nesting level: tasks that own subtasks cannot become subtasks
+        if (!hasBoardSubTasks(evt.item)) {
+          areaBoard.classList.add('draggingNestable');
+        }
+      },
+      onMove: (evt) => {
+        if (evt.to.classList.contains('boardSubTasks')) {
+          if (evt.dragged.contains(evt.to) || hasBoardSubTasks(evt.dragged)) {
+            return false;
+          }
+        }
+        requestAnimationFrame(updateNestHighlight);
+      },
+      onEnd: handleBoardDrop
+    };
+  }
+
+  function hasBoardSubTasks(item) {
+    return item.querySelectorAll('.boardSubTasks > li').length > 0;
+  }
+
+  function updateNestHighlight() {
+    const ghost = areaBoard.querySelector('.sortable-ghost');
+    const target = ghost && ghost.parentElement.classList.contains('boardSubTasks') ? ghost.parentElement.parentElement : null;
+    areaBoard.querySelectorAll('.boardTasks > li.nestTarget').forEach(li => {
+      if (li !== target) li.classList.remove('nestTarget');
+    });
+    if (target) target.classList.add('nestTarget');
+  }
+
+  function saveSubOrder(subList) {
+    const parent = Zeke.notes.find(n => n.id === parseInt(subList.dataset.parentId));
+    if (!parent) return;
+    const areaKey = parent.pin ? 'areaPinNotes' : 'areaListNotes';
+    const zekeKey = parent.pin ? 'orderedPinNoteIds' : 'orderedNoteIds';
+    const subIds = Array.from(subList.children).map(li => parseInt(li.dataset.id));
+    const subSet = new Set(subIds);
+    const saved = (Zeke[zekeKey][parent.list] || []).map(id => parseInt(id)).filter(id => !subSet.has(id));
+    const updated = [...saved, ...subIds];
+    Zeke[zekeKey][parent.list] = updated;
+    dbUpdate('list', parent.list, { [areaKey]: updated });
+  }
+
+  function handleBoardDrop(evt) {
+    areaBoard.classList.remove('draggingNestable');
+    areaBoard.querySelectorAll('.nestTarget').forEach(li => li.classList.remove('nestTarget'));
+    const noteId = parseInt(evt.item.dataset.id);
+    const note = Zeke.notes.find(n => n.id === noteId);
+    const fromSub = evt.from.classList.contains('boardSubTasks');
+    const toSub = evt.to.classList.contains('boardSubTasks');
+
+    if (!fromSub && !toSub) {
+      if (evt.from !== evt.to) {
+        moveTaskToList(noteId, parseInt(evt.to.dataset.listId));
+        saveBoardListOrder(evt.from);
+      }
+      saveBoardListOrder(evt.to);
+      return;
+    }
+
+    if (fromSub && evt.from === evt.to) {
+      saveSubOrder(evt.to);
+      return;
+    }
+    if (!note) return;
+
+    if (toSub) {
+      const newParent = Zeke.notes.find(n => n.id === parseInt(evt.to.dataset.parentId));
+      if (!newParent) return;
+      const update = { parent: newParent.id, list: newParent.list };
+      if (note.pin) {
+        note.pin = false;
+        update.pin = false;
+      }
+      note.parent = newParent.id;
+      note.list = newParent.list;
+      dbUpdate('note', noteId, update);
+      if (newParent.parent !== true) {
+        newParent.parent = true;
+        dbUpdate('note', newParent.id, { parent: true });
+      }
+      saveSubOrder(evt.to);
+    } else {
+      const listId = parseInt(evt.to.dataset.listId);
+      note.parent = 0;
+      note.list = listId;
+      dbUpdate('note', noteId, { parent: 0, list: listId });
+      saveBoardListOrder(evt.to);
+    }
+
+    if (!fromSub) {
+      saveBoardListOrder(evt.from);
+    } else if (evt.from.children.length === 0) {
+      const oldParent = Zeke.notes.find(n => n.id === parseInt(evt.from.dataset.parentId));
+      if (oldParent) {
+        oldParent.parent = 0;
+        dbUpdate('note', oldParent.id, { parent: 0 });
+      }
+    } else {
+      saveSubOrder(evt.from);
+    }
+
+    renderBoard();
+  }
+
+  // Mirrors renderNotes subtask order: untracked (ascending id) first, then saved order
+  function getOrderedSubNotes(subNotes, savedIds) {
+    const ids = (savedIds || []).map(id => parseInt(id));
+    const idSet = new Set(ids);
+    const byId = new Map(subNotes.map(n => [n.id, n]));
+    const unordered = subNotes.filter(n => !idSet.has(n.id)).sort((a, b) => a.id - b.id);
+    const ordered = ids.map(id => byId.get(id)).filter(Boolean);
+    return [...unordered, ...ordered];
+  }
+
+  function generateBoardList(list, notes) {
+    const column = document.createElement('div');
+    const header = document.createElement('div');
+    const nameInput = document.createElement('input');
+    const taskList = document.createElement('ul');
+    const addInput = document.createElement('input');
+
+    column.className = 'boardList';
+    column.dataset.id = list.id;
+    header.className = 'boardListHeader';
+    nameInput.className = 'boardListName';
+    nameInput.value = list.name;
+    nameInput.readOnly = true;
+    taskList.className = 'boardTasks';
+    taskList.dataset.listId = list.id;
+    addInput.className = 'boardTaskAdd';
+    addInput.placeholder = '+';
+
+    getBoardOrderedNotes(list.id, notes.filter(n => n.list === list.id)).forEach(note => {
+      taskList.append(generateBoardTask(note, notes));
+    });
+
+    header.append(nameInput);
+    column.append(header, taskList, addInput);
+
+    nameInput.addEventListener('dblclick', () => {
+      nameInput.readOnly = false;
+      column.classList.add('edit');
+      nameInput.focus();
+      nameInput.select();
+    });
+
+    const endRename = (save) => {
+      if (nameInput.readOnly) return;
+      const newName = nameInput.value.trim();
+      nameInput.readOnly = true;
+      column.classList.remove('edit');
+      if (save && newName && newName !== list.name) {
+        list.name = newName;
+        dbUpdate('list', list.id, { name: newName });
+        getLists();
+      } else {
+        nameInput.value = list.name;
+      }
+    };
+    nameInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        endRename(true);
+      } else if (e.key === 'Escape') {
+        endRename(false);
+      }
+    });
+    nameInput.addEventListener('blur', () => endRename(true));
+
+    addInput.addEventListener('keydown', (e) => {
+      if (e.key !== 'Enter') return;
+      e.preventDefault();
+      const content = addInput.value.trim();
+      if (!content) return;
+      const note = {
+        list: list.id,
+        content: content,
+        completed: false,
+        dateCreated: Date.now(),
+        dateCompleted: '',
+        parent: 0,
+        remind: null,
+        due: null
+      };
+      const request = db.transaction(['note'], 'readwrite').objectStore('note').add(note);
+      request.onsuccess = (event) => {
+        note.id = event.target.result;
+        Zeke.notes.push(note);
+        taskList.prepend(generateBoardTask(note, []));
+        saveBoardListOrder(taskList);
+        addInput.value = '';
+      };
+      request.onerror = () => console.error('Error adding note');
+    });
+
+    taskList.sortable = Sortable.create(taskList, boardSortableOptions());
+
+    return column;
+  }
+
+  function renderBoard() {
+    const transaction = db.transaction(['list', 'note'], 'readonly');
+    const listRequest = transaction.objectStore('list').getAll();
+    const noteRequest = transaction.objectStore('note').getAll();
+
+    transaction.oncomplete = () => {
+      const lists = listRequest.result;
+      const notes = noteRequest.result;
+      const order = (localStorage.getItem('listOrder') || '').split(',').map(id => parseInt(id));
+      const position = (id) => order.indexOf(id) < 0 ? Number.MAX_SAFE_INTEGER : order.indexOf(id);
+
+      Zeke.notes = notes;
+      lists.forEach(list => {
+        Zeke.orderedNoteIds[list.id] = list.areaListNotes;
+        Zeke.orderedPinNoteIds[list.id] = list.areaPinNotes;
+      });
+      lists.sort((a, b) => position(a.id) - position(b.id) || a.id - b.id);
+
+      const scrollLeft = areaBoard.scrollLeft;
+      const columnScrolls = {};
+      areaBoard.querySelectorAll('.boardTasks').forEach(ul => { columnScrolls[ul.dataset.listId] = ul.scrollTop; });
+      areaBoard.querySelectorAll('.boardTasks, .boardSubTasks').forEach(ul => ul.sortable && ul.sortable.destroy());
+      areaBoard.innerHTML = '';
+      lists.forEach(list => areaBoard.append(generateBoardList(list, notes)));
+      areaBoard.querySelectorAll('.boardTasks').forEach(ul => { ul.scrollTop = columnScrolls[ul.dataset.listId] || 0; });
+      areaBoard.scrollLeft = scrollLeft;
+
+      if (areaBoard.sortable) {
+        areaBoard.sortable.destroy();
+      }
+      areaBoard.sortable = Sortable.create(areaBoard, {
+        animation: 150,
+        direction: 'horizontal',
+        draggable: '.boardList',
+        handle: '.boardListHeader',
+        filter: '.boardList.edit .boardListName',
+        preventOnFilter: false,
+        ghostClass: 'sortable-ghost',
+        chosenClass: 'sortable-chosen',
+        dragClass: 'sortable-drag',
+        onEnd: () => {
+          const ids = Array.from(areaBoard.querySelectorAll('.boardList')).map(el => el.dataset.id);
+          localStorage.setItem('listOrder', ids.join(','));
+          getLists();
+        }
+      });
+    };
+    transaction.onerror = () => console.error('Error loading board');
+  }
+
+  function closeBoard() {
+    if (!panelNoteEl.classList.contains('showBoard')) return false;
+    panelNoteEl.classList.remove('showBoard');
+    btnBoard.classList.remove('active');
+    return true;
+  }
+
+  btnBoard.addEventListener('click', () => {
+    if (panelNoteEl.classList.contains('showBoard')) {
+      document.getElementById('btnTask').click();
+      return;
+    }
+    ['btnTask', 'btnSettings', 'btnReport'].forEach(id => document.getElementById(id).classList.remove('active'));
+    document.querySelectorAll('#panelNote .modal').forEach(modal => modal.classList.remove('open'));
+    panelNoteEl.classList.remove('showModal');
+    panelNoteEl.classList.add('showBoard');
+    btnBoard.classList.add('active');
+    document.getElementById('panelsContainer').style.gridTemplateColumns = '50px 0 0 1fr';
+    renderBoard();
+  });
+
+  document.getElementById('btnTask').addEventListener('click', () => {
+    if (closeBoard()) {
+      document.querySelectorAll('#panelNote li.expand').forEach(li => {
+        Zeke.expandedNotesIds.add(parseInt(li.dataset.id));
+      });
+      renderNotes(parseInt(localStorage.getItem('listActive')));
+    }
+  });
+  document.getElementById('btnSettings').addEventListener('click', closeBoard);
+  document.getElementById('btnReport').addEventListener('click', closeBoard);
+
 };
 
 function restructureGrid() {
@@ -2353,6 +2826,21 @@ function initTitlebar() {
   btnSidebar.addEventListener('click', (e) => {
     let panelsContainer = document.getElementById('panelsContainer');
     const currentGrid = panelsContainer.style.gridTemplateColumns.split(' ');
+
+    // btnTask can stay active while Settings/Report is open, so check these first
+    if (['btnBoard', 'btnReport', 'btnSettings'].some(id => document.getElementById(id).classList.contains('active'))) {
+      const rememberedGrid = (localStorage.getItem('grid-template-columns') || '50px 100px 10px 1fr').split(' ');
+      const navWidth = currentGrid[0] == '50px' ? '0px' : '50px';
+      document.querySelector('.switcherIcon').classList.toggle('open');
+      currentGrid[0] = navWidth;
+      rememberedGrid[0] = navWidth;
+      panelsContainer.style.gridTemplateColumns = currentGrid.join(' ');
+      localStorage.setItem('grid-template-columns', rememberedGrid.join(' '));
+      return;
+    }
+
+    if (!document.getElementById('btnTask').classList.contains('active')) return;
+
     const rememberedGrid = localStorage.getItem('grid-template-columns') || '50px 100px 10px 1fr';
     let currentListGrid = currentGrid[1];
 

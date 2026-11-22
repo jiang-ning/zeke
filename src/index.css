@@ -275,7 +275,7 @@ select:hover {
 
 #panelNav {
   display: grid;
-  grid-template-rows: 40px 40px 1fr 40px;
+  grid-template-rows: 40px 40px 40px 1fr 40px;
   grid-column: 1;
   grid-row: 1;
   background-color: #eee;
@@ -286,7 +286,7 @@ select:hover {
 #panelList {
   grid-column: 2;
   grid-row: 1;
-  background-color: #fff;
+  background-color: #f6f6f6;
   display: grid;
   grid-template-rows: 1fr 40px;
 }
@@ -305,15 +305,208 @@ select:hover {
 }
 #panelNote.showModal #areaNew,
 #panelNote.showModal #areaPinNotes,
-#panelNote.showModal #areaListNotes {
+#panelNote.showModal #areaListNotes,
+#panelNote.showBoard #areaNew,
+#panelNote.showBoard #areaPinNotes,
+#panelNote.showBoard #areaListNotes {
   display: none;
+}
+
+/* Board */
+#areaBoard {
+  display: none;
+  grid-column: 1;
+  grid-row: 2 / span 3;
+  min-height: 0;
+  gap: 6px;
+  padding: 8px;
+  overflow: auto hidden;
+  align-items: flex-start;
+  background-color: #fff;
+}
+#panelNote.showBoard #areaBoard {
+  display: flex;
+}
+.boardList {
+  flex: 0 0 220px;
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  border: 1px solid #88888833;
+  border-radius: 6px;
+  background-color: #f6f6f6;
+}
+.boardListHeader {
+  padding: 6px 8px;
+  cursor: grab;
+}
+.boardListName {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 4px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background-color: transparent;
+  color: inherit;
+  font-size: .85rem;
+  font-weight: 600;
+  outline: none;
+  cursor: grab;
+}
+.boardList.edit .boardListName {
+  cursor: text;
+  background-color: #ffffff99;
+  border-color: #ccc;
+}
+.boardTasks {
+  list-style: none;
+  flex: 1 1 auto;
+  min-height: 36px;
+  overflow: hidden auto;
+  padding: 0 8px;
+}
+.boardTasks li {
+  display: flex;
+  justify-content: space-between;
+  gap: 0 6px;
+  margin-bottom: 6px;
+  padding: 8px;
+  background-color: #ffffffcc;
+  border: 1px solid #88888833;
+  border-radius: 6px;
+  font-size: .85rem;
+  word-break: break-word;
+  cursor: grab;
+}
+.boardTasks li.completed .boardTaskContent {
+  text-decoration: line-through;
+  opacity: .5;
+}
+.boardTaskProgress {
+  font-size: .7rem;
+  opacity: .6;
+  white-space: nowrap;
+}
+.boardTaskEdit {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  height: 36px;
+  margin: -8px 0;
+  padding: 0 4px;
+  border: none;
+  border-radius: 4px;
+  background-color: #ffffff99;
+  color: inherit;
+  font: inherit;
+  outline: none;
+}
+.boardTasks li.editing,
+.boardTasks li.editing .boardTaskContent {
+  cursor: text;
+  text-decoration: none;
+  opacity: 1;
+}
+.boardTasks li {
+  flex-wrap: wrap;
+  align-items: center;
+}
+.boardTasks input.boardTaskCheck {
+  flex: 0 0 auto;
+  margin-top: 0;
+  cursor: pointer;
+}
+.boardTasks li:hover > input.boardTaskCheck {
+  border-color: #ccc;
+}
+.boardTasks li.completed > input.boardTaskCheck::before {
+  background-color: #ccc;
+}
+.boardTasks .boardTaskContent {
+  flex: 1 1 0;
+}
+.boardSubTasks {
+  flex: 1 1 100%;
+  list-style: none;
+  margin-top: 6px;
+  padding-left: 10px;
+}
+.boardSubTasks:empty {
+  margin-top: 0;
+}
+#areaBoard.draggingNestable .boardTasks > li:not(.sortable-chosen) .boardSubTasks:empty {
+  min-height: 36px;
+  margin-top: 6px;
+}
+/* Nest indicator: the task that will receive the dragged item */
+.boardTasks > li.nestTarget {
+  border-color: #888;
+  box-shadow: 0 0 0 2px #88888866;
+}
+.boardTasks .boardSubTasks li.sortable-ghost {
+  opacity: 1;
+  background-color: #88888822;
+}
+.boardTasks .boardSubTasks li.sortable-ghost > :not(.boardTaskContent) {
+  display: none;
+}
+/* Reorder indicator: collapse the placeholder into an insertion line */
+#areaBoard .boardTasks > li.sortable-ghost {
+  height: 0;
+  min-height: 0;
+  padding: 0;
+  margin: 3px 0 9px;
+  overflow: hidden;
+  border: none;
+  border-top: 3px solid #888;
+  border-radius: 2px;
+  opacity: 1;
+}
+.boardTasks .boardSubTasks li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  padding: 8px;
+  background-color: transparent;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  font-size: .85rem;
+  opacity: .8;
+  cursor: grab;
+}
+.boardTasks .boardSubTasks li.completed {
+  text-decoration: line-through;
+  opacity: .5;
+}
+.boardTaskAdd {
+  flex: 0 0 auto;
+  box-sizing: border-box;
+  /* matches a task card: 20px checkbox + 2 * 8px padding + 2 * 1px border */
+  height: 38px;
+  margin: 4px 8px 8px;
+  padding: 0 8px;
+  border: 1px dashed #88888866;
+  border-radius: 6px;
+  background-color: transparent;
+  color: inherit;
+  font-size: .85rem;
+  outline: none;
+}
+.boardTaskAdd:focus {
+  border-style: solid;
+  background-color: #ffffff99;
+}
+#areaBoard .sortable-ghost {
+  opacity: .4;
 }
 
 #gutter {
   grid-column: 3;
   grid-row: 1;
   cursor: col-resize;
-  background-color: #fff;
+  background-color: #f6f6f6;
 }
 #gutter + #panelNote {
   box-shadow: -1px 0px 0px #cccccccc;
@@ -397,6 +590,7 @@ li.edit .noteSub {
   grid-column: 1;
   grid-row: 1;
   overflow: hidden auto;
+  background-color: #f6f6f6;
 }
 #areaListLists li {
   list-style: none;
@@ -418,7 +612,7 @@ li.edit .noteSub {
   cursor: default;
 }
 #areaListLists input {
-  background-color: #fff;
+  background-color: #f6f6f6;
   border: 1px solid transparent;
   border-left: 3px solid transparent;
   width: calc(100% + 7px);
@@ -1058,6 +1252,9 @@ li.edit .noteSub {
 .switcherIcon.open {
   transform: scaleX(1);
 }
+#btnBoard svg {
+  transform: rotate(90deg);
+}
 
 #areaListNotes .sortable-ghost,
 #areaPinNotes .sortable-ghost  {
@@ -1100,7 +1297,7 @@ li.edit .noteSub {
   line-height: 40px;
   font-size: .8rem;
   border-bottom: 1px solid #ccc;
-  /* border-radius: 6px 6px 0 0; */
+  background-color: #eee;
 }
 span.appIcon {
   width: 30px;
