@@ -724,7 +724,7 @@ request.onsuccess = async function(event) {
           Zeke.expandedNotesIds.add(parseInt(li.dataset.id));
         });
         renderNotes(parseInt(localStorage.getItem('listActive')));
-        syncReminderToMain();
+        syncRemindersToMain();
       }, { alignRight: true, onRemove: () => {
         dbUpdate('note', note.id, { remind: null });
         note.remind = null;
@@ -734,7 +734,7 @@ request.onsuccess = async function(event) {
           Zeke.expandedNotesIds.add(parseInt(li.dataset.id));
         });
         renderNotes(parseInt(localStorage.getItem('listActive')));
-        syncReminderToMain();
+        syncRemindersToMain();
       }});
     });
 
@@ -1480,7 +1480,7 @@ request.onsuccess = async function(event) {
     }
 
     const btnDueDate = document.getElementById('btnDueDate');
-    dueDatePicker.onClose = () => hideReminderButton();
+    dueDatePicker.onClose = () => hideDueDateButton();
     dueDatePicker.show(btnDueDate, null, (dateTime) => {
       const txtNew = document.getElementById('txtNew');
       btnDueDate.dataset.dueValue = dateTime;
@@ -1498,10 +1498,10 @@ request.onsuccess = async function(event) {
     const iconReminderSolid = document.getElementById('iconReminderSolid');
     const iconDueDateOutline = document.getElementById('iconDueDateOutline');
     const iconDueDateSolid = document.getElementById('iconDueDateSolid');
-    if (reminderPicker.isOpen() && !reminderPicker.el.contains(e.target) && !btnReminder.contains(e.target) && !e.target.closest('.noteReminder')) {
+    if (reminderPicker.isOpen() && !reminderPicker.el.contains(e.target) && !btnReminder.contains(e.target) && !e.target.closest('.noteReminder, .boardTaskReminder')) {
       reminderPicker.close();
     }
-    if (dueDatePicker.isOpen() && !dueDatePicker.el.contains(e.target) && !btnDueDate.contains(e.target) && !e.target.closest('.noteDueDate')) {
+    if (dueDatePicker.isOpen() && !dueDatePicker.el.contains(e.target) && !btnDueDate.contains(e.target) && !e.target.closest('.noteDueDate, .boardTaskDue')) {
       dueDatePicker.close();
     }
     if (!btnReminder.classList.contains('set') && !reminderPicker.isOpen()) {
@@ -1678,13 +1678,11 @@ request.onsuccess = async function(event) {
   function generateBoardTask(note, notes) {
     const item = document.createElement('li');
     const checkbox = createBoardCheckbox(note);
-    const content = document.createElement('span');
     item.dataset.id = note.id;
     if (note.completed) item.classList.add('completed');
-    content.className = 'boardTaskContent';
-    content.textContent = note.content;
-    item.append(checkbox, content);
-    enableBoardTaskEdit(content, note);
+    const dueStatus = updateCompletionStyle(note.due, note.dateCompleted);
+    if (dueStatus === 'overdue' || dueStatus === 'due-today') item.classList.add(dueStatus);
+    item.append(checkbox, createBoardTaskBody(note), ...createBoardTaskIcons(note));
 
     const subNotes = notes.filter(n => n.parent === note.id);
     if (subNotes.length > 0) {
@@ -1696,9 +1694,10 @@ request.onsuccess = async function(event) {
 
       if (!note.completed) {
         const stroke = getCurrentThemeColor(true);
+        const fillColor = dueStatus === 'overdue' ? '#90000066' : dueStatus === 'due-today' ? '#ff980066' : (stroke ? stroke + '66' : '#cccccccc');
         checkbox.classList.add('has-progress');
         checkbox.style.setProperty('--completion', `${(doneCount / subNotes.length * 100).toFixed()}%`);
-        checkbox.style.setProperty('--fill-color', stroke ? stroke + '66' : '#cccccccc');
+        checkbox.style.setProperty('--fill-color', fillColor);
       }
     }
 
@@ -1709,19 +1708,86 @@ request.onsuccess = async function(event) {
     const savedIds = note.pin ? Zeke.orderedPinNoteIds[note.list] : Zeke.orderedNoteIds[note.list];
     getOrderedSubNotes(subNotes, savedIds).forEach(sub => {
       const subItem = document.createElement('li');
-      const subContent = document.createElement('span');
       subItem.dataset.id = sub.id;
-      subContent.className = 'boardTaskContent';
-      subContent.textContent = sub.content;
-      subItem.append(createBoardCheckbox(sub), subContent);
+      subItem.append(createBoardCheckbox(sub), createBoardTaskBody(sub), ...createBoardTaskIcons(sub));
       if (sub.completed) subItem.classList.add('completed');
+      const subDueStatus = updateCompletionStyle(sub.due, sub.dateCompleted);
+      if (subDueStatus === 'overdue' || subDueStatus === 'due-today') subItem.classList.add(subDueStatus);
       subList.append(subItem);
-      enableBoardTaskEdit(subContent, sub);
     });
     item.append(subList);
     subList.sortable = Sortable.create(subList, boardSortableOptions());
 
     return item;
+  }
+
+  function createBoardTaskBody(note) {
+    const body = document.createElement('div');
+    const content = document.createElement('span');
+    const meta = document.createElement('span');
+    body.className = 'boardTaskBody';
+    content.className = 'boardTaskContent';
+    content.textContent = note.content;
+    meta.className = 'boardTaskMeta';
+    meta.textContent = getMomentText(meta, note.dateCreated, note.due, note.dateCompleted);
+    body.append(content, meta);
+    enableBoardTaskEdit(content, note);
+    return body;
+  }
+
+  function createBoardTaskIcons(note) {
+    const icons = [];
+    if (note.remind) {
+      const reminder = document.createElement('span');
+      reminder.className = 'boardTaskIcon boardTaskReminder';
+      reminder.title = translate('__remind_me_at__') + ' ' + moment(note.remind).format('YYYY-MM-DD HH:mm');
+      reminder.innerHTML = iconReminderActive;
+      reminder.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (reminderPicker.isOpen()) {
+          reminderPicker.close();
+          return;
+        }
+        reminderPicker.onClose = null;
+        reminderPicker.show(reminder, note.remind, (dateTime) => {
+          note.remind = new Date(dateTime).getTime();
+          dbUpdate('note', note.id, { remind: note.remind });
+          renderBoard();
+          syncRemindersToMain();
+        }, { alignRight: true, onRemove: () => {
+          note.remind = null;
+          dbUpdate('note', note.id, { remind: null });
+          renderBoard();
+          syncRemindersToMain();
+        }});
+      });
+      icons.push(reminder);
+    }
+    if (note.due) {
+      const due = document.createElement('span');
+      due.className = 'boardTaskIcon boardTaskDue';
+      due.title = translate('__due_at__') + ' ' + moment(note.due).format('YYYY-MM-DD');
+      due.innerHTML = getDueDateStatus(due, note.due, note.dateCompleted);
+      due.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (dueDatePicker.isOpen()) {
+          dueDatePicker.close();
+          return;
+        }
+        dueDatePicker.onClose = null;
+        dueDatePicker.show(due, note.due, (dateTime) => {
+          note.due = moment(dateTime).endOf('day').valueOf();
+          dbUpdate('note', note.id, { due: note.due });
+          renderBoard();
+        }, { alignRight: true, hideTime: true, onRemove: () => {
+          note.due = null;
+          dbUpdate('note', note.id, { due: null });
+          renderBoard();
+        }});
+      });
+      icons.push(due);
+    }
+    return icons;
   }
 
   function createBoardCheckbox(note) {
@@ -1799,7 +1865,7 @@ request.onsuccess = async function(event) {
       ghostClass: 'sortable-ghost',
       chosenClass: 'sortable-chosen',
       dragClass: 'sortable-drag',
-      filter: '.editing, .boardTaskCheck',
+      filter: '.editing, .boardTaskCheck, .boardTaskIcon',
       preventOnFilter: false,
       onStart: (evt) => {
         // Only one nesting level: tasks that own subtasks cannot become subtasks

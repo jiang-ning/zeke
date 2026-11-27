@@ -414,7 +414,9 @@ select:hover {
 }
 .boardTasks input.boardTaskCheck {
   flex: 0 0 auto;
+  align-self: center;
   margin-top: 0;
+  margin-bottom: 0;
   cursor: pointer;
 }
 .boardTasks li:hover > input.boardTaskCheck {
@@ -425,6 +427,37 @@ select:hover {
 }
 .boardTasks .boardTaskContent {
   flex: 1 1 0;
+}
+.boardTaskBody {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+.boardTaskMeta {
+  margin-top: 2px;
+  font-size: .7rem;
+  opacity: .6;
+}
+.boardTasks li.editing > .boardTaskBody > .boardTaskMeta {
+  display: none;
+}
+.boardTaskIcon {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  color: #999;
+  cursor: pointer;
+}
+.boardTaskIcon svg {
+  width: 12px;
+  height: 12px;
+}
+.boardTaskIcon.overDue {
+  color: #e57373;
+}
+.boardTasks li.completed > .boardTaskIcon {
+  opacity: .5;
 }
 .boardSubTasks {
   flex: 1 1 100%;
@@ -448,7 +481,8 @@ select:hover {
   opacity: 1;
   background-color: #88888822;
 }
-.boardTasks .boardSubTasks li.sortable-ghost > :not(.boardTaskContent) {
+.boardTasks .boardSubTasks li.sortable-ghost > :not(.boardTaskBody),
+.boardTasks .boardSubTasks li.sortable-ghost .boardTaskMeta {
   display: none;
 }
 /* Reorder indicator: collapse the placeholder into an insertion line */
@@ -1175,7 +1209,9 @@ li.edit .noteSub {
 }
 #panelNote li.overdue:not(.completed) > .noteDueDate svg,
 #panelNote li.overdue:not(.completed) > .noteReminder svg,
-#panelNote li.overdue:not(.completed) > .noteMoment {
+#panelNote li.overdue:not(.completed) > .noteMoment,
+#panelNote li.overdue:not(.completed) > .boardTaskBody,
+#panelNote li.overdue:not(.completed) > .boardTaskIcon {
   color: #900000CC;
 }
 #panelNote li.due-today:not(.completed) > input[type='checkbox'] {
@@ -1194,7 +1230,9 @@ li.edit .noteSub {
 }
 #panelNote li.due-today:not(.completed) > .noteDueDate svg,
 #panelNote li.due-today:not(.completed) > .noteReminder svg,
-#panelNote li.due-today:not(.completed) > .noteMoment {
+#panelNote li.due-today:not(.completed) > .noteMoment,
+#panelNote li.due-today:not(.completed) > .boardTaskBody,
+#panelNote li.due-today:not(.completed) > .boardTaskIcon {
   color: #ff9800CC;
 }
 
