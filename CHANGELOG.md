@@ -28,7 +28,7 @@
 ### v1.10.1
 ##### 2024-09-01
 - New Feature: Filter
-- Bug Fix: Parent task in pin list does't show expand icon
+- Bug Fix: Parent task in pin list doesn't show expand icon
 
 ### v1.9.6
 ##### 2024-08-26
@@ -37,7 +37,7 @@
 - New Feature: Multi-language support: Arabic, German, Spain, French, Hindi, Italian, Japanese, Korean, Urdu, Portugal, Russian, Chinese Simplified and Chinese Traditional
 - Improvement: Show list name instead brand on title bar
 - Improvement: Remember list show / hide status
-- Improvement: Animation for collepse and expand
+- Improvement: Animation for collapse and expand
 - Bug Fix: Window corners radius layout issue
 - Bug Fix: Disallowed open multiple window instances
 - Bug Fix: List panel resize issue
@@ -96,4 +96,4 @@
 
 ### v1.0.0
 ##### 2023-12-19
-- First version release on Mirosoft store
+- First version release on Microsoft store

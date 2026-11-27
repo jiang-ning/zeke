@@ -411,7 +411,7 @@ request.onsuccess = async function(event) {
   /**
    * Generate note item element <li>
    * @param {object} note {id:int, content:string, dateCreated:timestamp}
-   * @param {string} area The area where the notes gones to: areaListLists|areaPinNotes|areaListNotes
+   * @param {string} area The area where the notes go to: areaPinNotes|areaListNotes
    * @param {int} order 
    * @param {boolean} byUserOrdered
    */
@@ -657,10 +657,12 @@ request.onsuccess = async function(event) {
 
       if(note.pin) {
         document.querySelector('#areaListNotes ul').prepend(noteItem);
-        note.title = 'Pin';
+        notePin.dataset['langTitle'] = '__pin__';
+        notePin.title = translate('__pin__') || 'Pin';
       } else {
         document.querySelector('#areaPinNotes ul').appendChild(noteItem);
-        note.title = 'Unpin';
+        notePin.dataset['langTitle'] = '__unpin__';
+        notePin.title = translate('__unpin__') || 'Unpin';
       }
 
       if(noteItem.classList.contains('edit')) {
@@ -1539,7 +1541,7 @@ request.onsuccess = async function(event) {
     const areaNew = document.getElementById('areaNew');
     const btnFilter = document.getElementById('btnFilter');
     const txtNew = document.getElementById('txtNew');
-    // Preserve 'set' state if reminder was confirmed with text
+    // Preserve 'set' state if due date was confirmed with text
     const hasSet = btnDueDate.classList.contains('set');
     if (hasSet && txtNew.value.trim() !== '') {
       btnDueDate.className = 'active set';
@@ -2915,7 +2917,7 @@ function initTitlebar() {
       localStorage.setItem('listOpened', true);
     } else {
       panelsContainer.style.gridTemplateColumns = currentGrid[0] + ' 0px 0px 1fr';
-      localStorage.setItem('grid-template-columns', rememberedGrid); // remember previouse size
+      localStorage.setItem('grid-template-columns', rememberedGrid); // remember previous size
       localStorage.setItem('listOpened', false);
     }
   });
@@ -3150,8 +3152,6 @@ function updateTimelineChart(filterBy, dateRange, type) {
 }
 
 function generateBarChart() {
-
-  //TODO: if cavas already in use, update chart only
 
   const ctx = document.getElementById('chart_bar');
   const labels = Zeke.lists.map(list => list.name);
