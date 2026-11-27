@@ -77,7 +77,7 @@ function pointInRect(point, rect) {
 
 function getDockedEdge(bounds, workArea) {
   const edges = [];
-  if (Math.abs(bounds.x - workArea.x <= AUTO_HIDE_MAGNET_GAP)) edges.push('left');
+  if (Math.abs(bounds.x - workArea.x) <= AUTO_HIDE_MAGNET_GAP) edges.push('left');
   if (Math.abs((bounds.x + bounds.width) - (workArea.x + workArea.width)) <= AUTO_HIDE_MAGNET_GAP) edges.push('right');
   if (Math.abs(bounds.y - workArea.y) <= AUTO_HIDE_MAGNET_GAP) edges.push('top');
   if (Math.abs((bounds.y + bounds.height) - (workArea.y + workArea.height)) <= AUTO_HIDE_MAGNET_GAP) edges.push('bottom');

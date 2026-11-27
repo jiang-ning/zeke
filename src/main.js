@@ -139,8 +139,8 @@ request.onsuccess = async function(event) {
         // 2.2 fetch subtasks
         const pinnedIds = Zeke.orderedPinNoteIds[listId] ? new Set(Zeke.orderedPinNoteIds[listId].map(id => parseInt(id))) : new Set();
         listNotes.forEach((item, idx) => {
-          let expactedParentNote = notes.filter(note => note.id == item.parent);
-          if(item && item.parent > 0 && item.parent !== true && expactedParentNote.length > 0 && !pinnedIds.has(item.parent)) {
+          let expectedParentNote = notes.filter(note => note.id == item.parent);
+          if(item && item.parent > 0 && item.parent !== true && expectedParentNote.length > 0 && !pinnedIds.has(item.parent)) {
             generateSubNoteItem(item,
               'areaListNotes',
               idx,
@@ -442,7 +442,7 @@ request.onsuccess = async function(event) {
     '';
     noteDueDate.innerHTML = note.due ? getDueDateStatus(noteDueDate, note.due, note.dateCompleted) : iconDueDate;
     noteReminder.className = note.remind ? 'noteReminder active' : 'noteReminder';
-    noteReminder.title = note.remind ? translate('__remind_me_at__') + ' ' + moment(note.remind).format('YYYY-MM-DD HH:MM') : '';
+    noteReminder.title = note.remind ? translate('__remind_me_at__') + ' ' + moment(note.remind).format('YYYY-MM-DD HH:mm') : '';
     noteReminder.innerHTML = note.remind ? iconReminderActive : iconReminder;
     noteMoment.className = 'noteMoment';
     noteMoment.innerText = getMomentText(noteMoment, note.dateCreated, note.due, note.dateCompleted);
@@ -455,7 +455,7 @@ request.onsuccess = async function(event) {
     noteSubList.className = 'noteSubList';
     notePin.innerText = '^';
     notePin.dataset['langTitle'] = note.pin ? '__unpin__' : '__pin__';
-    notePin.title = translate(notePin.dataset['langTitle']) || note.pin ? 'Unpin' : 'Pin';
+    notePin.title = translate(notePin.dataset['langTitle']) || (note.pin ? 'Unpin' : 'Pin');
     notePin.className = 'icon notePin';
     noteRemove.className = 'icon noteRemove';
     noteRemove.innerText = '-';
@@ -719,7 +719,7 @@ request.onsuccess = async function(event) {
         noteReminder.className = 'noteReminder active';
         noteReminder.title = moment(remindTimestamp).format('YYYY-MM-DD HH:mm');
         noteReminder.innerHTML = iconReminder;
-        // Preserve expaned state of parent notes before re-render
+        // Preserve expanded state of parent notes before re-render
         document.querySelectorAll('#panelNote li.expand').forEach(li => {
           Zeke.expandedNotesIds.add(parseInt(li.dataset.id));
         });
@@ -755,7 +755,7 @@ request.onsuccess = async function(event) {
         noteDueDate.className = 'noteDueDate active';
         noteDueDate.title = moment(dueDateTimestamp).format('YYYY-MM-DD');
         noteDueDate.innerHTML = iconDueDateActive;
-        // Preserve expaned state of parent notes before re-render
+        // Preserve expanded state of parent notes before re-render
         document.querySelectorAll('#panelNote li.expand').forEach(li => {
           Zeke.expandedNotesIds.add(parseInt(li.dataset.id));
         });
@@ -886,7 +886,7 @@ request.onsuccess = async function(event) {
       deleteNote(targetId);
 
       // If parent has no more subnotes, hide collapse icon and remove parent status
-      const parentEl = document.querySelector(`#panelNote li[data-id="${subnote.parent}"]`);
+      const parentEl = document.querySelector(`#panelNote li[data-id="${subNote.parent}"]`);
       if (parentEl) {
         const remainingSubnotes = parentEl.querySelectorAll('.noteSubList li');
         if (remainingSubnotes.length === 0) {
@@ -921,7 +921,7 @@ request.onsuccess = async function(event) {
           Zeke.expandedNotesIds.add(parseInt(li.dataset.id));
         });
         renderNotes(parseInt(localStorage.getItem('listActive')));
-        syncReminderToMain();
+        syncRemindersToMain();
       }, { alignRight: true, onRemove: () => {
         dbUpdate('note', subNote.id, { remind: null });
         subNote.remind = null;
@@ -931,7 +931,7 @@ request.onsuccess = async function(event) {
           Zeke.expandedNotesIds.add(parseInt(li.dataset.id));
         });
         renderNotes(parseInt(localStorage.getItem('listActive')));
-        syncReminderToMain();
+        syncRemindersToMain();
       }});
     });
 
@@ -950,7 +950,7 @@ request.onsuccess = async function(event) {
         dbUpdate('note', subNote.id, { due: dueTimestamp });
         subNote.due = dueTimestamp;
         subNoteDueDate.className = 'noteDueDate active';
-        subNoteDueDate.title = moment(dueTimestamp).format('YYYY-MM-DD HH:mm');
+        subNoteDueDate.title = moment(dueTimestamp).format('YYYY-MM-DD');
         subNoteDueDate.innerHTML = iconDueDateActive;
         // Preserve expanded state of parent notes before re-render
         document.querySelectorAll('#panelNote li.expand').forEach(li => {
@@ -987,7 +987,7 @@ request.onsuccess = async function(event) {
 
     // Prevent subNoteInput focusout when clicking action buttons, so the click event fires while edit mode is still active
     subNoteItem.addEventListener('mousedown', (e) => {
-      if (e.target.closest('.noteRemove, .noteReminder, noteDueDate')) {
+      if (e.target.closest('.noteRemove, .noteReminder, .noteDueDate')) {
         e.preventDefault();
       }
     });
@@ -2509,7 +2509,7 @@ function initModalSettings() {
       const onReplace = () => finish('replace');
       const onCancel = () => finish(null);
 
-      restoreModeDesc.innerText = translate('__select_how__restore_mode_desc__');
+      restoreModeDesc.innerText = translate('__restore_mode_desc__');
       restoreModeMerge.style.display = '';
       restoreModeReplace.style.display = '';
       restoreModeCancel.style.display = '';

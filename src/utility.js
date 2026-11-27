@@ -240,7 +240,7 @@ class DateTimePicker {
 
     this.open(onConfirm);
 
-    // If the picker overflows the viewpoint bottom, flip it above the anchor
+    // If the picker overflows the viewport bottom, flip it above the anchor
     const pickerRect = this.el.getBoundingClientRect();
     if (pickerRect.bottom > window.innerHeight) {
       this.el.style.top = (rect.top + window.scrollY - this.el.offsetHeight) + 'px';
@@ -340,19 +340,19 @@ function getMomentText(el, createdDateStr, dueDateStr, completedDateStr) {
   const due = dueDateStr ? moment(dueDateStr) : null;
   const completed = completedDateStr ? moment(completedDateStr) : null;
 
-  el.title = created.format('YYYY-MM-DD HH:MM');
+  el.title = created.format('YYYY-MM-DD HH:mm');
 
   if (completed) {
     if (due) {
       if (completed.isSameOrBefore(due)) {
-        el.title = translate('__completed_in__') + ' ' + completed.from(created, true) + ' (' + completed.format('YYYY-MM-DD HH:MM') + ')';
+        el.title = translate('__completed_in__') + ' ' + completed.from(created, true) + ' (' + completed.format('YYYY-MM-DD HH:mm') + ')';
         return translate('__completed_on_time__');
       } else {
-        el.title = translate('__completed_in_overdue__') + ' ' + completed.from(due, true) + ' (' + completed.format('YYYY-MM-DD HH:MM') + ')';
+        el.title = translate('__completed_in_overdue__') + ' ' + completed.from(due, true) + ' (' + completed.format('YYYY-MM-DD HH:mm') + ')';
         return translate('__overdue__') + ' ' + completed.from(due, true);
       }
     } else {
-      el.title = translate('__completed_in__') + ' ' + completed.from(created, true) + ' (' + completed.format('YYYY-MM-DD HH:MM') + ')';
+      el.title = translate('__completed_in__') + ' ' + completed.from(created, true) + ' (' + completed.format('YYYY-MM-DD HH:mm') + ')';
       return translate('__completed_in__') + ' ' + completed.from(created, true);
     }
   } else {
@@ -364,11 +364,11 @@ function getMomentText(el, createdDateStr, dueDateStr, completedDateStr) {
         el.title = translate('__due_today__') + ' (' + due.format('YYYY-MM-DD') + ')';
         return translate('__due_today__');
       } else {
-        el.title = translate('__due_in__') + due.fromNow(true) + ' (' + due.format('YYYY-MM-DD') + ')';
+        el.title = translate('__due_in__') + ' ' + due.fromNow(true) + ' (' + due.format('YYYY-MM-DD') + ')';
         return translate('__due_in__') + ' ' + due.fromNow(true);
       }
     } else {
-      el.title = created.format('YYYY-MM-DD HH:MM');
+      el.title = created.format('YYYY-MM-DD HH:mm');
       return created.fromNow();
     }
   }
