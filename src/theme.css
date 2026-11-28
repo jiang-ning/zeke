@@ -143,7 +143,8 @@
 .theme-dark #mode-auto {
   background-color: #ffffff33;
 }
-.theme-dark #txtNew:focus {
+.theme-dark #txtNew:focus,
+.theme-dark .boardTasks li {
   background-color: transparent;
 }
 .theme-dark .areaNav {
@@ -231,8 +232,7 @@
 }
 .theme-dark input[type='checkbox'],
 .theme-dark #areaListNotes li.edit > input[type='text'], 
-.theme-dark #areaPinNotes li.edit > input[type='text'],
-.theme-dark .boardTasks > li {
+.theme-dark #areaPinNotes li.edit > input[type='text'] {
   border-color: #666;
 }
 .theme-dark #areaPinNotes li:hover input[type='checkbox'],

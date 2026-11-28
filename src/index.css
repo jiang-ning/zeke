@@ -1194,11 +1194,11 @@ li.edit .noteSub {
 
 /* Duedate styles */
 #panelNote li.overdue:not(.completed) > input[type='checkbox'] {
-  border-color: #900000CC;
+  border-color: #A00000CC;
 }
 #panelNote li.overdue:not(.completed) > .noteContent {
   background-color: transparent;
-  color: #900000CC;
+  color: #A00000CC;
 }
 #panelNote li.overdue:not(.completed) > input[type='checkbox']:hover,
 #panelNote li.overdue:not(.completed):hover > input[type='checkbox'] {
@@ -1212,7 +1212,7 @@ li.edit .noteSub {
 #panelNote li.overdue:not(.completed) > .noteMoment,
 #panelNote li.overdue:not(.completed) > .boardTaskBody,
 #panelNote li.overdue:not(.completed) > .boardTaskIcon {
-  color: #900000CC;
+  color: #A00000CC;
 }
 #panelNote li.due-today:not(.completed) > input[type='checkbox'] {
   border-color: #ff9800CC;
