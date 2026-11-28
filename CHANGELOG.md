@@ -1,5 +1,10 @@
 # Change Log
 
+### v1.19.1
+##### 2026-11-28
+- Improvement: dark theme in board
+- Bug Fix: Snap issue to the edge of the screen
+
 ### v1.19.0
 ##### 2026-11-21
 - New Feature: Board
